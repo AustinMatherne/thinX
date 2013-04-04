@@ -28,7 +28,6 @@ def get_units(ini):
     # contains a prefix, namespace, and a list of measures.
     return registries
 
-
 def add_namespace(elem, prefix, ns, clean_measures):
     """Accepts an element, a prefix, a namespace, and a list of measures.
     Declares the namespace and prefix in the provided element, then searches
@@ -48,10 +47,30 @@ def add_namespace(elem, prefix, ns, clean_measures):
                 old = element.text
                 new = prefix.split(":")[1] + ":" + clean_measure
                 if new != old:
-                    element.text = new
-                    log[old] = new
+                    if current_measure != clean_measure and clean_measure in ['m', 'mm', 't']:
+                        pass
+                    else:
+                        element.text = new
+                        log[old] = new
+
     return log
 
+def extended_measures(elem, prefixes, ini):
+    """..."""
+    log = []
+    units = get_units(ini)
+    standard_prefixes = []
+    for namespace in units:
+        standard_prefixes.append(units[namespace]["Prefix"])
+    all_prefixes = prefixes + standard_prefixes
+    current_measures = elem.findall(".//{http://www.xbrl.org/2003/instance}measure")
+    for element in current_measures:
+        current_measure = element.text.split(":")[0]
+        if current_measure not in all_prefixes:
+            if element.text not in log:
+                log.append(element.text)
+
+    return log
 
 def clean_contexts(elem):
     """Search through the provided element's children for contexts. Find the
@@ -64,10 +83,58 @@ def clean_contexts(elem):
     for element in current_contexts:
         contexts[element] = element.get("id")
     for context in contexts:
-        wtf = ".//*[@contextRef='" + str(contexts[context]) + "']"
-        temp = elem.find(wtf)
+        fact_values = ".//*[@contextRef='" + str(contexts[context]) + "']"
+        temp = elem.find(fact_values)
         if temp is None:
             contexts_removed.append(contexts[context])
             elem.remove(context)
 
     return contexts_removed
+
+def get_linkbase(filename, linkbase):
+    """Find the requested linkbase in the provided element's DTS."""
+    if linkbase == "xsd":
+        return filename[:-3] + "xsd"
+    else:
+        return filename[:-4] + "_" + linkbase + ".xml"
+
+def get_calcs(elem):
+    """..."""
+    store = {}
+    linkroles = elem.findall(".//{http://www.xbrl.org/2003/linkbase}calculationLink")
+    for linkrole in linkroles:
+        link_role_href = linkrole.get("{http://www.w3.org/1999/xlink}role")
+        store[link_role_href] = {}
+        arcs = linkrole.findall(".//{http://www.xbrl.org/2003/linkbase}calculationArc")
+        for arc in arcs:
+            arc_from = arc.get("{http://www.w3.org/1999/xlink}from")
+            arc_to = arc.get("{http://www.w3.org/1999/xlink}to")
+            if arc_from not in store[link_role_href]:
+                store[link_role_href][arc_from] = []
+            store[link_role_href][arc_from].append(arc_to)
+
+    for linkrole in store:
+        for arc_from in store[linkrole]:
+            store[linkrole][arc_from].sort()
+
+    return store
+
+def dup_calcs(elem):
+    """..."""
+    store = get_calcs(elem)
+    warnings = {}
+    base_calcs = {}
+    for linkrole in store:
+        for total in store[linkrole]:
+            if total in base_calcs:
+                if store[linkrole][total] in base_calcs[total]:
+                    if total in warnings:
+                        warnings[total] += 1
+                    else:
+                        warnings[total] = 0
+                else:
+                    base_calcs[total].append(store[linkrole][total])
+            else:
+                base_calcs[total] = [store[linkrole][total]]
+
+    return warnings

@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 
-import sys
-from PyQt4 import QtGui
-from ui_thinX import Ui_MainWindow
+import esky
 import namespace
+import os
+import platform
+from PySide import QtGui
+import sys
+from ui_thinX import Ui_MainWindow
+import updater
 import xbrl
 
 
-class thinX(QtGui.QMainWindow):
+class ThinX(QtGui.QMainWindow):
     """The main app class. Handles the GUI and various XBRL utilities."""
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
@@ -17,13 +21,19 @@ class thinX(QtGui.QMainWindow):
         self.__init_connections()
         self.filename = ""
         self.unit_config_file = "units.ini"
+        if hasattr(sys,"frozen"):
+            self.ini = os.path.expanduser("~/.thinX/config")
+            server = "http://ec2-177-71-148-146.sa-east-1.compute.amazonaws.com/"
+            self.app = esky.Esky(sys.executable, server)
 
     def __init_connections(self):
         self.ui.actionOpen.triggered.connect(self.open)
         self.ui.actionExit.triggered.connect(sys.exit)
+        self.ui.actionAbout.triggered.connect(self.about)
+        self.ui.actionUpdate.triggered.connect(self.update)
         self.ui.actionUnits.triggered.connect(self.units)
         self.ui.actionContexts.triggered.connect(self.contexts)
-        self.ui.actionAbout.triggered.connect(self.about)
+        self.ui.actionCalculations.triggered.connect(self.calculations)
 
     def __init_statusbar(self):
         self.status = QtGui.QLabel()
@@ -31,30 +41,65 @@ class thinX(QtGui.QMainWindow):
         self.statusBar().addPermanentWidget(self.status)
 
     def about(self):
+        """Displays project information."""
         self.ui.textLog.clear()
         self.ui.textLog.append('<html><head/><body><p align=\"center\"><span '
                                'style=\"font-size:24pt; font-weight:600;\">'
                                'thinX</span></p></body></html>')
-
-        self.ui.textLog.append('<html><head/><body><p align=\"center\">'
+        if hasattr(sys,"frozen"):
+            self.ui.textLog.append('<html><head/><body><p align=\"center\" '
+                                   'style=\" font-size:10pt;\">'
+                                    + self.app.active_version +
+                                   '</p></body></html>')
+        self.ui.textLog.append('<p align=\"center\">'
                                '<span style=\" font-size:10pt;\">thinX '
-                               'is an open source XBRL toolkit developed '
-                               'by<br>Austin M. Matherne and released '
-                               'under the WTFPL.</span></p><p align='
+                               'is an open source XBRL toolkit developed and '
+                               'maintained<br>by Austin M. Matherne and '
+                               'released under the WTFPL.</span></p><p align='
                                '\"center\">https://github.com/AustinMatherne/'
-                               'thinX</p></body></html>')
+                               'thinX</p>')
+
+    def update(self):
+        self.ui.textLog.clear()
+        if platform.release() != "XP":
+            self.status.setText("The Update Function Only Works On Windows "
+                                "XP ")
+            return
+        if hasattr(sys,"frozen"):
+            self.app.cleanup()
+            success = updater.check(self)
+            if success == True:
+                self.status.setText("No Updates Found ")
+            else:
+                self.ui.textLog.append('<p align=\"center\"><span style=\" '
+                                       'font-size:10pt;\">404 - Server Not '
+                                       'Found<br>Your login details may have '
+                                       'been incorrect, or you do not have an'
+                                       ' active internet connection.</span>'
+                                       '</p><p align=\"center\"><span '
+                                       'style=\" font-size:10pt;\">If you are'
+                                       ' connected to the internet and you '
+                                       'are sure that your login details are '
+                                       'correct,<br>please contact the server'
+                                       ' administrator Austin M. Matherne.'
+                                       '</span></p>')
 
     def reset_status(self):
         """Resets the text in the status bar."""
         self.status.setText("Open an Instance Document to Begin ")
+
+    def open_fail(self, file_name):
+        """Logs a file that failed to open to the status bar."""
+        self.status.setText("Failed to Open: " + file_name + " ")
 
     def open(self):
         """Prompts the user to open an XBRL instance document and stores the
         file path in self.filename.
 
         """
+        self.ui.textLog.clear()
         self.filename = QtGui.QFileDialog.getOpenFileName(
-            filter="Instance Document (*.XML *.XBRL)")
+            filter="Instance Document (*.XML *.XBRL)")[0]
         if self.filename != "":
             self.status.setText(self.filename)
         else:
@@ -68,44 +113,68 @@ class thinX(QtGui.QMainWindow):
 
         """
         if self.filename == "":
-            self.status.setText(
-                "You Must Open an Instance Document Before Processing ")
+            self.status.setText("You Must Open an Instance Document Before "
+                                "Processing ")
             return
         else:
             fixed = False
             logs = []
-            tree = namespace.parse_xmlns(self.filename)
+            try:
+                tree = namespace.parse_xmlns(self.filename)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename)
+                return
+
             root = tree.getroot()
             registries = xbrl.get_units(self.unit_config_file)
+            prefixes = []
             for registry in registries:
                 reg = registries[registry]
                 prefix = "xmlns:" + reg["Prefix"]
+                prefixes.append(prefix)
                 ns = reg["Namespace"]
                 measures = reg["Measures"]
                 log = xbrl.add_namespace(root, prefix, ns, measures)
                 if log:
                     logs.append(log)
                     fixed = True
+            check = xbrl.extended_measures(root, prefixes,
+                                           self.unit_config_file)
             namespace.fixup_xmlns(root)
             tree.write(self.filename, xml_declaration=True)
             self.ui.textLog.clear()
             if fixed == True:
-                self.status.setText("Unit Cleansing Complete ")
+                self.status.setText("XBRL International Units Registry ")
+                self.ui.textLog.append("<strong>The Following Measures Have "
+                                       "Been Modified:</strong>")
                 for dict in logs:
                     for item in dict:
                         self.ui.textLog.append(item +" > " + dict[item])
+                self.ui.textLog.append("<br>")
             else:
                 self.status.setText("No Units Found to Fix ")
 
+            if len(check) > 0:
+                self.ui.textLog.append("<strong>The Following Measures "
+                                       "Require User Approval:</strong>")
+                for measure in check:
+                    self.ui.textLog.append(measure)
 
     def contexts(self):
         """Removes unused contexts from self.filename."""
         if self.filename == "":
-            self.status.setText(
-                "You Must Open an Instance Document Before Processing ")
+            self.status.setText("You Must Open an Instance Document Before "
+                                "Processing ")
             return
         else:
-            tree = namespace.parse_xmlns(self.filename)
+            try:
+                tree = namespace.parse_xmlns(self.filename)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename)
+                return
+
             root = tree.getroot()
             log = xbrl.clean_contexts(root)
             namespace.fixup_xmlns(root)
@@ -114,15 +183,48 @@ class thinX(QtGui.QMainWindow):
             if not log:
                 self.status.setText("No Unused Contexts Found in File ")
             else:
-                self.status.setText("Unused Contexts Removed ")
+                self.status.setText("The Above Unreferenced Contexts Have "
+                                    "Been Removed ")
                 for item in log:
                     self.ui.textLog.append(item)
 
+    def calculations(self):
+        """Displays duplicate calculations found in the corresponding
+        calculation linkbase of self.filename.
+
+        """
+        if self.filename == "":
+            self.status.setText("You Must Open an Instance Document Before "
+                                "Processing ")
+            return
+        else:
+            try:
+                calc_linkbase = xbrl.get_linkbase(self.filename, "cal")
+                tree = namespace.parse_xmlns(calc_linkbase)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(calc_linkbase)
+                return
+
+            root = tree.getroot()
+            log = xbrl.dup_calcs(root)
+            self.ui.textLog.clear()
+            if not log:
+                self.status.setText("No Duplicate Calculations Found ")
+            else:
+                self.status.setText("Duplicate Calculations With The Above "
+                                    "Total Concepts Have Been Found ")
+                for item in log:
+                    if log[item] > 0:
+                        self.ui.textLog.append(item + " *" + str(log[item] + 1))
+                    else:
+                        self.ui.textLog.append(item)
+            
 
 def main():
-    """Launches Qt and creates an instance of thinX."""
+    """Launches Qt and creates an instance of ThinX."""
     app = QtGui.QApplication(sys.argv)
-    window = thinX()
+    window = ThinX()
     window.show()
     sys.exit(app.exec_())
 

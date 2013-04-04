@@ -6,17 +6,17 @@ thinX is a GUI that implements various utilities for manipulating XBRL files.
 
 ### Version
 
-0.1.1
+0.2.0
 
 
 ### Dependencies
 
-thinX is developed with Python 3.3 and PyQt4. It should work with other versions of Python, as well; however, no guarantees are made. It will also likely work with PySide by simply swapping out the import.
+thinX is developed with Python 3.2 and PySide.
 
 
-### cx_Freeze Support
+### esky & cx_Freeze Support
 
-setup.py is provided for creating executables using cx_Freeze.
+setup.py is provided for creating executables using esky and cx_Freeze.
 
 
 ### Versioning
@@ -43,12 +43,17 @@ Utilities
 
 ### Comply with UTR
 
-The UTR utility adds each namespace supplied in the units.ini configuration file and searches the selected instance document for measures which match those defined in units.ini. If a match is found under a different namespace, the prefix for the proper namespace is used, and the capitalization of the measure is corrected if necessary.
+The UTR utility adds each namespace supplied in the units.ini configuration file and searches the selected instance document for measures which match those defined in units.ini. If a match is found under a different namespace, the prefix for the proper namespace is used, and the capitalization of the measure is corrected if necessary. Measures for periods of time are ignored.
 
 
 ### Remove Unused Contexts
 
 The Unused Contexts utility searches the selected instance document for declared contexts that are not in use. All unused contexts are logged and removed from the file.
+
+
+### Duplicate Calculations
+
+The Duplicate Calculations utility searches the corresponding calculation linkbase of the selected instance document for duplicate calculation relationships. All duplicate calculations are logged.
 
 
 [1]: http://scottchacon.com/2011/08/31/github-flow.html
