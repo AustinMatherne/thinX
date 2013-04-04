@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
-import esky
 import namespace
 import os
 import platform
 from PySide import QtGui
 import sys
 from ui_thinX import Ui_MainWindow
-import updater
 import xbrl
 
 
@@ -22,16 +20,11 @@ class ThinX(QtGui.QMainWindow):
         self.about()
         self.filename = ""
         self.unit_config_file = "units.ini"
-        if hasattr(sys,"frozen"):
-            self.ini = os.path.expanduser("~/.thinX/config")
-            server = "http://ec2-177-71-148-146.sa-east-1.compute.amazonaws.com/"
-            self.app = esky.Esky(sys.executable, server)
 
     def __init_connections(self):
         self.ui.actionOpen.triggered.connect(self.open)
         self.ui.actionExit.triggered.connect(sys.exit)
         self.ui.actionAbout.triggered.connect(self.about)
-        self.ui.actionUpdate.triggered.connect(self.update)
         self.ui.actionUnits.triggered.connect(self.units)
         self.ui.actionContexts.triggered.connect(self.contexts)
         self.ui.actionCalculations.triggered.connect(self.calculations)
@@ -59,31 +52,6 @@ class ThinX(QtGui.QMainWindow):
                                'released under the WTFPL.</span></p><p align='
                                '\"center\">https://github.com/AustinMatherne/'
                                'thinX</p>')
-
-    def update(self):
-        self.ui.textLog.clear()
-        if platform.release() != "XP":
-            self.status.setText("The Update Function Only Works On Windows "
-                                "XP ")
-            return
-        if hasattr(sys,"frozen"):
-            self.app.cleanup()
-            success = updater.check(self)
-            if success == True:
-                self.status.setText("No Updates Found ")
-            else:
-                self.ui.textLog.append('<p align=\"center\"><span style=\" '
-                                       'font-size:10pt;\">404 - Server Not '
-                                       'Found<br>Your login details may have '
-                                       'been incorrect, or you do not have an'
-                                       ' active internet connection.</span>'
-                                       '</p><p align=\"center\"><span '
-                                       'style=\" font-size:10pt;\">If you are'
-                                       ' connected to the internet and you '
-                                       'are sure that your login details are '
-                                       'correct,<br>please contact the server'
-                                       ' administrator Austin M. Matherne.'
-                                       '</span></p>')
 
     def reset_status(self):
         """Resets the text in the status bar."""

@@ -6,17 +6,12 @@ thinX is a GUI that implements various utilities for manipulating XBRL files.
 
 ### Version
 
-0.2.1
+0.3.0
 
 
 ### Dependencies
 
-thinX is developed with Python 3.2 and PySide.
-
-
-### esky & cx_Freeze Support
-
-setup.py is provided for creating executables using esky and cx_Freeze.
+thinX is developed with Python 3.3 and PySide.
 
 
 ### Versioning
@@ -43,8 +38,7 @@ Utilities
 
 ### Comply with UTR
 
-The UTR utility adds each namespace supplied in the units.ini configuration file and searches the selected instance document for measures which match those defined in units.ini. If a match is found under a different namespace, the prefix for the proper namespace is used, and the capitalization of the measure is corrected if necessary. Measures for periods of time are ignored.
-
+The UTR utility adds each namespace supplied in the units.ini configuration file and searches the selected instance document for measures which match those defined in units.ini. If a match is found under a different namespace, the prefix for the proper namespace is used, and the capitalization of the measure is corrected if necessary.
 
 ### Remove Unused Contexts
 
