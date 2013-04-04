@@ -11,7 +11,7 @@ project_files = ["AUTHORS.md", "LICENSE.md", "README.md", "TODO.md",
 
 setup(
   name = "thinX",
-  version = "0.2.0",
+  version = "0.2.1",
   description="GUI with various utilities for manipulating XBRL files.",
   author="Austin M. Matherne",
   author_email="AustinMatherne@Gmail.com",

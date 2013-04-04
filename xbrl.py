@@ -43,11 +43,12 @@ def add_namespace(elem, prefix, ns, clean_measures):
     for element in current_measures:
         current_measure = element.text.split(":")[1]
         for clean_measure in clean_measures:
-            if current_measure.lower() == clean_measure.lower():
+            clean_measure_lower = clean_measure.lower()
+            if current_measure.lower() == clean_measure_lower:
                 old = element.text
                 new = prefix.split(":")[1] + ":" + clean_measure
                 if new != old:
-                    if current_measure != clean_measure and clean_measure in ['m', 'mm', 't']:
+                    if current_measure != clean_measure and clean_measure_lower in ['m', 'mm', 't']:
                         pass
                     else:
                         element.text = new
