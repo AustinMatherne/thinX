@@ -6,7 +6,7 @@ thinX is a GUI that implements various utilities for manipulating XBRL files.
 
 ### Version
 
-0.3.0
+0.4.0
 
 
 ### Dependencies
