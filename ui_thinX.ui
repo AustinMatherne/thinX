@@ -46,7 +46,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -70,7 +70,6 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
-    <addaction name="actionUpdate"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuUtilities"/>
@@ -151,15 +150,6 @@
    </property>
    <property name="text">
     <string>Find Duplicate Calculations</string>
-   </property>
-  </action>
-  <action name="actionUpdate">
-   <property name="icon">
-    <iconset resource="icons.qrc">
-     <normaloff>:/Glyphicons/icons/glyphicons_057_history.png</normaloff>:/Glyphicons/icons/glyphicons_057_history.png</iconset>
-   </property>
-   <property name="text">
-    <string>Check for Updates</string>
    </property>
   </action>
  </widget>

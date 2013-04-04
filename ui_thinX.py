@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Documents and Settings\amather\My Documents\thinIceLabs\thinX\ui_thinX.ui'
+# Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Mon Feb  4 16:40:00 2013
+# Created: Thu Apr  4 13:30:23 2013
 #      by: pyside-uic 0.2.14 running on PySide 1.1.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.textLog)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 600, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 600, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -74,11 +74,6 @@ class Ui_MainWindow(object):
         icon6.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_041_charts.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCalculations.setIcon(icon6)
         self.actionCalculations.setObjectName("actionCalculations")
-        self.actionUpdate = QtGui.QAction(MainWindow)
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_057_history.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionUpdate.setIcon(icon7)
-        self.actionUpdate.setObjectName("actionUpdate")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
@@ -86,7 +81,6 @@ class Ui_MainWindow(object):
         self.menuUtilities.addAction(self.actionUnits)
         self.menuUtilities.addAction(self.actionCalculations)
         self.menuHelp.addAction(self.actionAbout)
-        self.menuHelp.addAction(self.actionUpdate)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuUtilities.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
@@ -115,6 +109,5 @@ class Ui_MainWindow(object):
         self.actionContexts.setText(QtGui.QApplication.translate("MainWindow", "Remove Unused Contexts", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAbout.setText(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCalculations.setText(QtGui.QApplication.translate("MainWindow", "Find Duplicate Calculations", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionUpdate.setText(QtGui.QApplication.translate("MainWindow", "Check for Updates", None, QtGui.QApplication.UnicodeUTF8))
 
 import icons_rc
