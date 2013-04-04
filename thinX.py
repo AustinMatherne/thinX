@@ -19,6 +19,7 @@ class ThinX(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.__init_statusbar()
         self.__init_connections()
+        self.about()
         self.filename = ""
         self.unit_config_file = "units.ini"
         if hasattr(sys,"frozen"):
