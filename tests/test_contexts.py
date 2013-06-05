@@ -29,4 +29,4 @@ class Units(unittest.TestCase):
             mine.append(temp.get("id"))
 
         for context in expected_unused_contexts:
-            self.assertNotIn(context, mine, msg=mine)
+            self.assertNotIn(context, mine)
