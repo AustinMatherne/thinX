@@ -1,5 +1,5 @@
 #define MyAppName "thinX"
-#define MyAppVersion "0.5.0"
+#define MyAppVersion "0.6.0"
 #define MyAppPublisher "Austin M. Matherne"
 #define MyAppURL "https://github.com/AustinMatherne/thinX"
 #define MyAppExeName "thinX.exe"
@@ -65,7 +65,7 @@ const
 
   VC_2008_REDIST_X86 = '{FF66E9F6-83E7-3A3E-AF14-8DE9A809A6A4}';
 
-function MsiQueryProductState(szProduct: string): INSTALLSTATE; 
+function MsiQueryProductState(szProduct: string): INSTALLSTATE;
   external 'MsiQueryProductState{#AW}@msi.dll stdcall';
 
 function VCVersionInstalled(const ProductID: string): Boolean;

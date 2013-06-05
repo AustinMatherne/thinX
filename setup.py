@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name = "thinX",
-    version = "0.5.0",
+    version = "0.6.0",
     description="GUI with various utilities for manipulating XBRL files.",
     author="Austin M. Matherne",
     author_email="AustinMatherne@Gmail.com",
