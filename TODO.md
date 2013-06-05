@@ -1,5 +1,4 @@
-1. Turn thinX into a Python package.
-2. Add nose testing framework.
+1. Add nose testing framework.
 3. Dump esky and move to native Python implementation using InnoSetup to update.
 4. Raise a flag for calculations which are subsets of other calculations.
 5. Add a Merrill units registry.
