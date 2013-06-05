@@ -47,6 +47,5 @@ class Units(unittest.TestCase):
         self.assertEqual(ton, "test:T")
         self.assertEqual(acre, "test:acre")
 
-
     def test_extended_measures(self):
         pass
