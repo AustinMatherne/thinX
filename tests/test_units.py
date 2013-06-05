@@ -39,8 +39,6 @@ class Units(unittest.TestCase):
         tonne = self.root.findtext(unit_elem % {"unit": "Tonne"})
         ton = self.root.findtext(unit_elem % {"unit": "Ton"})
         acre = self.root.findtext(unit_elem % {"unit": "Acre"})
-        acre = self.root.findtext(unit_elem % {"unit": "Acre"})
-        acre = self.root.findtext(unit_elem % {"unit": "Acre"})
 
         self.assertEqual(year, "test:Y")
         self.assertEqual(tonne, "test:t")
