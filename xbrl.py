@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import configparser
+import collections
 
 
 def get_units(ini):
@@ -39,6 +40,8 @@ def add_namespace(elem, prefix, ns, clean_measures):
     """
     log = {}
     elem.set(prefix, ns)
+    lower_clean_measures = [x.lower() for x in clean_measures]
+    dup_measures = [x for x, y in collections.Counter(lower_clean_measures).items() if y > 1]
     current_measures = elem.findall(".//{http://www.xbrl.org/2003/instance}measure")
     for element in current_measures:
         current_measure = element.text.split(":")[1]
@@ -48,7 +51,7 @@ def add_namespace(elem, prefix, ns, clean_measures):
                 old = element.text
                 new = prefix.split(":")[1] + ":" + clean_measure
                 if new != old:
-                    if current_measure != clean_measure and clean_measure_lower in ['m', 'mm', 't']:
+                    if current_measure != clean_measure and clean_measure_lower in dup_measures:
                         pass
                     else:
                         element.text = new
@@ -57,7 +60,7 @@ def add_namespace(elem, prefix, ns, clean_measures):
     return log
 
 def extended_measures(elem, prefixes, ini):
-    """..."""
+    """Returns all extended measures in the supplied element."""
     log = []
     units = get_units(ini)
     standard_prefixes = []
