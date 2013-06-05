@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.example.com/20130331" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:abc="http://www.example.com/20130331" xmlns:nonnum="http://www.xbrl.org/dtr/type/non-numeric" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:num="http://www.xbrl.org/dtr/type/numeric" xmlns:xbrldt="http://xbrl.org/2005/xbrldt" xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xsd:annotation>
+    <xsd:appinfo>
+      <link:linkbaseRef xlink:type="simple" xlink:href="abc-20130331_pre.xml" xlink:role="http://www.xbrl.org/2003/role/presentationLinkbaseRef" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"/>
+      <link:linkbaseRef xlink:type="simple" xlink:href="abc-20130331_cal.xml" xlink:role="http://www.xbrl.org/2003/role/calculationLinkbaseRef" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"/>
+      <link:linkbaseRef xlink:type="simple" xlink:href="abc-20130331_def.xml" xlink:role="http://www.xbrl.org/2003/role/definitionLinkbaseRef" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"/>
+      <link:linkbaseRef xlink:type="simple" xlink:href="abc-20130331_lab.xml" xlink:role="http://www.xbrl.org/2003/role/labelLinkbaseRef" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase"/>
+      <link:roleType roleURI="http://www.example.com/role/BalanceSheetComponents" id="BalanceSheetComponents">
+        <link:definition>1020 - Disclosure - Balance Sheet Components</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/BalanceSheetComponentsComponentsOfAccumulatedOtherComprehensiveIncomeDetails" id="BalanceSheetComponentsComponentsOfAccumulatedOtherComprehensiveIncomeDetails">
+        <link:definition>4022 - Disclosure - Balance Sheet Components (Components of Accumulated Other Comprehensive Income) (Details)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/BalanceSheetComponentsEffectsOnNetIncomeOfAmountsReclassifiedFromAociDetails" id="BalanceSheetComponentsEffectsOnNetIncomeOfAmountsReclassifiedFromAociDetails">
+        <link:definition>4023 - Disclosure - Balance Sheet Components (Effects on Net Income of Amounts Reclassified from AOCI) (Details)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/BalanceSheetComponentsEffectsOnNetIncomeOfAmountsReclassifiedFromAociDetailsCalc2" id="BalanceSheetComponentsEffectsOnNetIncomeOfAmountsReclassifiedFromAociDetailsCalc2">
+        <link:definition>4024 - Disclosure - Balance Sheet Components (Effects on Net Income of Amounts Reclassified from AOCI) (Details) (Calc2)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/BalanceSheetComponentsInventoriesDetails" id="BalanceSheetComponentsInventoriesDetails">
+        <link:definition>4020 - Disclosure - Balance Sheet Components (Inventories) (Details)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/BalanceSheetComponentsPropertyAndEquipmentDetails" id="BalanceSheetComponentsPropertyAndEquipmentDetails">
+        <link:definition>4021 - Disclosure - Balance Sheet Components (Property and Equipment) (Details)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/BalanceSheetComponentsTables" id="BalanceSheetComponentsTables">
+        <link:definition>3020 - Disclosure - Balance Sheet Components (Tables)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/ConsolidatedBalanceSheets" id="ConsolidatedBalanceSheets">
+        <link:definition>0010 - Statement - CONSOLIDATED BALANCE SHEETS</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/ConsolidatedBalanceSheetsParenthetical" id="ConsolidatedBalanceSheetsParenthetical">
+        <link:definition>0015 - Statement - CONSOLIDATED BALANCE SHEETS (Parenthetical)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/ConsolidatedStatementsOfCashFlows" id="ConsolidatedStatementsOfCashFlows">
+        <link:definition>0040 - Statement - CONSOLIDATED STATEMENTS OF CASH FLOWS</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/ConsolidatedStatementsOfComprehensiveIncome" id="ConsolidatedStatementsOfComprehensiveIncome">
+        <link:definition>0030 - Statement - CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/ConsolidatedStatementsOfComprehensiveIncomeParenthetical" id="ConsolidatedStatementsOfComprehensiveIncomeParenthetical">
+        <link:definition>0035 - Statement - CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME (Parenthetical)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/ConsolidatedStatementsOfIncome" id="ConsolidatedStatementsOfIncome">
+        <link:definition>0020 - Statement - CONSOLIDATED STATEMENTS OF INCOME</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/ConsolidatedStatementsOfIncomeParenthetical" id="ConsolidatedStatementsOfIncomeParenthetical">
+        <link:definition>0025 - Statement - CONSOLIDATED STATEMENTS OF INCOME (Parenthetical)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/Debt" id="Debt">
+        <link:definition>1010 - Disclosure - Debt</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/DebtAdditionalInformationDetails" id="DebtAdditionalInformationDetails">
+        <link:definition>4010 - Disclosure - Debt (Additional Information) (Details)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/DebtLongTermDebtDetails" id="DebtLongTermDebtDetails">
+        <link:definition>4011 - Disclosure - Debt (Long-Term Debt) (Details)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/DebtLongTermDebtParentheticalDetails" id="DebtLongTermDebtParentheticalDetails">
+        <link:definition>4012 - Disclosure - Debt (Long-Term Debt - Parenthetical) (Details)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/DebtTables" id="DebtTables">
+        <link:definition>3010 - Disclosure - Debt (Tables)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/DocumentAndEntityInformation" id="DocumentAndEntityInformation">
+        <link:definition>0000 - Document - Document and Entity Information</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+    </xsd:appinfo>
+  </xsd:annotation>
+  <xsd:import namespace="http://fasb.org/us-gaap/2012-01-31" schemaLocation="http://xbrl.fasb.org/us-gaap/2012/elts/us-gaap-2012-01-31.xsd"/>
+  <xsd:import namespace="http://fasb.org/us-roles/2012-01-31" schemaLocation="http://xbrl.fasb.org/us-gaap/2012/elts/us-roles-2012-01-31.xsd"/>
+  <xsd:import namespace="http://fasb.org/us-types/2012-01-31" schemaLocation="http://xbrl.fasb.org/us-gaap/2012/elts/us-types-2012-01-31.xsd"/>
+  <xsd:import namespace="http://www.xbrl.org/2003/instance" schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
+  <xsd:import namespace="http://www.xbrl.org/2003/linkbase" schemaLocation="http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd"/>
+  <xsd:import namespace="http://www.xbrl.org/2009/arcrole/fact-explanatoryFact" schemaLocation="http://www.xbrl.org/lrr/arcrole/factExplanatory-2009-12-16.xsd"/>
+  <xsd:import namespace="http://www.xbrl.org/2009/role/negated" schemaLocation="http://www.xbrl.org/lrr/role/negated-2009-12-16.xsd"/>
+  <xsd:import namespace="http://www.xbrl.org/2009/role/net" schemaLocation="http://www.xbrl.org/lrr/role/net-2009-12-16.xsd"/>
+  <xsd:import namespace="http://www.xbrl.org/dtr/type/non-numeric" schemaLocation="http://www.xbrl.org/dtr/type/nonNumeric-2009-12-16.xsd"/>
+  <xsd:import namespace="http://www.xbrl.org/dtr/type/numeric" schemaLocation="http://www.xbrl.org/dtr/type/numeric-2009-12-16.xsd"/>
+  <xsd:import namespace="http://xbrl.org/2005/xbrldt" schemaLocation="http://www.xbrl.org/2005/xbrldt-2005.xsd"/>
+  <xsd:import namespace="http://xbrl.sec.gov/country/2012-01-31" schemaLocation="http://xbrl.sec.gov/country/2012/country-2012-01-31.xsd"/>
+  <xsd:import namespace="http://xbrl.sec.gov/currency/2012-01-31" schemaLocation="http://xbrl.sec.gov/currency/2012/currency-2012-01-31.xsd"/>
+  <xsd:import namespace="http://xbrl.sec.gov/dei/2012-01-31" schemaLocation="http://xbrl.sec.gov/dei/2012/dei-2012-01-31.xsd"/>
+  <xsd:import namespace="http://xbrl.sec.gov/exch/2012-01-31" schemaLocation="http://xbrl.sec.gov/exch/2012/exch-2012-01-31.xsd"/>
+  <xsd:import namespace="http://xbrl.sec.gov/invest/2012-01-31" schemaLocation="http://xbrl.sec.gov/invest/2012/invest-2012-01-31.xsd"/>
+  <xsd:import namespace="http://xbrl.sec.gov/naics/2011-01-31" schemaLocation="http://xbrl.sec.gov/naics/2011/naics-2011-01-31.xsd"/>
+  <xsd:import namespace="http://xbrl.sec.gov/sic/2011-01-31" schemaLocation="http://xbrl.sec.gov/sic/2011/sic-2011-01-31.xsd"/>
+  <xsd:import namespace="http://xbrl.sec.gov/stpr/2011-01-31" schemaLocation="http://xbrl.sec.gov/stpr/2011/stpr-2011-01-31.xsd"/>
+  <xsd:element name="ABCIncorporatedMember" id="abc_ABCIncorporatedMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="AccruedRevenueShare" id="abc_AccruedRevenueShare" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="credit" xbrli:periodType="instant"/>
+  <xsd:element name="AccumulatedOtherComprehensiveIncomeLossLineItems" id="abc_AccumulatedOtherComprehensiveIncomeLossLineItems" type="xbrli:stringItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="AccumulatedOtherComprehensiveIncomeLossTable" id="abc_AccumulatedOtherComprehensiveIncomeLossTable" type="xbrli:stringItemType" substitutionGroup="xbrldt:hypercubeItem" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="AcquisitionsNetOfCashAcquiredAndPurchasesOfIntangibleAndOtherAssets" id="abc_AcquisitionsNetOfCashAcquiredAndPurchasesOfIntangibleAndOtherAssets" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="credit" xbrli:periodType="duration"/>
+  <xsd:element name="AdvertisingMember" id="abc_AdvertisingMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="BalanceSheetComponentsDisclosureAbstract" id="abc_BalanceSheetComponentsDisclosureAbstract" type="xbrli:stringItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="CapitalClassCMember" id="abc_CapitalClassCMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="CapitalStockParOrStatedValuePerShare" id="abc_CapitalStockParOrStatedValuePerShare" type="num:perShareItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:periodType="instant"/>
+  <xsd:element name="CapitalStockSharesAuthorized" id="abc_CapitalStockSharesAuthorized" type="xbrli:sharesItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:periodType="instant"/>
+  <xsd:element name="CapitalStockSharesIssued" id="abc_CapitalStockSharesIssued" type="xbrli:sharesItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:periodType="instant"/>
+  <xsd:element name="CapitalStockSharesOutstanding" id="abc_CapitalStockSharesOutstanding" type="xbrli:sharesItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:periodType="instant"/>
+  <xsd:element name="CapitalStockValue" id="abc_CapitalStockValue" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="credit" xbrli:periodType="instant"/>
+  <xsd:element name="CommercialPaperFinancingCreditFacilityMember" id="abc_CommercialPaperFinancingCreditFacilityMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="DocumentDocumentandEntityInformationAbstract" id="abc_DocumentDocumentandEntityInformationAbstract" type="xbrli:stringItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="HardwareMember" id="abc_HardwareMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="IncreaseDecreaseInAccruedRevenueShare" id="abc_IncreaseDecreaseInAccruedRevenueShare" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="debit" xbrli:periodType="duration"/>
+  <xsd:element name="IncreaseDecreaseInPrepaidRevenueShareExpensesAndOtherAssets" id="abc_IncreaseDecreaseInPrepaidRevenueShareExpensesAndOtherAssets" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="credit" xbrli:periodType="duration"/>
+  <xsd:element name="InformationTechnologyAssetsGross" id="abc_InformationTechnologyAssetsGross" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="debit" xbrli:periodType="instant"/>
+  <xsd:element name="InvestmentsInReverseRepurchaseAgreements" id="abc_InvestmentsInReverseRepurchaseAgreements" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="debit" xbrli:periodType="duration"/>
+  <xsd:element name="LandAndBuildingsGross" id="abc_LandAndBuildingsGross" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="debit" xbrli:periodType="instant"/>
+  <xsd:element name="LineOfCreditMaturityMonthAndYear" id="abc_LineOfCreditMaturityMonthAndYear" type="xbrli:gYearMonthItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:periodType="instant"/>
+  <xsd:element name="LongTermDebtParValue" id="abc_LongTermDebtParValue" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="credit" xbrli:periodType="instant"/>
+  <xsd:element name="NetProceedsPaymentsRelatedToStockBasedAwardActivities" id="abc_NetProceedsPaymentsRelatedToStockBasedAwardActivities" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="credit" xbrli:periodType="duration"/>
+  <xsd:element name="NumberOfTranches" id="abc_NumberOfTranches" type="xbrli:integerItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:periodType="instant"/>
+  <xsd:element name="OtherComprehensiveIncomeLossBeforeReclassificationsNetOfTax" id="abc_OtherComprehensiveIncomeLossBeforeReclassificationsNetOfTax" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="credit" xbrli:periodType="duration"/>
+  <xsd:element name="OutstandingBalanceUnderCommercialPaperProgram" id="abc_OutstandingBalanceUnderCommercialPaperProgram" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="credit" xbrli:periodType="instant"/>
+  <xsd:element name="OutstandingBalanceUnderRevolvingCreditFacility" id="abc_OutstandingBalanceUnderRevolvingCreditFacility" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="credit" xbrli:periodType="instant"/>
+  <xsd:element name="PrepaidRevenueShareExpensesAndOtherAssetsCurrent" id="abc_PrepaidRevenueShareExpensesAndOtherAssetsCurrent" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="debit" xbrli:periodType="instant"/>
+  <xsd:element name="PrepaidRevenueShareExpensesAndOtherAssetsNoncurrent" id="abc_PrepaidRevenueShareExpensesAndOtherAssetsNoncurrent" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="debit" xbrli:periodType="instant"/>
+  <xsd:element name="ReceivableUnderReverseRepurchaseAgreements" id="abc_ReceivableUnderReverseRepurchaseAgreements" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="debit" xbrli:periodType="instant"/>
+  <xsd:element name="ReclassificationAdjustmentsOutOfAccumulatedOtherComprehensiveIncomeLineItems" id="abc_ReclassificationAdjustmentsOutOfAccumulatedOtherComprehensiveIncomeLineItems" type="xbrli:stringItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="ReclassificationFromAccumulatedOtherComprehensiveIncomeCurrentPeriodNetOfTax" id="abc_ReclassificationFromAccumulatedOtherComprehensiveIncomeCurrentPeriodNetOfTax" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="debit" xbrli:periodType="duration"/>
+  <xsd:element name="ReclassificationOutOfAccumulatedOtherComprehensiveIncomeAxis" id="abc_ReclassificationOutOfAccumulatedOtherComprehensiveIncomeAxis" type="xbrli:stringItemType" substitutionGroup="xbrldt:dimensionItem" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="ReclassificationOutOfAccumulatedOtherComprehensiveIncomeDomain" id="abc_ReclassificationOutOfAccumulatedOtherComprehensiveIncomeDomain" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="ReclassificationOutOfAccumulatedOtherComprehensiveIncomeMember" id="abc_ReclassificationOutOfAccumulatedOtherComprehensiveIncomeMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="ReclassificationOutOfAccumulatedOtherComprehensiveIncomeTable" id="abc_ReclassificationOutOfAccumulatedOtherComprehensiveIncomeTable" type="xbrli:stringItemType" substitutionGroup="xbrldt:hypercubeItem" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="ScheduleOfEffectOnNetIncomeOfAmountsReclassifiedFromAccumulatedOCITableTextBlock" id="abc_ScheduleOfEffectOnNetIncomeOfAmountsReclassifiedFromAccumulatedOCITableTextBlock" type="nonnum:textBlockItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="SecuritiesOwnedAndLoaned" id="abc_SecuritiesOwnedAndLoaned" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" nillable="true" xbrli:balance="debit" xbrli:periodType="instant"/>
+  <xsd:element name="ShortAndLongTermDebtTable" id="abc_ShortAndLongTermDebtTable" type="xbrli:stringItemType" substitutionGroup="xbrldt:hypercubeItem" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="UnsecuredSeniorNotesOnePointTwoFivePercentDueMayNineteenTwentyFourteenMember" id="abc_UnsecuredSeniorNotesOnePointTwoFivePercentDueMayNineteenTwentyFourteenMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="UnsecuredSeniorNotesThreePointSixTwoFivePercentDueMayNineteenTwentyTwentyOneMember" id="abc_UnsecuredSeniorNotesThreePointSixTwoFivePercentDueMayNineteenTwentyTwentyOneMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="UnsecuredSeniorNotesTwoPointOneTwoFivePercentDueMayNineteenTwentySixteenMember" id="abc_UnsecuredSeniorNotesTwoPointOneTwoFivePercentDueMayNineteenTwentySixteenMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+  <xsd:element name="XYZHoldingsIncMember" id="abc_XYZHoldingsIncMember" type="nonnum:domainItemType" substitutionGroup="xbrli:item" abstract="true" nillable="true" xbrli:periodType="duration"/>
+</xsd:schema>

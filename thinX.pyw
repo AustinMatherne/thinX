@@ -3,7 +3,7 @@
 import namespace
 import os
 import platform
-from PySide import QtGui
+from PyQt4 import QtGui
 import sys
 from ui_thinX import Ui_MainWindow
 import xbrl
@@ -68,7 +68,7 @@ class ThinX(QtGui.QMainWindow):
         """
         self.ui.textLog.clear()
         self.filename = QtGui.QFileDialog.getOpenFileName(
-            filter="Instance Document (*.XML *.XBRL)")[0]
+            filter="Instance Document (*.XML *.XBRL)")
         if self.filename != "":
             self.status.setText(self.filename)
         else:
@@ -119,7 +119,7 @@ class ThinX(QtGui.QMainWindow):
                                        "Been Modified:</strong>")
                 for dict in logs:
                     for item in dict:
-                        self.ui.textLog.append(item +" > " + dict[item])
+                        self.ui.textLog.append(item + " > " + dict[item])
                 self.ui.textLog.append("<br>")
             else:
                 self.status.setText("No Units Found to Fix ")
@@ -188,7 +188,7 @@ class ThinX(QtGui.QMainWindow):
                         self.ui.textLog.append(item + " *" + str(log[item] + 1))
                     else:
                         self.ui.textLog.append(item)
-            
+
 
 def main():
     """Launches Qt and creates an instance of ThinX."""
