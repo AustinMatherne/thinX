@@ -46,4 +46,13 @@ class Units(unittest.TestCase):
         self.assertEqual(acre, "test:acre")
 
     def test_extended_measures(self):
-        pass
+        prefixes = ["xbrli", "iso4217"]
+        extensions = ["abc:item", "abc:Y", "abc:acre", "abc:wk", "abc:MMcfe",
+                      "abc:MM", "abc:mm", "abc:Q", "abc:t", "abc:T"]
+
+        extended = xbrl.extended_measures(
+            self.root,
+            prefixes,
+            self.unit_config_file
+        )
+        self.assertEqual(extended, extensions)

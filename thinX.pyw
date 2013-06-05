@@ -125,7 +125,6 @@ class ThinX(QtGui.QMainWindow):
                 self.status.setText("No Units Found to Fix ")
 
             if len(check) > 0:
-                print(check)
                 self.ui.textLog.append("<strong>The Following Measures "
                                        "Require User Approval:</strong>")
                 for measure in check:
@@ -189,7 +188,7 @@ class ThinX(QtGui.QMainWindow):
                         self.ui.textLog.append(item + " *" + str(log[item] + 1))
                     else:
                         self.ui.textLog.append(item)
-            
+
 
 def main():
     """Launches Qt and creates an instance of ThinX."""
