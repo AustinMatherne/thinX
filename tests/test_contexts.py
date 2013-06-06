@@ -24,11 +24,12 @@ class Units(unittest.TestCase):
         ])
         unused_contexts = sorted(xbrl.clean_contexts(self.root))
 
+        #Check that the unused contexts match up with what was expected.
         self.assertEqual(unused_contexts, expected_unused_contexts)
 
         context_xpath = ".//{http://www.xbrl.org/2003/instance}context"
-        context_ids = []
         contexts = self.root.findall(context_xpath)
+        context_ids = []
         for context in contexts:
             context_ids.append(context.get("id"))
 
