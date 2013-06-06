@@ -37,21 +37,21 @@ class ThinX(QtGui.QMainWindow):
     def about(self):
         """Displays project information."""
         self.ui.textLog.clear()
-        self.ui.textLog.append('<html><head/><body><p align=\"center\"><span '
-                               'style=\"font-size:24pt; font-weight:600;\">'
-                               'thinX</span></p></body></html>')
+        self.ui.textLog.append(
+            '<html><head/><body><p align=\"center\"><span style=\"font-size:'
+            '24pt; font-weight:600;\">thinX</span></p></body></html>'
+        )
         if hasattr(sys,"frozen"):
-            self.ui.textLog.append('<html><head/><body><p align=\"center\" '
-                                   'style=\" font-size:10pt;\">'
-                                    + self.app.active_version +
-                                   '</p></body></html>')
-        self.ui.textLog.append('<p align=\"center\">'
-                               '<span style=\" font-size:10pt;\">thinX '
-                               'is an open source XBRL toolkit developed and '
-                               'maintained<br>by Austin M. Matherne and '
-                               'released under the WTFPL.</span></p><p align='
-                               '\"center\">https://github.com/AustinMatherne/'
-                               'thinX</p>')
+            self.ui.textLog.append(
+                '<html><head/><body><p align=\"center\" style=\" font-size:'
+                '10pt;\">' + self.app.active_version + '</p></body></html>'
+            )
+        self.ui.textLog.append(
+            '<p align=\"center\"><span style=\" font-size:10pt;\">thinX is an '
+            'open source XBRL toolkit developed and maintained<br>by Austin M. '
+            'Matherne and released under the WTFPL.</span></p><p align='
+            '\"center\">https://github.com/AustinMatherne/thinX</p>'
+        )
 
     def reset_status(self):
         """Resets the text in the status bar."""
@@ -82,8 +82,9 @@ class ThinX(QtGui.QMainWindow):
 
         """
         if self.filename == "":
-            self.status.setText("You Must Open an Instance Document Before "
-                                "Processing ")
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
             return
         else:
             fixed = False
@@ -115,8 +116,10 @@ class ThinX(QtGui.QMainWindow):
             self.ui.textLog.clear()
             if fixed == True:
                 self.status.setText("XBRL International Units Registry ")
-                self.ui.textLog.append("<strong>The Following Measures Have "
-                                       "Been Modified:</strong>")
+                self.ui.textLog.append(
+                    "<strong>The Following Measures Have Been Modified:"
+                    "</strong>"
+                )
                 for dict in logs:
                     for item in dict:
                         self.ui.textLog.append(item + " > " + dict[item])
@@ -125,16 +128,19 @@ class ThinX(QtGui.QMainWindow):
                 self.status.setText("No Units Found to Fix ")
 
             if len(check) > 0:
-                self.ui.textLog.append("<strong>The Following Measures "
-                                       "Require User Approval:</strong>")
+                self.ui.textLog.append(
+                    "<strong>The Following Measures Require User Approval:"
+                    "</strong>"
+                )
                 for measure in check:
                     self.ui.textLog.append(measure)
 
     def contexts(self):
         """Removes unused contexts from self.filename."""
         if self.filename == "":
-            self.status.setText("You Must Open an Instance Document Before "
-                                "Processing ")
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
             return
         else:
             try:
@@ -152,8 +158,9 @@ class ThinX(QtGui.QMainWindow):
             if not log:
                 self.status.setText("No Unused Contexts Found in File ")
             else:
-                self.status.setText("The Above Unreferenced Contexts Have "
-                                    "Been Removed ")
+                self.status.setText(
+                    "The Above Unreferenced Contexts Have Been Removed "
+                )
                 for item in log:
                     self.ui.textLog.append(item)
 
@@ -163,8 +170,9 @@ class ThinX(QtGui.QMainWindow):
 
         """
         if self.filename == "":
-            self.status.setText("You Must Open an Instance Document Before "
-                                "Processing ")
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
             return
         else:
             try:
@@ -181,8 +189,10 @@ class ThinX(QtGui.QMainWindow):
             if not log:
                 self.status.setText("No Duplicate Calculations Found ")
             else:
-                self.status.setText("Duplicate Calculations With The Above "
-                                    "Total Concepts Have Been Found ")
+                self.status.setText(
+                    "Duplicate Calculations With The Above Total Concepts Have "
+                    "Been Found "
+                )
                 for item in log:
                     if log[item] > 0:
                         self.ui.textLog.append(item + " *" + str(log[item] + 1))

@@ -13,20 +13,24 @@ class Units(unittest.TestCase):
         self.root = self.tree.getroot()
 
     def test_clean_contexts(self):
-        expected_unused_contexts = [
-            "D2012Q1_CostOfSalesMember",
+        expected_unused_contexts = sorted([
             "D2012Q2",
-            "D2012Q2_AccumulatedNetGainLossFromDesignatedOrQualifyingCashFlowHedgesMember",
+            "D2012Q1_CostOfSalesMember",
             "D2013Q1_CommonClassAMember",
-            "I2012Q2_AccumulatedNetGainLossFromDesignatedOrQualifyingCashFlowHedgesMember"
-        ]
-        log = sorted(xbrl.clean_contexts(self.root))
+            "D2012Q2_AccumulatedNetGainLossFromDesignatedOrQualifyingCashFlow" \
+                "HedgesMember",
+            "I2012Q2_AccumulatedNetGainLossFromDesignatedOrQualifyingCashFlow" \
+                "HedgesMember"
+        ])
+        unused_contexts = sorted(xbrl.clean_contexts(self.root))
 
-        self.assertEqual(log, expected_unused_contexts)
-        mine = []
-        temps = self.root.findall(".//{http://www.xbrl.org/2003/instance}context")
-        for temp in temps:
-            mine.append(temp.get("id"))
+        self.assertEqual(unused_contexts, expected_unused_contexts)
+
+        context_xpath = ".//{http://www.xbrl.org/2003/instance}context"
+        context_ids = []
+        contexts = self.root.findall(context_xpath)
+        for context in contexts:
+            context_ids.append(context.get("id"))
 
         for context in expected_unused_contexts:
-            self.assertNotIn(context, mine)
+            self.assertNotIn(context, context_ids)

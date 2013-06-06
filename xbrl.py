@@ -42,7 +42,8 @@ def add_namespace(elem, prefix, ns, clean_measures):
     elem.set(prefix, ns)
     lower_clean_measures = [x.lower() for x in clean_measures]
     dup_measures = [x for x, y in collections.Counter(lower_clean_measures).items() if y > 1]
-    current_measures = elem.findall(".//{http://www.xbrl.org/2003/instance}measure")
+    measure_xpath = ".//{http://www.xbrl.org/2003/instance}measure"
+    current_measures = elem.findall(measure_xpath)
     for element in current_measures:
         current_measure = element.text.split(":")[1]
         for clean_measure in clean_measures:
@@ -67,7 +68,8 @@ def extended_measures(elem, prefixes, ini):
     for namespace in units:
         standard_prefixes.append(units[namespace]["Prefix"])
     all_prefixes = prefixes + standard_prefixes
-    current_measures = elem.findall(".//{http://www.xbrl.org/2003/instance}measure")
+    measure_xpath = ".//{http://www.xbrl.org/2003/instance}measure"
+    current_measures = elem.findall(measure_xpath)
     for element in current_measures:
         current_measure = element.text.split(":")[0]
         if current_measure not in all_prefixes:
@@ -83,7 +85,8 @@ def clean_contexts(elem):
     """
     contexts = {}
     contexts_removed = []
-    current_contexts = elem.findall(".//{http://www.xbrl.org/2003/instance}context")
+    context_xpath = ".//{http://www.xbrl.org/2003/instance}context"
+    current_contexts = elem.findall(context_xpath)
     for element in current_contexts:
         contexts[element] = element.get("id")
     for context in contexts:
@@ -103,13 +106,15 @@ def get_linkbase(filename, linkbase):
         return filename[:-4] + "_" + linkbase + ".xml"
 
 def get_calcs(elem):
-    """..."""
+    """Return all calculation relationships discovered in the given element."""
     store = {}
-    linkroles = elem.findall(".//{http://www.xbrl.org/2003/linkbase}calculationLink")
+    calc_link_xpath = ".//{http://www.xbrl.org/2003/linkbase}calculationLink"
+    calc_arc_xpath = ".//{http://www.xbrl.org/2003/linkbase}calculationArc"
+    linkroles = elem.findall(calc_link_xpath)
     for linkrole in linkroles:
         link_role_href = linkrole.get("{http://www.w3.org/1999/xlink}role")
         store[link_role_href] = {}
-        arcs = linkrole.findall(".//{http://www.xbrl.org/2003/linkbase}calculationArc")
+        arcs = linkrole.findall(calc_arc_xpath)
         for arc in arcs:
             arc_from = arc.get("{http://www.w3.org/1999/xlink}from")
             arc_to = arc.get("{http://www.w3.org/1999/xlink}to")
@@ -124,7 +129,7 @@ def get_calcs(elem):
     return store
 
 def dup_calcs(elem):
-    """..."""
+    """Return all duplicate calculation relationships in the given element."""
     store = get_calcs(elem)
     warnings = {}
     base_calcs = {}
