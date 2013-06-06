@@ -32,7 +32,7 @@ def parse_xmlns(file):
     return ET.ElementTree(root)
 
 
-def fixup_element_prefixes(elem, uri_map, memo):
+def fixup_element_prefixes(elem, uri_map, memo={}):
     """Accepts an element and replaces any namespace it finds with its
     corresponding xmlns prefix.
 
@@ -55,6 +55,7 @@ def fixup_element_prefixes(elem, uri_map, memo):
                 return new_name
 
     # Fix element name.
+    print(elem.tag)
     name = fixup(elem.tag)
     if name:
         elem.tag = name
@@ -87,7 +88,7 @@ def fixup_xmlns(elem, maps=None):
         uri_map = maps[-1]
 
     # Fixup this element.
-    fixup_element_prefixes(elem, uri_map, {})
+    fixup_element_prefixes(elem, uri_map)
 
     # Process elements.
     maps.append(uri_map)
