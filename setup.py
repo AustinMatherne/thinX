@@ -1,8 +1,21 @@
 from distutils.core import setup
+import re
+
+def get_version(filename):
+    try:
+        f = open(filename)
+    except EnvironmentError:
+        return None
+    for line in f.readlines():
+        mo = re.match("__version__ = \"([^']+)\"", line)
+        if mo:
+            ver = mo.group(1)
+            return ver
+    return None
 
 setup(
     name = "thinX",
-    version = "0.6.0",
+    version=get_version("_version.py"),
     description="GUI with various utilities for manipulating XBRL files.",
     author="Austin M. Matherne",
     author_email="AustinMatherne@Gmail.com",

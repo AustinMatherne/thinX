@@ -1,10 +1,9 @@
-1. Dump esky and move to native Python implementation using InnoSetup to update.
-2. Raise a flag for calculations which are subsets of other calculations.
-3. Add a Merrill units registry.
-4. Update xbrl.get_linkbase to use the DTS to discover linkbases.
-5. Create Inno Setup application updater.
-6. Create a process for automatically updating extension taxonomies to new versions of the US-GAAP taxonomy that is capable of handling one to one element replacements.
-7. Determine duplicate calculations by qname instead of by xlink references.
-8. Correctly handle instance files which utilize a document wide namespace.
-9. Add a utility to remove labels which are not in use.
-10. Add a utility to remove unused concepts from the various linkbases.
+* Raise a flag for calculations which are subsets of other calculations.
+* Add a Merrill units registry.
+* Update xbrl.get_linkbase to use the DTS to discover linkbases.
+* Create Inno Setup application updater.
+* Create a process for automatically updating extension taxonomies to new versions of the US-GAAP taxonomy that is capable of handling one to one element replacements.
+* Determine duplicate calculations by qname instead of by xlink references.
+* Correctly handle instance files which utilize a document wide namespace.
+* Add a utility to remove labels which are not in use.
+* Add a utility to remove unused concepts from the various linkbases.

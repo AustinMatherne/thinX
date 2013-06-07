@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
 import namespace
-import os
-import platform
-from PyQt4 import QtGui
 import sys
+import re
+from PyQt4 import QtGui
 from ui_thinX import Ui_MainWindow
 import xbrl
 
@@ -34,23 +33,30 @@ class ThinX(QtGui.QMainWindow):
         self.reset_status()
         self.statusBar().addPermanentWidget(self.status)
 
+    def get_version(self):
+        try:
+            f = open("_version.py")
+        except EnvironmentError:
+            return None
+        for line in f.readlines():
+            mo = re.match("__version__ = \"([^']+)\"", line)
+            if mo:
+                ver = mo.group(1)
+                print(type(ver))
+                return ver
+        return None
+
     def about(self):
         """Displays project information."""
         self.ui.textLog.clear()
         self.ui.textLog.append(
-            '<html><head/><body><p align=\"center\"><span style=\"font-size:'
-            '24pt; font-weight:600;\">thinX</span></p></body></html>'
-        )
-        if hasattr(sys,"frozen"):
-            self.ui.textLog.append(
-                '<html><head/><body><p align=\"center\" style=\" font-size:'
-                '10pt;\">' + self.app.active_version + '</p></body></html>'
-            )
-        self.ui.textLog.append(
-            '<p align=\"center\"><span style=\" font-size:10pt;\">thinX is an '
-            'open source XBRL toolkit developed and maintained<br>by Austin M. '
-            'Matherne and released under the WTFPL.</span></p><p align='
-            '\"center\">https://github.com/AustinMatherne/thinX</p>'
+            "<html><head/><body><p align=\"center\" style=\"font-size:24pt; "
+            "font-weight:600;\">thinX</p><p align=\"center\"><span style=\" "
+            "font-size:10pt;\">thinX is an open source XBRL toolkit developed "
+            "and maintained<br>by Austin M. Matherne and released under the "
+            "WTFPL.</span></p><p align=\"center\">https://github.com/Austin"
+            "Matherne/thinX</p><p align=\"center\" style=\"font-size:8pt;\">"
+            + self.get_version() + "</p></body></html>"
         )
 
     def reset_status(self):
