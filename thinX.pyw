@@ -42,7 +42,6 @@ class ThinX(QtGui.QMainWindow):
             mo = re.match("__version__ = \"([^']+)\"", line)
             if mo:
                 ver = mo.group(1)
-                print(type(ver))
                 return ver
         return None
 
@@ -196,7 +195,7 @@ class ThinX(QtGui.QMainWindow):
                 self.status.setText("No Duplicate Calculations Found ")
             else:
                 self.status.setText(
-                    "Duplicate Calculations With The Above Total Concepts Have "
+                    "Duplicate Calculations For The Above Total Concepts Have "
                     "Been Found "
                 )
                 for item in log:

@@ -58,7 +58,8 @@ class Units(unittest.TestCase):
         cal_root = cal_tree.getroot()
         expected_dup_calcs = {
             "OtherComprehensiveIncomeLossAvailableForSaleSecuritiesAdjustmentNetOfTax": 0,
-            "NetCashProvidedByUsedInInvestingActivities": 1
+            "NetCashProvidedByUsedInInvestingActivities": 1,
+            "NetIncomeLoss": 0
         }
         duplicate_calcs = xbrl.dup_calcs(cal_root)
 

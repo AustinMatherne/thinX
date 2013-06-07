@@ -42,7 +42,7 @@ The Unused Contexts utility searches the selected instance document for declared
 
 ### Duplicate Calculations
 
-The Duplicate Calculations utility searches the corresponding calculation linkbase of the selected instance document for duplicate calculation relationships. All duplicate calculations are logged.
+The Duplicate Calculations utility searches the corresponding calculation linkbase of the selected instance document for duplicate calculation relationships. All duplicate calculations, including subsets, are logged.
 
 
 [1]: http://scottchacon.com/2011/08/31/github-flow.html

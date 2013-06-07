@@ -1,4 +1,3 @@
-* Raise a flag for calculations which are subsets of other calculations.
 * Add a Merrill units registry.
 * Update xbrl.get_linkbase to use the DTS to discover linkbases.
 * Create Inno Setup application updater.

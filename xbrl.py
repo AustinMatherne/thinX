@@ -132,18 +132,47 @@ def dup_calcs(elem):
     """Return all duplicate calculation relationships in the given element."""
     store = get_calcs(elem)
     warnings = {}
+
+    def add_warning(total):
+         #Check to see if a duplicate calculation has already been found for the total.
+        if total in warnings:
+            warnings[total] += 1
+        else:
+            warnings[total] = 0
+
     base_calcs = {}
+    #Loop through linkroles in store.
     for linkrole in store:
+        #Loop through calculations in linkroles.
         for total in store[linkrole]:
+            #Check to see if total is already in base_calcs.
             if total in base_calcs:
-                if store[linkrole][total] in base_calcs[total]:
-                    if total in warnings:
-                        warnings[total] += 1
-                    else:
-                        warnings[total] = 0
+                #Check to see if elements that add up to total are already in base_calcs.
+                new_children = set(store[linkrole][total])
+                totals = base_calcs[total]
+                if new_children in totals:
+                    add_warning(total)
                 else:
-                    base_calcs[total].append(store[linkrole][total])
+                    set_new_children = set(new_children)
+                    for foot in totals:
+                        set_old_children = set(foot)
+                        if set_new_children.issubset(set_old_children):
+                            add_warning(total)
+                            found = True
+                            break
+                        elif set_new_children.issuperset(set_old_children):
+                            add_warning(total)
+                            foot = store[linkrole][total]
+                            found = True
+                            break
+
+                    if not found:
+                        totals.append(store[linkrole][total])
+
+            #If total isn't already in base_calcs, add it.
             else:
                 base_calcs[total] = [store[linkrole][total]]
 
+
     return warnings
+
