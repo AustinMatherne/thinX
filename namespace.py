@@ -55,7 +55,6 @@ def fixup_element_prefixes(elem, uri_map, memo={}):
                 return new_name
 
     # Fix element name.
-    print(elem.tag)
     name = fixup(elem.tag)
     if name:
         elem.tag = name

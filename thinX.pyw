@@ -125,17 +125,18 @@ class ThinX(QtGui.QMainWindow):
                     "<strong>The Following Measures Have Been Modified:"
                     "</strong>"
                 )
-                for dict in logs:
-                    for item in dict:
-                        self.ui.textLog.append(item + " > " + dict[item])
+                for dictionary in logs:
+                    for item in dictionary:
+                        self.ui.textLog.append(item + " > " + dictionary[item])
                 self.ui.textLog.append("<br>")
             else:
                 self.status.setText("No Units Found to Fix ")
 
             if len(check) > 0:
                 self.ui.textLog.append(
-                    "<strong>The Following Measures Require User Approval:"
-                    "</strong>"
+                    "<strong>The Following Measures Are Not Part Of Any Known "
+                    "Units Database:<br>If You Believe They Are Legitimate, "
+                    "Please Contact Austin M. Matherne.</strong>"
                 )
                 for measure in check:
                     self.ui.textLog.append(measure)

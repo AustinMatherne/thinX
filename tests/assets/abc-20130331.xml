@@ -597,7 +597,10 @@
     </xbrli:divide>
   </xbrli:unit>
   <xbrli:unit id="Item">
-    <xbrli:measure>abc:item</xbrli:measure>
+    <xbrli:measure>abc:Item</xbrli:measure>
+  </xbrli:unit>
+  <xbrli:unit id="Fake">
+    <xbrli:measure>abc:fake</xbrli:measure>
   </xbrli:unit>
   <xbrli:unit id="Year">
     <xbrli:measure>abc:Y</xbrli:measure>
