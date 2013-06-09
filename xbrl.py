@@ -44,9 +44,13 @@ def add_namespace(elem, prefix, ns, clean_measures):
         elem.set(prefix, ns)
 
     #Let's get some lowercase measures to work with.
-    lower_clean_measures = [x.lower() for x in clean_measures]
+    low_clean_measures = [x.lower() for x in clean_measures]
     #And let's get rid of any duplicates.
-    dup_measures = [x for x, y in collections.Counter(lower_clean_measures).items() if y > 1]
+    low_clean_measures = [
+        key
+        for key, value in collections.Counter(low_clean_measures).items()
+            if value > 1
+    ]
     #Store the xpath for retrieving measures.
     measure_xpath = ".//{http://www.xbrl.org/2003/instance}measure"
     #Find all measures.
@@ -57,16 +61,25 @@ def add_namespace(elem, prefix, ns, clean_measures):
         current_measure = element.text.split(":")[1]
         #For each clean measure.
         for clean_measure in clean_measures:
+            #Convert it to lowercase.
             clean_measure_lower = clean_measure.lower()
+            #Compare it against the lowercase version of the current measure.
             if current_measure.lower() == clean_measure_lower:
+                #Find the current measure, with prefix.
                 old = element.text
+                #Are we dealing with a base measure?
                 if prefix_end == "base":
+                    #If we are, save the clean measure with the old prefix.
                     new = old.split(":")[0] + ":" + clean_measure
+                #If we aren't, save the clean measure with the new prefix.
                 else:
                     new = prefix_end + ":" + clean_measure
+                #If the clean measure is already set, don't bother writing it.
                 if new != old:
-                    if current_measure != clean_measure and clean_measure_lower in dup_measures:
+                    #Are we dealing with a measure that's case sensitive?
+                    if current_measure != clean_measure and clean_measure_lower in low_clean_measures:
                         pass
+                    #If not, set the clean measure.
                     else:
                         element.text = new
                         log[old] = new
@@ -86,9 +99,9 @@ def extended_measures(elem, prefixes, ini):
     measure_xpath = ".//{http://www.xbrl.org/2003/instance}measure"
     current_measures = elem.findall(measure_xpath)
     for element in current_measures:
-        current_prefix = element.text.split(":")[0]
-        current_measure = element.text.split(":")[1]
-        if current_prefix not in all_prefixes and current_measure not in base_units:
+        curnt_prefix = element.text.split(":")[0]
+        curnt_measure = element.text.split(":")[1]
+        if curnt_prefix not in all_prefixes and curnt_measure not in base_units:
             if element.text not in log:
                 log.append(element.text)
 
