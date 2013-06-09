@@ -47,8 +47,10 @@ class Units(unittest.TestCase):
 
     def test_extended_measures(self):
         prefixes = ["xbrli", "iso4217"]
-        extensions = ["abc:Y", "abc:acre", "abc:wk", "abc:MMcfe", "abc:MM",
-                      "abc:mm", "abc:Q", "abc:t", "abc:T"]
+        extensions = [
+            "abc:Item", "abc:fake", "abc:Y", "abc:acre", "abc:wk", "abc:MMcfe",
+            "abc:MM", "abc:mm", "abc:Q", "abc:t", "abc:T"
+        ]
 
         extended = xbrl.extended_measures(
             self.root,
