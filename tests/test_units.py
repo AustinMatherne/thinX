@@ -27,9 +27,14 @@ class Units(unittest.TestCase):
 
     def test_add_namespace(self):
         prefix = "xmlns:test"
+        base_prefix = "xmlns:base"
         ns = "http://www.example.org/1989/instance"
+        base_ns = "http://www.example.com/2013/base"
         measures = ["Y", "t", "T", "fake", "acre"]
-        log = xbrl.add_namespace(self.root, prefix, ns, measures)
+        base_measures = ["item"]
+
+        xbrl.add_namespace(self.root, prefix, ns, measures)
+        xbrl.add_namespace(self.root, base_prefix, base_ns, base_measures)
 
         self.assertEqual(self.root.get(prefix), ns)
 
@@ -39,11 +44,13 @@ class Units(unittest.TestCase):
         tonne = self.root.findtext(unit_elem % {"unit": "Tonne"})
         ton = self.root.findtext(unit_elem % {"unit": "Ton"})
         acre = self.root.findtext(unit_elem % {"unit": "Acre"})
+        item = self.root.findtext(unit_elem % {"unit": "Item"})
 
         self.assertEqual(year, "test:Y")
         self.assertEqual(tonne, "test:t")
         self.assertEqual(ton, "test:T")
         self.assertEqual(acre, "test:acre")
+        self.assertEqual(item, "abc:item")
 
     def test_extended_measures(self):
         prefixes = ["xbrli", "iso4217"]
