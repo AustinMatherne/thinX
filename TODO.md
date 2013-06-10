@@ -1,3 +1,4 @@
+* Report incorrectly typed measures under standard namespaces.
 * Create Inno Setup application updater.
 * Determine duplicate calculations by qname instead of by xlink references.
 * Update xbrl.get_linkbase to use the DTS to discover linkbases.
