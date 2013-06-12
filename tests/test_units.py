@@ -52,16 +52,16 @@ class Units(unittest.TestCase):
         self.assertEqual(acre, "test:acre")
         self.assertEqual(item, "abc:item")
 
-    def test_extended_measures(self):
-        prefixes = ["xbrli", "iso4217"]
-        extensions = [
-            "abc:Item", "abc:fake", "abc:Y", "abc:acre", "abc:wk", "abc:MMcfe",
-            "abc:MM", "abc:mm", "abc:Q", "abc:t", "abc:T"
+    def test_unknown_measures(self):
+        expected_unknown = [
+            "xbrli:shares", "iso4217:USD", "iso4217:USD", "xbrli:shares",
+            "abc:Item", "abc:fake", "iso4217:typo", "abc:Y", "abc:acre",
+            "abc:wk", "abc:MMcfe", "abc:MM", "abc:mm", "abc:Q", "abc:t", "abc:T"
         ]
 
-        extended = xbrl.extended_measures(
+        unknown = xbrl.unknown_measures(
             self.root,
-            prefixes,
-            self.unit_config_file
+            self.unit_config_file,
+            self.instance_file
         )
-        self.assertEqual(extended, extensions)
+        self.assertEqual(unknown, expected_unknown)
