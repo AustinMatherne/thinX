@@ -102,7 +102,7 @@ class ThinX(QtGui.QMainWindow):
                 return
 
             root = tree.getroot()
-            registries = xbrl.get_units(self.unit_config_file)
+            registries = xbrl.get_units(self.unit_config_file, self.filename)
             prefixes = []
             for registry in registries:
                 reg = registries[registry]
@@ -114,12 +114,15 @@ class ThinX(QtGui.QMainWindow):
                 if log:
                     logs.append(log)
                     fixed = True
-            check = xbrl.extended_measures(root, prefixes,
-                                           self.unit_config_file)
+            check = xbrl.unknown_measures(
+                root,
+                self.unit_config_file,
+                self.filename
+            )
             namespace.fixup_xmlns(root)
             tree.write(self.filename, xml_declaration=True)
             self.ui.textLog.clear()
-            if fixed == True:
+            if fixed:
                 self.status.setText("XBRL International Units Registry ")
                 self.ui.textLog.append(
                     "<strong>The Following Measures Have Been Modified:"

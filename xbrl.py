@@ -2,9 +2,23 @@
 
 import configparser
 import collections
+from thinX import namespace
 
 
-def get_units(ini):
+def get_file_namespace(filename):
+    xsd = get_linkbase(filename, "xsd")
+    tree = namespace.parse_xmlns(xsd)
+    root = tree.getroot()
+    name = root.get("targetNamespace")
+    for item in root.items():
+        if name in item and "targetNamespace" not in item:
+            prefix = item[0].split(":")[1]
+            break
+
+    file_namespace = {"namespace": name, "prefix": prefix}
+    return file_namespace
+
+def get_units(ini, filename=False):
     """Parses the supplied configuration file for unit namespaces, prefixes,
     and measures.
 
@@ -24,6 +38,14 @@ def get_units(ini):
         for measure in measures:
             clean_measures.append(measure.lstrip('\n'))
         registries[section]["Measures"] = clean_measures
+
+
+    if filename:
+        file_namespace = get_file_namespace(filename)
+        file_ns = file_namespace["namespace"]
+        file_prefix = file_namespace["prefix"]
+        registries["BASE"]["Namespace"] = file_ns
+        registries["BASE"]["Prefix"] = file_prefix
 
     # Return a dictionary containing a dictionary for each namespace, which
     # contains a prefix, namespace, and a list of measures.
@@ -86,24 +108,26 @@ def add_namespace(elem, prefix, ns, clean_measures):
 
     return log
 
-def extended_measures(elem, prefixes, ini):
-    """Returns all extended measures in the supplied element."""
+def unknown_measures(elem, ini, filename):
+    """Returns all measures in the supplied element which are not defined in the
+    passed configuration file.
+
+    """
     log = []
-    units = get_units(ini)
-    base_units = units["BASE"]["Measures"]
-    standard_prefixes = []
-    for namespace in units:
-        if units[namespace]["Prefix"] != "base":
-            standard_prefixes.append(units[namespace]["Prefix"])
-    all_prefixes = prefixes + standard_prefixes
+    prefixes = []
+    units = get_units(ini, filename)
     measure_xpath = ".//{http://www.xbrl.org/2003/instance}measure"
     current_measures = elem.findall(measure_xpath)
     for element in current_measures:
-        curnt_prefix = element.text.split(":")[0]
-        curnt_measure = element.text.split(":")[1]
-        if curnt_prefix not in all_prefixes and curnt_measure not in base_units:
-            if element.text not in log:
-                log.append(element.text)
+        logit = True
+        for item in units:
+            prefix = units[item]["Prefix"]
+            for measure in units[item]["Measures"]:
+                if prefix + ":" + measure == element.text:
+                    logit = False
+
+        if logit:
+            log.append(element.text)
 
     return log
 
@@ -205,4 +229,3 @@ def dup_calcs(elem):
 
 
     return warnings
-
