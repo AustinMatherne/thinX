@@ -2,6 +2,7 @@
 
 import configparser
 import collections
+import re
 from thinX import namespace
 
 
@@ -62,8 +63,7 @@ def add_namespace(elem, prefix, ns, clean_measures):
     """
     log = {}
     prefix_end = prefix.split(":")[1]
-    if prefix_end != "base":
-        elem.set(prefix, ns)
+    elem.set(prefix, ns)
 
     #Let's get some lowercase measures to work with.
     low_clean_measures = [x.lower() for x in clean_measures]
@@ -80,21 +80,27 @@ def add_namespace(elem, prefix, ns, clean_measures):
     #For each measure.
     for element in current_measures:
         #Let's take the measure, minus the prefix.
-        current_measure = element.text.split(":")[1]
+        current_measure = element.text.split(":")
+        if len(current_measure) > 1:
+            noprefix = False
+            current_measure = current_measure[1]
+        else:
+            noprefix = True
+            current_measure = current_measure[0]
         #For each clean measure.
         for clean_measure in clean_measures:
             #Convert it to lowercase.
             clean_measure_lower = clean_measure.lower()
             #Compare it against the lowercase version of the current measure.
             if current_measure.lower() == clean_measure_lower:
-                #Find the current measure, with prefix.
+                #Find the current measure, with, or without prefix.
                 old = element.text
-                #Are we dealing with a base measure?
-                if prefix_end == "base":
-                    #If we are, save the clean measure with the old prefix.
-                    new = old.split(":")[0] + ":" + clean_measure
-                #If we aren't, save the clean measure with the new prefix.
+                #Check to see if we were using a prefix.
+                if noprefix:
+                    #We weren't, so save the clean measure without a prefix.
+                    new = clean_measure
                 else:
+                    #We were, so save the clean measure with the new prefix.
                     new = prefix_end + ":" + clean_measure
                 #If the clean measure is already set, don't bother writing it.
                 if new != old:
@@ -117,7 +123,6 @@ def unknown_measures(elem, ini, filename):
 
     """
     log = []
-    prefixes = []
     units = get_units(ini, filename)
     measure_xpath = ".//{http://www.xbrl.org/2003/instance}measure"
     current_measures = elem.findall(measure_xpath)
@@ -126,8 +131,12 @@ def unknown_measures(elem, ini, filename):
         for item in units:
             prefix = units[item]["Prefix"]
             for measure in units[item]["Measures"]:
-                if prefix + ":" + measure == element.text:
-                    logit = False
+                if len(element.text.split(":")) > 1:
+                    if prefix + ":" + measure == element.text:
+                        logit = False
+                else:
+                    if measure == element.text:
+                        logit = False
 
         if logit:
             log.append(element.text)
