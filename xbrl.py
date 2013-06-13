@@ -156,11 +156,44 @@ def clean_contexts(elem):
 
 def get_linkbase(filename, linkbase):
     """Find the requested linkbase in the provided element's DTS."""
-
+    #Store the path to filename.
+    path = filename.rsplit("/", 1)[0] + "/"
+    #Parse the instance document.
+    tree = namespace.parse_xmlns(filename)
+    #Grab the root element.
+    root = tree.getroot()
+    #Find the element containing the schema reference.
+    schema_ref = root.find(".//{http://www.xbrl.org/2003/linkbase}schemaRef")
+    #Grab the schema reference.
+    schema = schema_ref.get("{http://www.w3.org/1999/xlink}href")
+    #Overwrite the instance filename with the schema.
+    filename = path + schema
+    #If the schema was requested, return it.
     if linkbase == "xsd":
-        return filename[:-3] + "xsd"
-    else:
-        return filename[:-4] + "_" + linkbase + ".xml"
+        return filename
+    #Parse the schema.
+    tree = namespace.parse_xmlns(filename)
+    #Grab the root element.
+    root = tree.getroot()
+    #Store the xpath expression for retrieving linkbase references.
+    linkbase_refs_xpath = ".//{http://www.xbrl.org/2003/linkbase}linkbaseRef"
+    #Retrieve all linkbase references.
+    linkbase_refs = root.findall(linkbase_refs_xpath)
+    #Create a dictionary for retrieving each type of linkbase.
+    linkbases = {
+        "pre": "http://www.xbrl.org/2003/role/presentationLinkbaseRef",
+        "def": "http://www.xbrl.org/2003/role/definitionLinkbaseRef",
+        "cal": "http://www.xbrl.org/2003/role/calculationLinkbaseRef",
+        "lab": "http://www.xbrl.org/2003/role/labelLinkbaseRef"
+    }
+    #Store the xpath expression for retrieving role attributes.
+    role_xpath = "{http://www.w3.org/1999/xlink}role"
+    #For each linkbase reference.
+    for linkbase_ref in linkbase_refs:
+        #If the linkbase reference matches the requested linkbase.
+        if linkbase_ref.get(role_xpath) == linkbases[linkbase]:
+            #Return the matching full linkbase filename.
+            return path + linkbase_ref.get("{http://www.w3.org/1999/xlink}href")
 
 def get_calcs(elem):
     """Return all calculation relationships discovered in the given element."""
