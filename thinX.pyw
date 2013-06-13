@@ -184,8 +184,8 @@ class ThinX(QtGui.QMainWindow):
             )
             return
         else:
+            calc_linkbase = xbrl.get_linkbase(self.filename, "cal")
             try:
-                calc_linkbase = xbrl.get_linkbase(self.filename, "cal")
                 tree = namespace.parse_xmlns(calc_linkbase)
             except:
                 self.ui.textLog.clear()
