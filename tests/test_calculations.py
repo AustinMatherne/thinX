@@ -31,10 +31,10 @@ class Units(unittest.TestCase):
         cal_root = cal_tree.getroot()
         linkrole = "http://www.example.com/role/BalanceSheetComponents" \
                         "InventoriesDetails"
-        total = "InventoryNet"
+        total = "us-gaap_InventoryNet"
         elems_to_add = sorted([
-            "InventoryWorkInProcessAndRawMaterialsNetOfReserves",
-            "InventoryFinishedGoodsNetOfReserves"
+            "us-gaap_InventoryWorkInProcessAndRawMaterialsNetOfReserves",
+            "us-gaap_InventoryFinishedGoodsNetOfReserves"
         ])
 
         calc_linkroles = xbrl.get_calcs(cal_root)
@@ -57,9 +57,10 @@ class Units(unittest.TestCase):
         cal_tree = namespace.parse_xmlns(cal_linkbase)
         cal_root = cal_tree.getroot()
         expected_dup_calcs = {
-            "OtherComprehensiveIncomeLossAvailableForSaleSecuritiesAdjustmentNetOfTax": 0,
-            "NetCashProvidedByUsedInInvestingActivities": 1,
-            "NetIncomeLoss": 0
+            "us-gaap_OtherComprehensiveIncomeLossAvailableForSaleSecurities" \
+            "AdjustmentNetOfTax": 0,
+            "us-gaap_NetCashProvidedByUsedInInvestingActivities": 1,
+            "us-gaap_NetIncomeLoss": 0
         }
         duplicate_calcs = xbrl.dup_calcs(cal_root)
 
