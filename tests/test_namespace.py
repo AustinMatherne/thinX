@@ -35,7 +35,7 @@ class Namespace(unittest.TestCase):
         self.assertIn("xmlns:abc", self.root.attrib)
         self.assertIn("xmlns:us-gaap", self.root.attrib)
         self.assertIn("xmlns:xlink", self.root.attrib)
-        self.assertEqual(8, len(self.root.attrib))
+        self.assertEqual(9, len(self.root.attrib))
 
     def test_fixup_xmlns(self):
         namespace.fixup_xmlns(self.root)

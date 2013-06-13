@@ -27,10 +27,10 @@ class Units(unittest.TestCase):
 
     def test_add_namespace(self):
         prefix = "xmlns:test"
-        base_prefix = "xmlns:base"
+        base_prefix = "xmlns:abc"
         ns = "http://www.example.org/1989/instance"
         base_ns = "http://www.example.com/2013/base"
-        measures = ["Y", "t", "T", "fake", "acre"]
+        measures = ["Y", "t", "T", "fake", "acre", "pure"]
         base_measures = ["item"]
 
         xbrl.add_namespace(self.root, prefix, ns, measures)
@@ -45,19 +45,21 @@ class Units(unittest.TestCase):
         ton = self.root.findtext(unit_elem % {"unit": "Ton"})
         acre = self.root.findtext(unit_elem % {"unit": "Acre"})
         item = self.root.findtext(unit_elem % {"unit": "Item"})
+        pure = self.root.findtext(unit_elem % {"unit": "Pure"})
 
         self.assertEqual(year, "test:Y")
         self.assertEqual(tonne, "test:t")
         self.assertEqual(ton, "test:T")
         self.assertEqual(acre, "test:acre")
         self.assertEqual(item, "abc:item")
+        self.assertEqual(pure, "pure")
 
     def test_unknown_measures(self):
         expected_unknown = [
-            "xbrli:shares", "iso4217:USD", "iso4217:USD", "xbrli:shares",
-            "abc:Item", "abc:fake", "abc:M1", "iso4217:typo", "abc:Y",
-            "abc:acre", "abc:wk", "abc:MMcfe", "abc:MM", "abc:mm", "abc:Q",
-            "abc:t", "abc:T"
+            "xbrli:shares", "iso4217:USD", "Pure", "iso4217:USD",
+            "xbrli:shares", "abc:Item", "abc:fake", "abc:M1", "iso4217:typo",
+            "abc:Y", "abc:acre", "abc:wk", "abc:MMcfe", "abc:MM", "abc:mm",
+            "abc:Q", "abc:t", "abc:T"
         ]
 
         unknown = xbrl.unknown_measures(
