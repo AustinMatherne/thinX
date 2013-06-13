@@ -13,22 +13,26 @@ def parse_xmlns(file):
     root = None
     ns_map = []
 
-    # Parse the provided XML file and iterate over each element in the tree.
+    #Parse the provided XML file and iterate over each element in the tree.
     for event, elem in ET.iterparse(file, events):
 
-        # Append the elements namespace to ns_map.
+        #Append the elements namespace to ns_map.
         if event == "start-ns":
             ns_map.append(elem)
 
-        # Add each namespace to the new document tree.
+        #Add each namespace to the new document tree.
         elif event == "start":
             if root is None:
                 root = elem
             for prefix, uri in ns_map:
-                elem.set("xmlns:" + prefix, uri)
+                #If we're dealing with a default namespace, don't set a prefix.
+                if prefix == "":
+                    elem.set("xmlns", uri)
+                else:
+                    elem.set("xmlns:" + prefix, uri)
             ns_map = []
 
-    # Return the document tree with namespace declarations.
+    #Return the document tree with namespace declarations.
     return ET.ElementTree(root)
 
 
@@ -54,12 +58,12 @@ def fixup_element_prefixes(elem, uri_map, memo={}):
                 memo[name] = new_name
                 return new_name
 
-    # Fix element name.
+    #Fix element name.
     name = fixup(elem.tag)
     if name:
         elem.tag = name
 
-    # Fix attribute names.
+    #Fix attribute names.
     for key, value in elem.items():
         name = fixup(key)
         if name:
@@ -75,7 +79,7 @@ def fixup_xmlns(elem, maps=None):
     if maps is None:
         maps = [{}]
 
-    # Check for local overrides.
+    #Check for local overrides.
     xmlns = {}
     for key, value in elem.items():
         if key[:6] == "xmlns:":
@@ -86,10 +90,10 @@ def fixup_xmlns(elem, maps=None):
     else:
         uri_map = maps[-1]
 
-    # Fixup this element.
+    #Fixup this element.
     fixup_element_prefixes(elem, uri_map)
 
-    # Process elements.
+    #Process elements.
     maps.append(uri_map)
     for elem in elem:
         fixup_xmlns(elem, maps)
