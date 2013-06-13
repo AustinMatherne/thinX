@@ -171,14 +171,20 @@ def get_calcs(elem):
         for arc in arcs:
             arc_from = arc.get("{http://www.w3.org/1999/xlink}from")
             arc_to = arc.get("{http://www.w3.org/1999/xlink}to")
-            if arc_from not in store[link_role_href]:
-                store[link_role_href][arc_from] = []
-            store[link_role_href][arc_from].append(arc_to)
+            label_from = linkrole.find(
+                ".//{http://www.xbrl.org/2003/linkbase}loc[@{http://www.w3.org/1999/xlink}label=\"" + arc_from + "\"]")
+            label_to = linkrole.find(
+                ".//{http://www.xbrl.org/2003/linkbase}loc[@{http://www.w3.org/1999/xlink}label=\"" + arc_to + "\"]")
+            parent = label_from.get("{http://www.w3.org/1999/xlink}href").split("#")[1]
+            child = label_to.get("{http://www.w3.org/1999/xlink}href").split("#")[1]
+
+            if parent not in store[link_role_href]:
+                store[link_role_href][parent] = []
+            store[link_role_href][parent].append(child)
 
     for linkrole in store:
-        for arc_from in store[linkrole]:
-            store[linkrole][arc_from].sort()
-
+        for parent in store[linkrole]:
+            store[linkrole][parent].sort()
     return store
 
 def dup_calcs(elem):
@@ -226,6 +232,5 @@ def dup_calcs(elem):
             #If the total element isn't already in base_calcs, add it.
             else:
                 base_calcs[total] = [store[linkrole][total]]
-
 
     return warnings
