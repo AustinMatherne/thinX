@@ -5,7 +5,7 @@ from thinX import namespace
 from thinX import xbrl
 
 
-class Units(unittest.TestCase):
+class Contexts(unittest.TestCase):
 
     def setUp(self):
         self.instance_file = "assets/abc-20130331.xml"

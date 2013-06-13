@@ -603,7 +603,7 @@
     <xbrli:measure>abc:fake</xbrli:measure>
   </xbrli:unit>
   <xbrli:unit id="Test">
-    <xbrli:measure>test:M1</xbrli:measure>
+    <xbrli:measure>abc:M1</xbrli:measure>
   </xbrli:unit>
   <xbrli:unit id="Typo">
     <xbrli:measure>iso4217:typo</xbrli:measure>

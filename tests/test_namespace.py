@@ -4,7 +4,7 @@ import unittest
 from thinX import namespace
 
 
-class Units(unittest.TestCase):
+class Namespace(unittest.TestCase):
 
     def setUp(self):
         self.instance_file = "assets/abc-20130331.xml"

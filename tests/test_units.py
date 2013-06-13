@@ -55,8 +55,9 @@ class Units(unittest.TestCase):
     def test_unknown_measures(self):
         expected_unknown = [
             "xbrli:shares", "iso4217:USD", "iso4217:USD", "xbrli:shares",
-            "abc:Item", "abc:fake", "iso4217:typo", "abc:Y", "abc:acre",
-            "abc:wk", "abc:MMcfe", "abc:MM", "abc:mm", "abc:Q", "abc:t", "abc:T"
+            "abc:Item", "abc:fake", "abc:M1", "iso4217:typo", "abc:Y",
+            "abc:acre", "abc:wk", "abc:MMcfe", "abc:MM", "abc:mm", "abc:Q",
+            "abc:t", "abc:T"
         ]
 
         unknown = xbrl.unknown_measures(
