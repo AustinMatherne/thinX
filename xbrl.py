@@ -99,7 +99,10 @@ def add_namespace(elem, prefix, ns, clean_measures):
                 #If the clean measure is already set, don't bother writing it.
                 if new != old:
                     #Are we dealing with a measure that's case sensitive?
-                    if current_measure != clean_measure and clean_measure_lower in low_clean_measures:
+                    if (
+                        current_measure != clean_measure and
+                        clean_measure_lower in low_clean_measures
+                    ):
                         pass
                     #If not, set the clean measure.
                     else:
@@ -143,7 +146,7 @@ def clean_contexts(elem):
     for element in current_contexts:
         contexts[element] = element.get("id")
     for context in contexts:
-        fact_values_xpath = ".//*[@contextRef='" + str(contexts[context]) + "']"
+        fact_values_xpath = ".//*[@contextRef='%s']" % str(contexts[context])
         fact_value = elem.find(fact_values_xpath)
         if fact_value is None:
             contexts_removed.append(contexts[context])
@@ -153,6 +156,7 @@ def clean_contexts(elem):
 
 def get_linkbase(filename, linkbase):
     """Find the requested linkbase in the provided element's DTS."""
+
     if linkbase == "xsd":
         return filename[:-3] + "xsd"
     else:
@@ -163,6 +167,8 @@ def get_calcs(elem):
     store = {}
     calc_link_xpath = ".//{http://www.xbrl.org/2003/linkbase}calculationLink"
     calc_arc_xpath = ".//{http://www.xbrl.org/2003/linkbase}calculationArc"
+    calc_loc_xpath = ".//{http://www.xbrl.org/2003/linkbase}loc"
+    label_attr_xpath = "[@{http://www.w3.org/1999/xlink}label=\"%s\"]"
     linkroles = elem.findall(calc_link_xpath)
     for linkrole in linkroles:
         link_role_href = linkrole.get("{http://www.w3.org/1999/xlink}role")
@@ -172,11 +178,16 @@ def get_calcs(elem):
             arc_from = arc.get("{http://www.w3.org/1999/xlink}from")
             arc_to = arc.get("{http://www.w3.org/1999/xlink}to")
             label_from = linkrole.find(
-                ".//{http://www.xbrl.org/2003/linkbase}loc[@{http://www.w3.org/1999/xlink}label=\"" + arc_from + "\"]")
+                calc_loc_xpath + label_attr_xpath % arc_from
+            )
             label_to = linkrole.find(
-                ".//{http://www.xbrl.org/2003/linkbase}loc[@{http://www.w3.org/1999/xlink}label=\"" + arc_to + "\"]")
-            parent = label_from.get("{http://www.w3.org/1999/xlink}href").split("#")[1]
-            child = label_to.get("{http://www.w3.org/1999/xlink}href").split("#")[1]
+                calc_loc_xpath + label_attr_xpath % arc_to
+            )
+            parent = label_from.get("{http://www.w3.org/1999/xlink}href")
+            child = label_to.get("{http://www.w3.org/1999/xlink}href")
+
+            parent = parent.split("#")[1]
+            child = child.split("#")[1]
 
             if parent not in store[link_role_href]:
                 store[link_role_href][parent] = []
