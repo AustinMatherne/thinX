@@ -1,5 +1,5 @@
 #define MyAppName "thinX"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Austin M. Matherne"
 #define MyAppURL "https://github.com/AustinMatherne/thinX"
 #define MyAppExeName "thinX.exe"
