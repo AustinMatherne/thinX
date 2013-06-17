@@ -63,6 +63,7 @@
     </property>
     <addaction name="actionContexts"/>
     <addaction name="actionUnits"/>
+    <addaction name="actionLabels"/>
     <addaction name="actionCalculations"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -91,6 +92,8 @@
    <addaction name="actionContexts"/>
    <addaction name="separator"/>
    <addaction name="actionUnits"/>
+   <addaction name="separator"/>
+   <addaction name="actionLabels"/>
    <addaction name="separator"/>
    <addaction name="actionCalculations"/>
    <addaction name="separator"/>
@@ -150,6 +153,18 @@
    </property>
    <property name="text">
     <string>Find Duplicate Calculations</string>
+   </property>
+  </action>
+  <action name="actionLabels">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_100_font.png</normaloff>:/Glyphicons/icons/glyphicons_100_font.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Unused Labels</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Unused Labels</string>
    </property>
   </action>
  </widget>

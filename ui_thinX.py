@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Tue Jun  4 15:20:35 2013
+# Created: Sun Jun 16 19:46:44 2013
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -88,11 +88,17 @@ class Ui_MainWindow(object):
         icon6.addPixmap(QtGui.QPixmap(_fromUtf8(":/Glyphicons/icons/glyphicons_041_charts.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionCalculations.setIcon(icon6)
         self.actionCalculations.setObjectName(_fromUtf8("actionCalculations"))
+        self.actionLabels = QtGui.QAction(MainWindow)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(_fromUtf8(":/Glyphicons/icons/glyphicons_100_font.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionLabels.setIcon(icon7)
+        self.actionLabels.setObjectName(_fromUtf8("actionLabels"))
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuUtilities.addAction(self.actionContexts)
         self.menuUtilities.addAction(self.actionUnits)
+        self.menuUtilities.addAction(self.actionLabels)
         self.menuUtilities.addAction(self.actionCalculations)
         self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -103,6 +109,8 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionContexts)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionUnits)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionLabels)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionCalculations)
         self.toolBar.addSeparator()
@@ -123,5 +131,7 @@ class Ui_MainWindow(object):
         self.actionContexts.setText(_translate("MainWindow", "Remove Unused Contexts", None))
         self.actionAbout.setText(_translate("MainWindow", "About", None))
         self.actionCalculations.setText(_translate("MainWindow", "Find Duplicate Calculations", None))
+        self.actionLabels.setText(_translate("MainWindow", "Remove Unused Labels", None))
+        self.actionLabels.setToolTip(_translate("MainWindow", "Remove Unused Labels", None))
 
 import icons_rc
