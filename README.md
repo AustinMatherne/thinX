@@ -31,13 +31,19 @@ thinX follows the [GitHub Flow][1] branching model.
 Utilities
 ---------
 
+### Remove Unused Contexts
+
+The Unused Contexts utility searches the selected instance document for declared contexts that are not in use. All unused contexts are logged and removed from the file.
+
+
 ### Comply with UTR
 
 The UTR utility adds each namespace supplied in the units.ini configuration file and searches the selected instance document for measures which match those defined in units.ini. If a match is found under a different namespace, the prefix for the proper namespace is used, and the capitalization of the measure is corrected if necessary.
 
-### Remove Unused Contexts
 
-The Unused Contexts utility searches the selected instance document for declared contexts that are not in use. All unused contexts are logged and removed from the file.
+### Remove Unused Labels
+
+The Unused Labels utility searches the corresponding label linkbase of the selected instance document for which are not used in the corresponding presentation linkbase. All unused labels are removed and logged.
 
 
 ### Duplicate Calculations
