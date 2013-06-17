@@ -143,6 +143,178 @@ def unknown_measures(elem, ini, filename):
 
     return log
 
+def get_labels(lab_elem):
+    """Return a dictionary of all labels in the element."""
+    found_labels = {}
+    loc_xpath = ".//{http://www.xbrl.org/2003/linkbase}loc"
+    label_xpath = ".//{http://www.xbrl.org/2003/linkbase}label" \
+                  "[@{http://www.w3.org/1999/xlink}label=\"%s\"]"
+    label_arc_xpath = ".//{http://www.xbrl.org/2003/linkbase}labelArc" \
+                      "[@{http://www.w3.org/1999/xlink}from=\"%s\"]"
+    role_attr_xpath = "{http://www.w3.org/1999/xlink}role"
+    to_attr_xpath = "{http://www.w3.org/1999/xlink}to"
+    href_attr_xpath = "{http://www.w3.org/1999/xlink}href"
+    label_attr_xpath = "{http://www.w3.org/1999/xlink}label"
+    locs = lab_elem.findall(loc_xpath)
+
+    for loc in locs:
+        concept = loc.get(href_attr_xpath)
+        concept_label = loc.get(label_attr_xpath)
+        if concept not in found_labels:
+            found_labels[concept] = {}
+        label_arcs = lab_elem.findall(label_arc_xpath % concept_label)
+        for label_arc in label_arcs:
+            element = label_arc.get(to_attr_xpath)
+            label_element = lab_elem.find(label_xpath % element)
+            label_type = label_element.get(role_attr_xpath)
+            label = label_element.text
+            found_labels[concept][label_type] = label
+
+    return found_labels
+
+def get_used_labels(pre_elem):
+    """Return a dictionary listing all active labels in the element."""
+    found_labels = {}
+    loc_xpath = ".//{http://www.xbrl.org/2003/linkbase}loc"
+    pre_arc_xpath = ".//{http://www.xbrl.org/2003/linkbase}presentationArc" \
+                      "[@{http://www.w3.org/1999/xlink}to=\"%s\"]"
+    href_attr_xpath = "{http://www.w3.org/1999/xlink}href"
+    label_attr_xpath = "{http://www.w3.org/1999/xlink}label"
+    locs = pre_elem.findall(loc_xpath)
+
+    for loc in locs:
+        concept = loc.get(href_attr_xpath)
+        concept_label = loc.get(label_attr_xpath)
+        if concept not in found_labels:
+            found_labels[concept] = {}
+        pre_arcs = pre_elem.findall(pre_arc_xpath % concept_label)
+        for pre_arc in pre_arcs:
+            element = pre_arc.get("preferredLabel")
+            if element not in found_labels[concept]:
+                found_labels[concept][element] = True
+
+    return found_labels
+
+def clean_labels(lab_elem, pre_elem):
+    """Search through the provided label element's children for labels and
+    delete any that are not being used by the presentation element.
+
+    """
+    #Label types which are never presented, and therefor shouldn't be deleted
+    #unless their associated concept is not used.
+    standard_labels = [
+        "http://www.xbrl.org/2003/role/label",
+        "http://www.xbrl.org/2003/role/documentation",
+        "http://www.xbrl.org/2003/role/definitionGuidance",
+        "http://www.xbrl.org/2003/role/disclosureGuidance",
+        "http://www.xbrl.org/2003/role/presentationGuidance",
+        "http://www.xbrl.org/2003/role/measurementGuidance",
+        "http://www.xbrl.org/2003/role/commentaryGuidance",
+        "http://www.xbrl.org/2003/role/exampleGuidance"
+    ]
+    #XPath for the containing label link element.
+    label_link_xpath = ".//{http://www.xbrl.org/2003/linkbase}labelLink"
+    #Retrieve a dictionary of all labels in the label linkbase.
+    labels = get_labels(lab_elem)
+    #Retrieve a dictionary of all label types used in the presentation linkbase.
+    used_labels = get_used_labels(pre_elem)
+    #Get the parent element of all labels, so they can be accessed for removal.
+    label_link = lab_elem.find(label_link_xpath)
+    #Create an empty dictionary for logging removed labels.
+    removed_labels = {}
+    #For each concept that has a label.
+    for concept in labels:
+        #If the concept is not presented at all.
+        if concept not in used_labels:
+            #Log and delete every label that belongs to the concept.
+            removed_labels, label_link = delete_label(
+                removed_labels,
+                concept,
+                label_link
+            )
+        #If the concept is presented.
+        else:
+            #For each type of label.
+            for label_type in labels[concept]:
+                #If the label type isn't used and it is a presentational type.
+                if (label_type not in used_labels[concept] and
+                    label_type not in standard_labels):
+                    #Remove the label and log it.
+                    removed_labels, label_link = delete_label(
+                        removed_labels,
+                        concept,
+                        label_link,
+                        label_type
+                    )
+    #Return a dictionary of the labels which have been removed.
+    return removed_labels
+
+def delete_label(removed_labels, concept, label_link, label_type=False):
+    """Accepts a dictionary of removed labels, a concept, a label_link element
+    full of labels, and possibly a type of label to delete. If the label type
+    isn't provided, all of the concepts labels are deleted, otherwise, only the
+    label of the provided type is removed.
+
+    """
+    #XPath expressions which will be used later.
+    label_xpath = ".//{http://www.xbrl.org/2003/linkbase}label" \
+                  "[@{http://www.w3.org/1999/xlink}label=\"%s\"]"
+    loc_href_xpath = ".//{http://www.xbrl.org/2003/linkbase}loc" \
+                     "[@{http://www.w3.org/1999/xlink}href=\"%s\"]"
+    label_arc_xpath = ".//{http://www.xbrl.org/2003/linkbase}labelArc" \
+                      "[@{http://www.w3.org/1999/xlink}from=\"%s\"]"
+    role_attr_xpath = "{http://www.w3.org/1999/xlink}role"
+    to_attr_xpath = "{http://www.w3.org/1999/xlink}to"
+    label_attr_xpath = "{http://www.w3.org/1999/xlink}label"
+
+    #If the concept has already been logged.
+    if concept not in removed_labels:
+        #Log it.
+        removed_labels[concept] = {}
+    #Our default stance is not to delete the labels related arc.
+    delete_arc = False
+    #Find all locators for the passed concept. There are usually only one.
+    locs_to_delete = label_link.findall(loc_href_xpath % concept)
+    #For each locator that is found.
+    for loc_to_delete in locs_to_delete:
+        #Store the element label reference.
+        label_ref = loc_to_delete.get(label_attr_xpath)
+        #Use the label reference to find all of the elements arcs.
+        label_arcs_to_delete = label_link.findall(label_arc_xpath % label_ref)
+        #For each arc.
+        for label_arc_to_delete in label_arcs_to_delete:
+            #Store the reference to the label.
+            to_label = label_arc_to_delete.get(to_attr_xpath)
+            #Use the reference to the label, to find every label.
+            labels_to_delete = label_link.findall(label_xpath % to_label)
+            #For each label.
+            for label_to_delete in labels_to_delete:
+                #Store the label type.
+                label_role = label_to_delete.get(role_attr_xpath)
+                #If the label type matches the passed type, or no type was
+                #passed at all.
+                if not label_type or label_type == label_role:
+                    #Log the label we are about to delete.
+                    removed_labels[concept][label_role] = label_to_delete.text
+                    #Delete the label.
+                    label_link.remove(label_to_delete)
+                    #Delete the arc later.
+                    delete_arc = True
+            #If we said to delete the arc.
+            if delete_arc:
+                #Delete it.
+                label_link.remove(label_arc_to_delete)
+                #And reset for the next arc.
+                delete_arc = False
+        #Check if there are any arcs referencing the locater.
+        label_arcs_to_delete = label_link.findall(label_arc_xpath % label_ref)
+        #If there aren't.
+        if not label_arcs_to_delete:
+            #Delete the locater.
+            label_link.remove(loc_to_delete)
+    #Return the log of delete labels and the element they were deleted from.
+    return (removed_labels, label_link)
+
 def clean_contexts(elem):
     """Search through the provided element's children for contexts. Find the
     ones which are not in use and remove them.
@@ -228,8 +400,8 @@ def get_calcs(elem):
             parent = label_from.get("{http://www.w3.org/1999/xlink}href")
             child = label_to.get("{http://www.w3.org/1999/xlink}href")
 
-            parent = parent.split("#")[1]
-            child = child.split("#")[1]
+            parent = parent.split("#")[-1]
+            child = child.split("#")[-1]
 
             if parent not in store[link_role_href]:
                 store[link_role_href][parent] = []

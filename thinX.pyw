@@ -27,6 +27,7 @@ class ThinX(QtGui.QMainWindow):
         self.ui.actionUnits.triggered.connect(self.units)
         self.ui.actionContexts.triggered.connect(self.contexts)
         self.ui.actionCalculations.triggered.connect(self.calculations)
+        self.ui.actionLabels.triggered.connect(self.labels)
 
     def __init_statusbar(self):
         self.status = QtGui.QLabel()
@@ -173,6 +174,55 @@ class ThinX(QtGui.QMainWindow):
                 for item in log:
                     self.ui.textLog.append(item)
 
+    def labels(self):
+        """Removes and logs labels which are not in use."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
+            lab_linkbase = xbrl.get_linkbase(self.filename, "lab")
+            try:
+                pre_tree = namespace.parse_xmlns(pre_linkbase)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(lab_linkbase)
+                return
+            try:
+                lab_tree = namespace.parse_xmlns(lab_linkbase)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(lab_linkbase)
+                return
+
+            pre_root = pre_tree.getroot()
+            lab_root = lab_tree.getroot()
+
+            log = xbrl.clean_labels(lab_root, pre_root)
+            namespace.fixup_xmlns(lab_root)
+            lab_tree.write(lab_linkbase, xml_declaration=True)
+            self.ui.textLog.clear()
+            if not log:
+                self.status.setText("No Unused Labels Found in File ")
+            else:
+                self.status.setText(
+                    "The Above Unreferenced Labels Have Been Removed "
+                )
+                for item in log:
+                    self.ui.textLog.append(
+                        "<strong>"
+                        + item.rsplit("#")[-1]
+                        + "</strong>"
+                    )
+                    for label_type in log[item]:
+                        self.ui.textLog.append(
+                            label_type.rsplit("/")[-1]
+                            + ": "
+                            + log[item][label_type]
+                        )
+
     def calculations(self):
         """Displays duplicate calculations found in the corresponding
         calculation linkbase of self.filename.
@@ -207,7 +257,6 @@ class ThinX(QtGui.QMainWindow):
                         self.ui.textLog.append(item + " *" + str(log[item] + 1))
                     else:
                         self.ui.textLog.append(item)
-
 
 def main():
     """Launches Qt and creates an instance of ThinX."""
