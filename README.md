@@ -43,7 +43,7 @@ The UTR utility adds each namespace supplied in the units.ini configuration file
 
 ### Remove Unused Labels
 
-The Unused Labels utility searches the corresponding label linkbase of the selected instance document for which are not used in the corresponding presentation linkbase. All unused labels are removed and logged.
+The Unused Labels utility searches the corresponding label linkbase of the selected instance document for labels which are not used in the corresponding presentation linkbase. All unused labels are removed and logged.
 
 
 ### Duplicate Calculations
