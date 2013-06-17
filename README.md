@@ -6,7 +6,7 @@ thinX is a GUI that implements various utilities for manipulating XBRL files.
 
 ### Dependencies
 
-thinX is developed with Python 3 and PyQt.
+thinX is developed with Python 3 and PyQt5.
 
 
 ### Versioning
