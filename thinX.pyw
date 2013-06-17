@@ -3,15 +3,15 @@
 import namespace
 import sys
 import re
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 from ui_thinX import Ui_MainWindow
 import xbrl
 
 
-class ThinX(QtGui.QMainWindow):
+class ThinX(QtWidgets.QMainWindow):
     """The main app class. Handles the GUI and various XBRL utilities."""
     def __init__(self):
-        QtGui.QMainWindow.__init__(self)
+        QtWidgets.QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.__init_statusbar()
@@ -30,7 +30,7 @@ class ThinX(QtGui.QMainWindow):
         self.ui.actionLabels.triggered.connect(self.labels)
 
     def __init_statusbar(self):
-        self.status = QtGui.QLabel()
+        self.status = QtWidgets.QLabel()
         self.reset_status()
         self.statusBar().addPermanentWidget(self.status)
 
@@ -73,8 +73,8 @@ class ThinX(QtGui.QMainWindow):
 
         """
         self.ui.textLog.clear()
-        self.filename = QtGui.QFileDialog.getOpenFileName(
-            filter="Instance Document (*.XML *.XBRL)")
+        self.filename = QtWidgets.QFileDialog.getOpenFileName(
+            filter="Instance Document (*.XML *.XBRL)")[0]
         if self.filename != "":
             self.status.setText(self.filename)
         else:
@@ -260,7 +260,7 @@ class ThinX(QtGui.QMainWindow):
 
 def main():
     """Launches Qt and creates an instance of ThinX."""
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = ThinX()
     window.show()
     sys.exit(app.exec_())
