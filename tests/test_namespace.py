@@ -7,19 +7,33 @@ from thinX import namespace
 class Namespace(unittest.TestCase):
 
     def setUp(self):
-        self.instance_file = "assets/abc-20130331.xml"
-        self.tree = namespace.parse_xmlns(self.instance_file)
-        self.root = self.tree.getroot()
-        self.elem = "OutstandingBalanceUnderRevolvingCreditFacility"
-        self.url = "http://www.example.com/20130331"
-        self.prefix = "abc"
-        self.element_xpath = ".//{%(prefix)s}%(elem)s"
-        self.exp_element = "us-gaap:" \
-                           "AccumulatedOtherComprehensiveIncomeLossNetOfTax"
-        self.child = self.root.find(
-            ".//*[@contextRef='I2012_AccumulatedTranslationAdjustmentMember']"
-        )
-        self.uri_map = {
+        instance_file = "assets/abc-20130331.xml"
+        tree = namespace.parse_xmlns(instance_file)
+        self.root = tree.getroot()
+
+    def test_parse_xmlns(self):
+        self.assertIn("xmlns:abc", self.root.attrib)
+        self.assertIn("xmlns:us-gaap", self.root.attrib)
+        self.assertIn("xmlns:xlink", self.root.attrib)
+        self.assertEqual(9, len(self.root.attrib))
+
+    def test_fixup_xmlns(self):
+        element_xpath = ".//{%(prefix)s}%(elem)s"
+        elem = "OutstandingBalanceUnderRevolvingCreditFacility"
+        prefix = "abc"
+        url = "http://www.example.com/20130331"
+        namespace.fixup_xmlns(self.root)
+
+        self.assertIsNotNone(self.root.find(
+            "%(prefix)s:%(elem)s" % {"prefix": prefix, "elem": elem}
+        ))
+        self.assertIsNone(self.root.find(
+            element_xpath % {"prefix": url, "elem": elem}
+        ))
+
+    def test_fixup_element_prefixes(self):
+        exp_element = "us-gaap:AccumulatedOtherComprehensiveIncomeLossNetOfTax"
+        uri_map = {
             'http://www.w3.org/1999/xlink': 'xlink',
             'http://www.xbrl.org/2003/instance': 'xbrli',
             'http://xbrl.org/2006/xbrldi': 'xbrldi',
@@ -30,24 +44,10 @@ class Namespace(unittest.TestCase):
             'http://www.xbrl.org/2003/linkbase': 'link',
             'http://www.example.com/20130331': 'abc'
         }
+        child = self.root.find(
+            ".//*[@contextRef='I2012_AccumulatedTranslationAdjustmentMember']"
+        )
 
-    def test_parse_xmlns(self):
-        self.assertIn("xmlns:abc", self.root.attrib)
-        self.assertIn("xmlns:us-gaap", self.root.attrib)
-        self.assertIn("xmlns:xlink", self.root.attrib)
-        self.assertEqual(9, len(self.root.attrib))
+        namespace.fixup_element_prefixes(child, uri_map)
 
-    def test_fixup_xmlns(self):
-        namespace.fixup_xmlns(self.root)
-
-        self.assertIsNotNone(self.root.find(
-            "%(prefix)s:%(elem)s" % {"prefix": self.prefix, "elem": self.elem}
-        ))
-        self.assertIsNone(self.root.find(
-            self.element_xpath % {"prefix": self.url, "elem": self.elem}
-        ))
-
-    def test_fixup_element_prefixes(self):
-        namespace.fixup_element_prefixes(self.child, self.uri_map)
-
-        self.assertEqual(self.child.tag, self.exp_element)
+        self.assertEqual(child.tag, exp_element)

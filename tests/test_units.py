@@ -11,8 +11,8 @@ class Units(unittest.TestCase):
         self.instance_file = "assets/abc-20130331.xml"
         self.unit_config_file = "assets/units.ini"
         self.units_dictionary = xbrl.get_units(self.unit_config_file)
-        self.tree = namespace.parse_xmlns(self.instance_file)
-        self.root = self.tree.getroot()
+        tree = namespace.parse_xmlns(self.instance_file)
+        self.root = tree.getroot()
 
     def test_get_units(self):
         self.assertIn("TestMeasures", self.units_dictionary)

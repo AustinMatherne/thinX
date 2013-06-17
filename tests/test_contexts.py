@@ -8,9 +8,9 @@ from thinX import xbrl
 class Contexts(unittest.TestCase):
 
     def setUp(self):
-        self.instance_file = "assets/abc-20130331.xml"
-        self.tree = namespace.parse_xmlns(self.instance_file)
-        self.root = self.tree.getroot()
+        instance_file = "assets/abc-20130331.xml"
+        tree = namespace.parse_xmlns(instance_file)
+        self.root = tree.getroot()
 
     def test_clean_contexts(self):
         expected_unused_contexts = sorted([

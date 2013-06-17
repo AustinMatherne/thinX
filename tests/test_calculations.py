@@ -9,8 +9,8 @@ class Calculations(unittest.TestCase):
 
     def setUp(self):
         self.instance_file = "assets/abc-20130331.xml"
-        self.tree = namespace.parse_xmlns(self.instance_file)
-        self.root = self.tree.getroot()
+        tree = namespace.parse_xmlns(self.instance_file)
+        self.root = tree.getroot()
 
     def test_get_linkbase(self):
         schema = xbrl.get_linkbase(self.instance_file, "xsd")
