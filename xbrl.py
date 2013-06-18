@@ -234,22 +234,28 @@ def clean_labels(lab_elem, pre_elem):
             )
         #If the concept is presented.
         else:
+            #Create a store for the label types to delete.
+            store = []
             #For each type of label.
             for label_type in label_types:
                 #If the label type isn't used and it is a presentational type.
                 if (label_type not in used_labels[concept] and
                     label_type not in standard_labels):
-                    #Remove the label and log it.
-                    removed_labels, label_link = delete_label(
-                        removed_labels,
-                        concept,
-                        label_link,
-                        label_type
-                    )
+                    #Add it to the store of label types to delete.
+                    store.append(label_type)
+            #If there are label types to remove.
+            if store:
+                #Remove the labels and log them.
+                removed_labels, label_link = delete_label(
+                    removed_labels,
+                    concept,
+                    label_link,
+                    store
+                )
     #Return a dictionary of the labels which have been removed.
     return removed_labels
 
-def delete_label(removed_labels, concept, label_link, label_type=False):
+def delete_label(removed_labels, concept, label_link, label_types=False):
     """Accepts a dictionary of removed labels, a concept, a label_link element
     full of labels, and possibly a type of label to delete. If the label type
     isn't provided, all of the concepts labels are deleted, otherwise, only the
@@ -291,9 +297,9 @@ def delete_label(removed_labels, concept, label_link, label_type=False):
             for label_to_delete in labels_to_delete:
                 #Store the label type.
                 label_role = label_to_delete.get(role_attr_xpath)
-                #If the label type matches the passed type, or no type was
+                #If the label type is in the passed types, or no types were
                 #passed at all.
-                if not label_type or label_type == label_role:
+                if not label_types or label_role in label_types:
                     #Log the label we are about to delete.
                     removed_labels[concept][label_role] = label_to_delete.text
                     #Delete the label.
