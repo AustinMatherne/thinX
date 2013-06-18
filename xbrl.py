@@ -128,9 +128,9 @@ def unknown_measures(elem, ini, filename):
     current_measures = elem.findall(measure_xpath)
     for element in current_measures:
         logit = True
-        for item in units:
-            prefix = units[item]["Prefix"]
-            for measure in units[item]["Measures"]:
+        for namespace, unit_set in units.items():
+            prefix = unit_set["Prefix"]
+            for measure in unit_set["Measures"]:
                 if len(element.text.split(":")) > 1:
                     if prefix + ":" + measure == element.text:
                         logit = False
@@ -223,7 +223,7 @@ def clean_labels(lab_elem, pre_elem):
     #Create an empty dictionary for logging removed labels.
     removed_labels = {}
     #For each concept that has a label.
-    for concept in labels:
+    for concept, label_types in labels.items():
         #If the concept is not presented at all.
         if concept not in used_labels:
             #Log and delete every label that belongs to the concept.
@@ -235,7 +235,7 @@ def clean_labels(lab_elem, pre_elem):
         #If the concept is presented.
         else:
             #For each type of label.
-            for label_type in labels[concept]:
+            for label_type in label_types:
                 #If the label type isn't used and it is a presentational type.
                 if (label_type not in used_labels[concept] and
                     label_type not in standard_labels):
@@ -326,11 +326,11 @@ def clean_contexts(elem):
     current_contexts = elem.findall(context_xpath)
     for element in current_contexts:
         contexts[element] = element.get("id")
-    for context in contexts:
-        fact_values_xpath = ".//*[@contextRef='%s']" % str(contexts[context])
+    for context, identifier in contexts.items():
+        fact_values_xpath = ".//*[@contextRef='%s']" % str(identifier)
         fact_value = elem.find(fact_values_xpath)
         if fact_value is None:
-            contexts_removed.append(contexts[context])
+            contexts_removed.append(identifier)
             elem.remove(context)
 
     return contexts_removed
@@ -407,9 +407,9 @@ def get_calcs(elem):
                 store[link_role_href][parent] = []
             store[link_role_href][parent].append(child)
 
-    for linkrole in store:
-        for parent in store[linkrole]:
-            store[linkrole][parent].sort()
+    for linkrole, totals in store.items():
+        for total, sum_elements in totals.items():
+            sum_elements.sort()
     return store
 
 def dup_calcs(elem):

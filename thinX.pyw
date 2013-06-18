@@ -105,12 +105,11 @@ class ThinX(QtWidgets.QMainWindow):
             root = tree.getroot()
             registries = xbrl.get_units(self.unit_config_file, self.filename)
             prefixes = []
-            for registry in registries:
-                reg = registries[registry]
-                prefix = "xmlns:" + reg["Prefix"]
+            for key, registry in registries.items():
+                prefix = "xmlns:" + registry["Prefix"]
                 prefixes.append(prefix)
-                ns = reg["Namespace"]
-                measures = reg["Measures"]
+                ns = registry["Namespace"]
+                measures = registry["Measures"]
                 log = xbrl.add_namespace(root, prefix, ns, measures)
                 if log:
                     logs.append(log)
@@ -210,17 +209,17 @@ class ThinX(QtWidgets.QMainWindow):
                 self.status.setText(
                     "The Above Unreferenced Labels Have Been Removed "
                 )
-                for item in log:
+                for element, labels in log.items():
                     self.ui.textLog.append(
                         "<strong>"
-                        + item.rsplit("#")[-1]
+                        + element.rsplit("#")[-1]
                         + "</strong>"
                     )
-                    for label_type in log[item]:
+                    for label_type, label in labels.items():
                         self.ui.textLog.append(
                             label_type.rsplit("/")[-1]
                             + ": "
-                            + log[item][label_type]
+                            + label
                         )
 
     def calculations(self):
@@ -252,11 +251,11 @@ class ThinX(QtWidgets.QMainWindow):
                     "Duplicate Calculations For The Above Total Concepts Have "
                     "Been Found "
                 )
-                for item in log:
-                    if log[item] > 0:
-                        self.ui.textLog.append(item + " *" + str(log[item] + 1))
+                for calc, mutliples in log.items():
+                    if mutliples > 0:
+                        self.ui.textLog.append(calc + " *" + str(mutliples + 1))
                     else:
-                        self.ui.textLog.append(item)
+                        self.ui.textLog.append(calc)
 
 def main():
     """Launches Qt and creates an instance of ThinX."""
