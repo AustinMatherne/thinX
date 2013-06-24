@@ -26,7 +26,7 @@ class Labels(unittest.TestCase):
         terse_label = "http://www.xbrl.org/2003/role/terseLabel"
         exp_terse_label = "Class of Stock [Axis]"
 
-        self.assertEqual(236, concepts_with_labels)
+        self.assertEqual(235, concepts_with_labels)
         self.assertIn(expected_concept, found_labels)
         self.assertEqual(2, expected_labels)
         self.assertIn(terse_label, found_labels[expected_concept])
@@ -42,7 +42,7 @@ class Labels(unittest.TestCase):
         expected_labels = len(found_labels[expected_concept])
         terse_label = "http://www.xbrl.org/2003/role/terseLabel"
 
-        self.assertEqual(235, concepts_using_labels)
+        self.assertEqual(233, concepts_using_labels)
         self.assertIn(expected_concept, found_labels)
         self.assertEqual(2, expected_labels)
         self.assertEqual(True, found_labels[expected_concept][terse_label])
@@ -56,8 +56,7 @@ class Labels(unittest.TestCase):
         period_start_label = "http://www.xbrl.org/2003/role/periodStartLabel"
         label = "Beginning Balance"
 
-        self.assertEqual(17, concepts_with_deleted_labels)
+        self.assertEqual(18, concepts_with_deleted_labels)
         self.assertIn(expected_concept, log)
         self.assertEqual(2, expected_labels)
         self.assertEqual(label, log[expected_concept][period_start_label])
-
