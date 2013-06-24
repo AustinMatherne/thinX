@@ -56,7 +56,7 @@ class ThinX(QtWidgets.QMainWindow):
             "and maintained<br>by Austin M. Matherne and released under the "
             "WTFPL.</span></p><p align=\"center\">https://github.com/Austin"
             "Matherne/thinX</p><p align=\"center\" style=\"font-size:8pt;\">"
-            + self.get_version() + "</p></body></html>"
+            + str(self.get_version()) + "</p></body></html>"
         )
 
     def reset_status(self):
@@ -200,12 +200,12 @@ class ThinX(QtWidgets.QMainWindow):
             lab_root = lab_tree.getroot()
 
             log = xbrl.clean_labels(lab_root, pre_root)
-            namespace.fixup_xmlns(lab_root)
-            lab_tree.write(lab_linkbase, xml_declaration=True)
             self.ui.textLog.clear()
             if not log:
                 self.status.setText("No Unused Labels Found in File ")
             else:
+                namespace.fixup_xmlns(lab_root)
+                lab_tree.write(lab_linkbase, xml_declaration=True)
                 self.status.setText(
                     "The Above Unreferenced Labels Have Been Removed "
                 )
