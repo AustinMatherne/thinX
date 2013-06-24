@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Mon Jun 17 17:24:02 2013
+# Created: Mon Jun 24 12:48:50 2013
 #      by: PyQt5 UI code generator 5.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -79,26 +79,34 @@ class Ui_MainWindow(object):
         icon7.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_100_font.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionLabels.setIcon(icon7)
         self.actionLabels.setObjectName("actionLabels")
+        self.actionConcepts = QtWidgets.QAction(MainWindow)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_196_circle_exclamation_mark.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionConcepts.setIcon(icon8)
+        self.actionConcepts.setObjectName("actionConcepts")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
-        self.menuUtilities.addAction(self.actionContexts)
-        self.menuUtilities.addAction(self.actionUnits)
+        self.menuUtilities.addAction(self.actionConcepts)
         self.menuUtilities.addAction(self.actionLabels)
         self.menuUtilities.addAction(self.actionCalculations)
+        self.menuUtilities.addAction(self.actionContexts)
+        self.menuUtilities.addAction(self.actionUnits)
         self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuUtilities.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
         self.toolBar.addAction(self.actionOpen)
         self.toolBar.addSeparator()
-        self.toolBar.addAction(self.actionContexts)
-        self.toolBar.addSeparator()
-        self.toolBar.addAction(self.actionUnits)
+        self.toolBar.addAction(self.actionConcepts)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionLabels)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionCalculations)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionContexts)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionUnits)
         self.toolBar.addSeparator()
 
         self.retranslateUi(MainWindow)
@@ -120,5 +128,7 @@ class Ui_MainWindow(object):
         self.actionCalculations.setText(_translate("MainWindow", "Find Duplicate Calculations"))
         self.actionLabels.setText(_translate("MainWindow", "Remove Unused Labels"))
         self.actionLabels.setToolTip(_translate("MainWindow", "Remove Unused Labels"))
+        self.actionConcepts.setText(_translate("MainWindow", "Remove Unused Extension Concepts"))
+        self.actionConcepts.setToolTip(_translate("MainWindow", "Remove Unused Extension Concepts"))
 
 import icons_rc

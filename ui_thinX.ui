@@ -61,10 +61,11 @@
     <property name="title">
      <string>Utilities</string>
     </property>
-    <addaction name="actionContexts"/>
-    <addaction name="actionUnits"/>
+    <addaction name="actionConcepts"/>
     <addaction name="actionLabels"/>
     <addaction name="actionCalculations"/>
+    <addaction name="actionContexts"/>
+    <addaction name="actionUnits"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -89,13 +90,15 @@
    </attribute>
    <addaction name="actionOpen"/>
    <addaction name="separator"/>
-   <addaction name="actionContexts"/>
-   <addaction name="separator"/>
-   <addaction name="actionUnits"/>
+   <addaction name="actionConcepts"/>
    <addaction name="separator"/>
    <addaction name="actionLabels"/>
    <addaction name="separator"/>
    <addaction name="actionCalculations"/>
+   <addaction name="separator"/>
+   <addaction name="actionContexts"/>
+   <addaction name="separator"/>
+   <addaction name="actionUnits"/>
    <addaction name="separator"/>
   </widget>
   <action name="actionOpen">
@@ -165,6 +168,18 @@
    </property>
    <property name="toolTip">
     <string>Remove Unused Labels</string>
+   </property>
+  </action>
+  <action name="actionConcepts">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_196_circle_exclamation_mark.png</normaloff>:/Glyphicons/icons/glyphicons_196_circle_exclamation_mark.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Unused Extension Concepts</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Unused Extension Concepts</string>
    </property>
   </action>
  </widget>
