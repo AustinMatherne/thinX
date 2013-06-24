@@ -341,6 +341,28 @@ def clean_contexts(elem):
 
     return contexts_removed
 
+def clean_concepts(xsd_elem, pre_elem, def_elem, cal_elem, lab_elem, schema):
+    """Search through the provided xsd element's children for concepts. Find any
+    that aren't referenced by the presentation, definition, calculation, or
+    label linkbases and remove them.
+
+    """
+    concepts_removed = []
+    concepts_xpath = ".//{http://www.w3.org/2001/XMLSchema}element"
+    href_xpath = ".//*[@{http://www.w3.org/1999/xlink}href='%s#%s']"
+    current_concepts = xsd_elem.findall(concepts_xpath)
+    for element in current_concepts:
+        identifier = element.get("id")
+        in_pre = pre_elem.findall(href_xpath % (schema, identifier))
+        in_def = def_elem.findall(href_xpath % (schema, identifier))
+        in_cal = cal_elem.findall(href_xpath % (schema, identifier))
+        in_lab = lab_elem.findall(href_xpath % (schema, identifier))
+        if not in_pre and not in_def and not in_cal and not in_lab:
+            xsd_elem.remove(element)
+            concepts_removed.append(identifier)
+
+    return concepts_removed
+
 def get_linkbase(filename, linkbase):
     """Find the requested linkbase in the provided element's DTS."""
     #Store the path to filename.
