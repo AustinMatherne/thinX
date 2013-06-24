@@ -28,6 +28,7 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionContexts.triggered.connect(self.contexts)
         self.ui.actionCalculations.triggered.connect(self.calculations)
         self.ui.actionLabels.triggered.connect(self.labels)
+        self.ui.actionConcepts.triggered.connect(self.concepts)
 
     def __init_statusbar(self):
         self.status = QtWidgets.QLabel()
@@ -245,6 +246,86 @@ class ThinX(QtWidgets.QMainWindow):
                             + ": "
                             + label
                         )
+
+    def concepts(self):
+        """Removes and logs extension concepts which are not in use."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            try:
+                xsd = xbrl.get_linkbase(self.filename, "xsd")
+                pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
+                def_linkbase = xbrl.get_linkbase(self.filename, "def")
+                cal_linkbase = xbrl.get_linkbase(self.filename, "cal")
+                lab_linkbase = xbrl.get_linkbase(self.filename, "lab")
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "xsd")
+                return
+
+            try:
+                xsd_tree = namespace.parse_xmlns(xsd)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "xsd")
+                return
+
+            try:
+                pre_tree = namespace.parse_xmlns(pre_linkbase)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "pre")
+                return
+
+            try:
+                def_tree = namespace.parse_xmlns(def_linkbase)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "def")
+                return
+
+            try:
+                cal_tree = namespace.parse_xmlns(cal_linkbase)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "cal")
+                return
+
+            try:
+                lab_tree = namespace.parse_xmlns(lab_linkbase)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "lab")
+                return
+
+            xsd_root = xsd_tree.getroot()
+            pre_root = pre_tree.getroot()
+            def_root = def_tree.getroot()
+            cal_root = cal_tree.getroot()
+            lab_root = lab_tree.getroot()
+
+            log = xbrl.clean_concepts(
+                xsd_root,
+                pre_root,
+                def_root,
+                cal_root,
+                lab_root,
+                xsd.split("/")[-1]
+            )
+            self.ui.textLog.clear()
+            if not log:
+                self.status.setText("No Unused Concepts Found in File ")
+            else:
+                namespace.fixup_xmlns(xsd_root)
+                xsd_tree.write(xsd, xml_declaration=True)
+                self.status.setText(
+                    "The Above Unreferenced Concepts Have Been Removed "
+                )
+                for concept in log:
+                    self.ui.textLog.append(concept)
 
     def calculations(self):
         """Displays duplicate calculations found in the corresponding
