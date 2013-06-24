@@ -148,9 +148,9 @@ def get_labels(lab_elem):
     found_labels = {}
     loc_xpath = ".//{http://www.xbrl.org/2003/linkbase}loc"
     label_xpath = ".//{http://www.xbrl.org/2003/linkbase}label" \
-                  "[@{http://www.w3.org/1999/xlink}label=\"%s\"]"
+                  "[@{http://www.w3.org/1999/xlink}label='%s']"
     label_arc_xpath = ".//{http://www.xbrl.org/2003/linkbase}labelArc" \
-                      "[@{http://www.w3.org/1999/xlink}from=\"%s\"]"
+                      "[@{http://www.w3.org/1999/xlink}from='%s']"
     role_attr_xpath = "{http://www.w3.org/1999/xlink}role"
     to_attr_xpath = "{http://www.w3.org/1999/xlink}to"
     href_attr_xpath = "{http://www.w3.org/1999/xlink}href"
@@ -177,7 +177,7 @@ def get_used_labels(pre_elem):
     found_labels = {}
     loc_xpath = ".//{http://www.xbrl.org/2003/linkbase}loc"
     pre_arc_xpath = ".//{http://www.xbrl.org/2003/linkbase}presentationArc" \
-                      "[@{http://www.w3.org/1999/xlink}to=\"%s\"]"
+                      "[@{http://www.w3.org/1999/xlink}to='%s']"
     href_attr_xpath = "{http://www.w3.org/1999/xlink}href"
     label_attr_xpath = "{http://www.w3.org/1999/xlink}label"
     locs = pre_elem.findall(loc_xpath)
@@ -264,11 +264,11 @@ def delete_label(removed_labels, concept, label_link, label_types=False):
     """
     #XPath expressions which will be used later.
     label_xpath = ".//{http://www.xbrl.org/2003/linkbase}label" \
-                  "[@{http://www.w3.org/1999/xlink}label=\"%s\"]"
+                  "[@{http://www.w3.org/1999/xlink}label='%s']"
     loc_href_xpath = ".//{http://www.xbrl.org/2003/linkbase}loc" \
-                     "[@{http://www.w3.org/1999/xlink}href=\"%s\"]"
+                     "[@{http://www.w3.org/1999/xlink}href='%s']"
     label_arc_xpath = ".//{http://www.xbrl.org/2003/linkbase}labelArc" \
-                      "[@{http://www.w3.org/1999/xlink}from=\"%s\"]"
+                      "[@{http://www.w3.org/1999/xlink}from='%s']"
     role_attr_xpath = "{http://www.w3.org/1999/xlink}role"
     to_attr_xpath = "{http://www.w3.org/1999/xlink}to"
     label_attr_xpath = "{http://www.w3.org/1999/xlink}label"
@@ -410,7 +410,7 @@ def get_calcs(elem):
     calc_link_xpath = ".//{http://www.xbrl.org/2003/linkbase}calculationLink"
     calc_arc_xpath = ".//{http://www.xbrl.org/2003/linkbase}calculationArc"
     calc_loc_xpath = ".//{http://www.xbrl.org/2003/linkbase}loc"
-    label_attr_xpath = "[@{http://www.w3.org/1999/xlink}label=\"%s\"]"
+    label_attr_xpath = "[@{http://www.w3.org/1999/xlink}label='%s']"
     linkroles = elem.findall(calc_link_xpath)
     for linkrole in linkroles:
         link_role_href = linkrole.get("{http://www.w3.org/1999/xlink}role")
