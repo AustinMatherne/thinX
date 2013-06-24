@@ -63,9 +63,25 @@ class ThinX(QtWidgets.QMainWindow):
         """Resets the text in the status bar."""
         self.status.setText("Open an Instance Document to Begin ")
 
-    def open_fail(self, file_name):
+    def open_fail(self, instance, file_type=None):
         """Logs a file that failed to open to the status bar."""
-        self.status.setText("Failed to Open: " + file_name + " ")
+        file_types = {
+            "xsd": "Schema",
+            "pre": "Presentation Linkbase",
+            "def": "Definition Linkbase",
+            "cal": "Calculation Linkbase",
+            "lab": "Label Linkbase"
+        }
+        if file_type in file_types:
+            self.status.setText(
+                "Failed to Open "
+                + file_types[file_type]
+                + " of: "
+                + instance
+                + " "
+            )
+        else:
+            self.status.setText("Failed to Open: " + instance + " ")
 
     def open(self):
         """Prompts the user to open an XBRL instance document and stores the
@@ -74,7 +90,8 @@ class ThinX(QtWidgets.QMainWindow):
         """
         self.ui.textLog.clear()
         self.filename = QtWidgets.QFileDialog.getOpenFileName(
-            filter="Instance Document (*.XML *.XBRL)")[0]
+            filter="Instance Document (*.XML *.XBRL)"
+        )[0]
         if self.filename != "":
             self.status.setText(self.filename)
         else:
@@ -181,19 +198,26 @@ class ThinX(QtWidgets.QMainWindow):
             )
             return
         else:
-            pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
-            lab_linkbase = xbrl.get_linkbase(self.filename, "lab")
+            try:
+                pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
+                lab_linkbase = xbrl.get_linkbase(self.filename, "lab")
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "xsd")
+                return
+
             try:
                 pre_tree = namespace.parse_xmlns(pre_linkbase)
             except:
                 self.ui.textLog.clear()
-                self.open_fail(lab_linkbase)
+                self.open_fail(self.filename, "pre")
                 return
+
             try:
                 lab_tree = namespace.parse_xmlns(lab_linkbase)
             except:
                 self.ui.textLog.clear()
-                self.open_fail(lab_linkbase)
+                self.open_fail(self.filename, "lab")
                 return
 
             pre_root = pre_tree.getroot()
@@ -233,14 +257,14 @@ class ThinX(QtWidgets.QMainWindow):
             )
             return
         else:
-            calc_linkbase = xbrl.get_linkbase(self.filename, "cal")
             try:
-                tree = namespace.parse_xmlns(calc_linkbase)
+                calc_linkbase = xbrl.get_linkbase(self.filename, "cal")
             except:
                 self.ui.textLog.clear()
-                self.open_fail(calc_linkbase)
+                self.open_fail(self.filename, "cal")
                 return
 
+            tree = namespace.parse_xmlns(calc_linkbase)
             root = tree.getroot()
             log = xbrl.dup_calcs(root)
             self.ui.textLog.clear()
