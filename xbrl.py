@@ -253,6 +253,184 @@ def clean_labels(lab_elem, pre_elem):
     #Return a dictionary of the labels which have been removed.
     return removed_labels
 
+def redundant_labels(lab_elem, pre_elem):
+    """Search through the provided label element's children for concepts with
+    redundant labels and consolidate them. Also update the presentation element
+    so that if the labels are identical, it doesn't point to more than one type
+    of label for a concept.
+
+    """
+    #XPath for the label link.
+    label_link_xpath = ".//{http://www.xbrl.org/2003/linkbase}labelLink"
+    #Get the label link.
+    label_link = lab_elem.find(label_link_xpath)
+    #Get a dictionary containing every concept with all of it's labels.
+    labels = get_labels(lab_elem)
+
+    #Presentational label types which all non negated labels can be reduced to.
+    regular_label_types = {
+        "http://www.xbrl.org/2003/role/terseLabel": 0,
+        "http://www.xbrl.org/2003/role/verboseLabel": 1
+    }
+    #Positive label types.
+    positive_label_types = {
+        "http://www.xbrl.org/2003/role/positiveLabel": 2,
+        "http://www.xbrl.org/2003/role/positiveTerseLabel": 3,
+        "http://www.xbrl.org/2003/role/positiveVerboseLabel": 4
+    }
+    #Negative label types.
+    negative_label_types = {
+        "http://www.xbrl.org/2003/role/negativeLabel": 2,
+        "http://www.xbrl.org/2003/role/negativeTerseLabel": 3,
+        "http://www.xbrl.org/2003/role/negativeVerboseLabel": 4
+    }
+    #Zero label types.
+    zero_label_types = {
+        "http://www.xbrl.org/2003/role/zeroLabel": 2,
+        "http://www.xbrl.org/2003/role/zeroTerseLabel": 3,
+        "http://www.xbrl.org/2003/role/zeroVerboseLabel": 4
+    }
+    #Combine all none negated label types that can be reduced.
+    pos_label_types = dict(
+        list(regular_label_types.items())
+        + list(positive_label_types.items())
+        + list(negative_label_types.items())
+        + list(zero_label_types.items())
+    )
+    #Negated label types.
+    neg_label_types = {
+        "http://www.xbrl.org/2009/role/negatedLabel": 0,
+        "http://www.xbrl.org/2009/role/negatedTerseLabel": 1
+    }
+
+    #The object to return.
+    result = {}
+
+    def clean_label_types(label_types):
+        print(label_types)
+        return label_types
+
+    def add_to_result(concept, base_label_types, label_type, store_label_type):
+        #If concept isn't already in the results dictionary.
+        if concept not in result:
+            #Create an empty dictionary in it's place.
+            result[concept] = {}
+        #If the label type has a lower precedence than the store label type.
+        if base_label_types[label_type] > base_label_types[store_label_type]:
+            #Record the label type to be overridden by the store label type.
+            result[concept][label_type] = store_label_type
+        #If the label type has a higher precedence than the store label type.
+        else:
+            #Record the store label type to be overridden by the label type.
+            result[concept][store_label_type] = label_type
+
+    #Only needed to pass to the delete label function.
+    removed_labels = {}
+    #For each concept with a label.
+    for concept, label_types in labels.items():
+        #Make sure we aren't using unnecessarily restrictive labels.
+        label_types = clean_label_types(label_types)
+        #Base store to compare against.
+        store = {}
+        #For each label type of concept.
+        for label_type, label in label_types.items():
+            #For each label in store.
+            for store_label_type, store_label in store.items():
+                #If label matches another label in store.
+                if label == store_label:
+                    #If both the label and store label are presentable, and
+                    #aren't negated, total, net, period start, or end types.
+                    if (label_type in pos_label_types and
+                        store_label_type in pos_label_types):
+                        #If either the label or store label are regular types.
+                        if (label_type in regular_label_types or
+                            store_label_type in regular_label_types):
+                            add_to_result(
+                                concept,
+                                pos_label_types,
+                                label_type,
+                                store_label_type
+                            )
+                        #If both the label and store label are positive types.
+                        elif (label_type in positive_label_types and
+                              store_label_type in positive_label_types):
+                            add_to_result(
+                                concept,
+                                positive_label_types,
+                                label_type,
+                                store_label_type
+                            )
+                        #If both the label and store label are negative types.
+                        elif (label_type in negative_label_types and
+                              store_label_type in negative_label_types):
+                            add_to_result(
+                                concept,
+                                negative_label_types,
+                                label_type,
+                                store_label_type
+                            )
+                        #If both the label and store label are zero types.
+                        elif (label_type in zero_label_types and
+                              store_label_type in zero_label_types):
+                            add_to_result(
+                                concept,
+                                zero_label_types,
+                                label_type,
+                                store_label_type
+                            )
+                    #If both the label and store label are negated types.
+                    elif (label_type in neg_label_types and
+                          store_label_type in neg_label_types):
+                        add_to_result(
+                            concept,
+                            neg_label_types,
+                            label_type,
+                            store_label_type
+                        )
+            #Add the label to the store.
+            store[label_type] = label
+
+    #Make sure the while loop runs at least once.
+    unclean = True
+    #Start the loop.
+    while unclean:
+        #Unless we change something, the loop should only run once.
+        unclean = False
+        #For concept in the result dictionary.
+        for concept in result:
+            #Save a reference to all of the label types that need to change.
+            store = result[concept].keys()
+            #For each label type of the concept that has so far been set to be
+            #overridden.
+            for key, value in result[concept].items():
+                #If the label type we are changing to is being replacing itself.
+                if value in store:
+                    #Change it to that new label type, as well.
+                    result[concept][key] = result[concept][value]
+                    #And make sure we loop again.
+                    unclean = True
+
+    #For each concept in results.
+    for concept, label_types in result.items():
+        #Delete all labels which have been reported for deletion.
+        removed_labels, label_link = delete_label(
+            removed_labels,
+            concept,
+            label_link,
+            label_types
+        )
+        #For label type of concept.
+        for label_type, label in label_types.items():
+            #Swap out the deleted label with the identical still existing label.
+            pre_elem = change_preferred_label(
+                concept,
+                pre_elem,
+                label_type,
+                label
+            )
+    #Return the concepts along with their labels which were removed.
+    return result
+
 def change_preferred_label(concept, pre_elem, old_label_type, new_label_type):
     """Accepts a concept, a presentation link element, a label type to remove
     and the label type to use in it's place.
