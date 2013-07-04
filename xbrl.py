@@ -306,10 +306,6 @@ def redundant_labels(lab_elem, pre_elem):
     #The object to return.
     result = {}
 
-    def clean_label_types(label_types):
-        print(label_types)
-        return label_types
-
     def add_to_result(concept, base_label_types, label_type, store_label_type):
         #If concept isn't already in the results dictionary.
         if concept not in result:
@@ -328,8 +324,6 @@ def redundant_labels(lab_elem, pre_elem):
     removed_labels = {}
     #For each concept with a label.
     for concept, label_types in labels.items():
-        #Make sure we aren't using unnecessarily restrictive labels.
-        label_types = clean_label_types(label_types)
         #Base store to compare against.
         store = {}
         #For each label type of concept.
