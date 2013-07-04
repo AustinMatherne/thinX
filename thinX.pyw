@@ -28,6 +28,7 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionContexts.triggered.connect(self.contexts)
         self.ui.actionCalculations.triggered.connect(self.calculations)
         self.ui.actionLabels.triggered.connect(self.labels)
+        self.ui.actionConsolidateLabels.triggered.connect(self.redundant_labels)
         self.ui.actionConcepts.triggered.connect(self.concepts)
 
     def __init_statusbar(self):
@@ -245,6 +246,64 @@ class ThinX(QtWidgets.QMainWindow):
                             label_type.rsplit("/")[-1]
                             + ": "
                             + label
+                        )
+
+    def redundant_labels(self):
+        """Removes and logs labels which are redundant."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            try:
+                pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
+                lab_linkbase = xbrl.get_linkbase(self.filename, "lab")
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "xsd")
+                return
+
+            try:
+                pre_tree = namespace.parse_xmlns(pre_linkbase)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "pre")
+                return
+
+            try:
+                lab_tree = namespace.parse_xmlns(lab_linkbase)
+            except:
+                self.ui.textLog.clear()
+                self.open_fail(self.filename, "lab")
+                return
+
+            pre_root = pre_tree.getroot()
+            lab_root = lab_tree.getroot()
+
+            log = xbrl.redundant_labels(lab_root, pre_root)
+            self.ui.textLog.clear()
+            if not log:
+                self.status.setText("No Redundant Labels Found in File ")
+            else:
+                namespace.fixup_xmlns(pre_root)
+                namespace.fixup_xmlns(lab_root)
+                # pre_tree.write(pre_linkbase, xml_declaration=True)
+                # lab_tree.write(lab_linkbase, xml_declaration=True)
+                self.status.setText(
+                    "The Above Redundant Labels Have Been Removed "
+                )
+                for element, labels in log.items():
+                    self.ui.textLog.append(
+                        "<strong>"
+                        + element.rsplit("#")[-1]
+                        + "</strong>"
+                    )
+                    for label_type, label in labels.items():
+                        self.ui.textLog.append(
+                            label_type.rsplit("/")[-1]
+                            + " > "
+                            + label.rsplit("/")[-1]
                         )
 
     def concepts(self):
