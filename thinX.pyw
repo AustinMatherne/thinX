@@ -157,8 +157,7 @@ class ThinX(QtWidgets.QMainWindow):
             if len(check) > 0:
                 self.ui.textLog.append(
                     "<strong>The Following Measures Are Not Part Of Any Known "
-                    "Units Database:<br>If You Believe They Are Legitimate, "
-                    "Please Contact Austin M. Matherne.</strong>"
+                    "Units Database:</strong>"
                 )
                 for measure in check:
                     self.ui.textLog.append(measure)
