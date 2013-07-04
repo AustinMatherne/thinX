@@ -63,6 +63,7 @@
     </property>
     <addaction name="actionConcepts"/>
     <addaction name="actionLabels"/>
+    <addaction name="actionConsolidateLabels"/>
     <addaction name="actionCalculations"/>
     <addaction name="actionContexts"/>
     <addaction name="actionUnits"/>
@@ -93,6 +94,8 @@
    <addaction name="actionConcepts"/>
    <addaction name="separator"/>
    <addaction name="actionLabels"/>
+   <addaction name="separator"/>
+   <addaction name="actionConsolidateLabels"/>
    <addaction name="separator"/>
    <addaction name="actionCalculations"/>
    <addaction name="separator"/>
@@ -161,7 +164,7 @@
   <action name="actionLabels">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/Glyphicons/icons/glyphicons_100_font.png</normaloff>:/Glyphicons/icons/glyphicons_100_font.png</iconset>
+     <normaloff>:/Glyphicons/icons/glyphicons_115_text_smaller.png</normaloff>:/Glyphicons/icons/glyphicons_115_text_smaller.png</iconset>
    </property>
    <property name="text">
     <string>Remove Unused Labels</string>
@@ -180,6 +183,15 @@
    </property>
    <property name="toolTip">
     <string>Remove Unused Extension Concepts</string>
+   </property>
+  </action>
+  <action name="actionConsolidateLabels">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_100_font.png</normaloff>:/Glyphicons/icons/glyphicons_100_font.png</iconset>
+   </property>
+   <property name="text">
+    <string>Consolidate Labels</string>
    </property>
   </action>
  </widget>
