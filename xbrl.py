@@ -105,10 +105,8 @@ def add_namespace(elem, prefix, ns, clean_measures):
                 #If the clean measure is already set, don't bother writing it.
                 if new != old:
                     #Are we dealing with a measure that's case sensitive?
-                    if (
-                        current_measure != clean_measure and
-                        clean_measure_lower in low_clean_measures
-                    ):
+                    if (current_measure != clean_measure and
+                        clean_measure_lower in low_clean_measures):
                         pass
                     #If not, set the clean measure.
                     else:
@@ -254,6 +252,27 @@ def clean_labels(lab_elem, pre_elem):
                 )
     #Return a dictionary of the labels which have been removed.
     return removed_labels
+
+def change_preferred_label(concept, pre_elem, old_label_type, new_label_type):
+    """Accepts a concept, a presentation link element, a label type to remove
+    and the label type to use in it's place.
+
+    """
+    loc_href_xpath = ".//{http://www.xbrl.org/2003/linkbase}loc" \
+                     "[@{http://www.w3.org/1999/xlink}href='%s']"
+    label_attr_xpath = "{http://www.w3.org/1999/xlink}label"
+    to_attr_xpath = ".//{http://www.xbrl.org/2003/linkbase}presentationArc" \
+                    "[@{http://www.w3.org/1999/xlink}to='%s']"
+    keep = pre_elem.findall(loc_href_xpath % concept)
+
+    for thing in keep:
+        label = thing.get(label_attr_xpath)
+        arcs = pre_elem.findall(to_attr_xpath % label)
+        for arc in arcs:
+            if arc.get("preferredLabel") == old_label_type:
+                arc.set("preferredLabel", new_label_type)
+
+    return pre_elem
 
 def delete_label(removed_labels, concept, label_link, label_types=False):
     """Accepts a dictionary of removed labels, a concept, a label_link element
