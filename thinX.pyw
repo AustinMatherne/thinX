@@ -288,8 +288,8 @@ class ThinX(QtWidgets.QMainWindow):
             else:
                 namespace.fixup_xmlns(pre_root)
                 namespace.fixup_xmlns(lab_root)
-                # pre_tree.write(pre_linkbase, xml_declaration=True)
-                # lab_tree.write(lab_linkbase, xml_declaration=True)
+                pre_tree.write(pre_linkbase, xml_declaration=True)
+                lab_tree.write(lab_linkbase, xml_declaration=True)
                 self.status.setText(
                     "The Above Redundant Labels Have Been Removed "
                 )
