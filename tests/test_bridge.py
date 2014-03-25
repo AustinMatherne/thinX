@@ -51,3 +51,10 @@ class Calculations(unittest.TestCase):
         for tup in files:
             self.assertIn(tup, result)
         self.assertEqual(len(result), 6)
+
+    def test_remove_namespace_date(self):
+        ns = ("http://www.example.com/20130331", "http://www.example.com")
+
+        result = xbrl.remove_namespace_date(self.xsd_root)
+
+        self.assertEqual(result, ns)
