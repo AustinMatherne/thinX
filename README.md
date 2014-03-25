@@ -58,7 +58,7 @@ The Unused Contexts utility searches the selected instance document for declared
 
 ### Comply with UTR
 
-The UTR utility adds each namespace supplied in the units.ini configuration file and searches the selected instance document for measures which match those defined in units.ini. If a match is found under a different namespace, the prefix for the proper namespace is used, and the capitalization of the measure is corrected if necessary.
+The UTR utility adds each namespace supplied in the units.ini configuration file and searches the selected instance document for measures which match those defined in units.ini. If a match is found under a different namespace, the prefix for the proper namespace is used, and the capitalization of the measure is corrected if necessary. thinX is compliant as of 2012-11-30, which is the version of the UTR accepted by the SEC as of this writing.
 
 
 [1]: http://scottchacon.com/2011/08/31/github-flow.html
