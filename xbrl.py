@@ -678,3 +678,45 @@ def dup_calcs(elem):
                 base_calcs[total] = [store[linkrole][total]]
 
     return warnings
+
+def link_role_sort(elem):
+    """Update link role sort codes to improve compatibility with Crossfire."""
+    log = []
+
+    dei = "0000"
+    face_fin = re.compile("^00[1-9]0$")
+    face_par = re.compile("^00[1-9]{2}$")
+    text_block = re.compile("^[1-3]\d{3}$")
+    level_four = re.compile("^4\d{3}$")
+    eights = re.compile("^8\d{3}$")
+    sort_reg = re.compile("^(\d+)(.+)$")
+
+    linkbase_refs_xpath = ".//{http://www.xbrl.org/2003/linkbase}definition"
+    linkbase_refs = elem.findall(linkbase_refs_xpath)
+
+    for linkbase_ref in linkbase_refs:
+        match = sort_reg.search(linkbase_ref.text)
+        sort = match.group(1)
+        link_def = match.group(2)
+        new_sort = sort
+        if sort == dei:
+            new_sort = "00090"
+        elif face_par.search(sort):
+            new_sort = sort[:3] + "0" + sort[-1:]
+        elif text_block.search(sort):
+            new_sort = sort[:3] + "0" + sort[:1]
+        elif face_fin.search(sort) or eights.search(sort):
+            new_sort = sort + "0"
+        elif level_four.search(sort):
+            code = int(sort[-1:]) + 1
+            if code < 10:
+                new_sort = sort[:-1] + "0" + str(code)
+            else:
+                new_sort = sort[:-1] + str(code)
+
+        if sort != new_sort:
+            log.append((sort, new_sort))
+            linkbase_ref.text = new_sort + link_def
+    log.sort(key=lambda tup: tup[0])
+
+    return log
