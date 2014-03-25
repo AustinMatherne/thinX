@@ -720,3 +720,16 @@ def link_role_sort(elem):
     log.sort(key=lambda tup: tup[0])
 
     return log
+
+def remove_namespace_date(elem):
+    """Remove the date from the targetNamespcae."""
+    old_namespace = elem.get("targetNamespace")
+    new_namespace = re.search("(^.*)/\d{8}$", old_namespace).group(1)
+    elem.set("targetNamespace", new_namespace)
+    attrs = elem.items()
+    for attr in attrs:
+        if attr[-1] == old_namespace:
+            elem.set(attr[0], new_namespace)
+            break
+
+    return (old_namespace, new_namespace)
