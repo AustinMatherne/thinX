@@ -112,12 +112,12 @@ class ThinX(QtWidgets.QMainWindow):
             )
             return
         else:
+            self.ui.textLog.clear()
             fixed = False
             logs = []
             try:
                 tree = namespace.parse_xmlns(self.filename)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename)
                 return
 
@@ -140,7 +140,6 @@ class ThinX(QtWidgets.QMainWindow):
             )
             namespace.fixup_xmlns(root)
             tree.write(self.filename, xml_declaration=True)
-            self.ui.textLog.clear()
             if fixed:
                 self.status.setText("XBRL International Units Registry ")
                 self.ui.textLog.append(
@@ -170,10 +169,10 @@ class ThinX(QtWidgets.QMainWindow):
             )
             return
         else:
+            self.ui.textLog.clear()
             try:
                 tree = namespace.parse_xmlns(self.filename)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename)
                 return
 
@@ -181,7 +180,6 @@ class ThinX(QtWidgets.QMainWindow):
             log = xbrl.clean_contexts(root)
             namespace.fixup_xmlns(root)
             tree.write(self.filename, xml_declaration=True)
-            self.ui.textLog.clear()
             if not log:
                 self.status.setText("No Unused Contexts Found in File ")
             else:
@@ -199,25 +197,23 @@ class ThinX(QtWidgets.QMainWindow):
             )
             return
         else:
+            self.ui.textLog.clear()
             try:
                 pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
                 lab_linkbase = xbrl.get_linkbase(self.filename, "lab")
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "xsd")
                 return
 
             try:
                 pre_tree = namespace.parse_xmlns(pre_linkbase)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "pre")
                 return
 
             try:
                 lab_tree = namespace.parse_xmlns(lab_linkbase)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "lab")
                 return
 
@@ -225,7 +221,6 @@ class ThinX(QtWidgets.QMainWindow):
             lab_root = lab_tree.getroot()
 
             log = xbrl.clean_labels(lab_root, pre_root)
-            self.ui.textLog.clear()
             if not log:
                 self.status.setText("No Unused Labels Found in File ")
             else:
@@ -255,25 +250,23 @@ class ThinX(QtWidgets.QMainWindow):
             )
             return
         else:
+            self.ui.textLog.clear()
             try:
                 pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
                 lab_linkbase = xbrl.get_linkbase(self.filename, "lab")
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "xsd")
                 return
 
             try:
                 pre_tree = namespace.parse_xmlns(pre_linkbase)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "pre")
                 return
 
             try:
                 lab_tree = namespace.parse_xmlns(lab_linkbase)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "lab")
                 return
 
@@ -281,7 +274,6 @@ class ThinX(QtWidgets.QMainWindow):
             lab_root = lab_tree.getroot()
 
             log = xbrl.redundant_labels(lab_root, pre_root)
-            self.ui.textLog.clear()
             if not log:
                 self.status.setText("No Redundant Labels Found in File ")
             else:
@@ -313,6 +305,7 @@ class ThinX(QtWidgets.QMainWindow):
             )
             return
         else:
+            self.ui.textLog.clear()
             try:
                 xsd = xbrl.get_linkbase(self.filename, "xsd")
                 pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
@@ -320,42 +313,36 @@ class ThinX(QtWidgets.QMainWindow):
                 cal_linkbase = xbrl.get_linkbase(self.filename, "cal")
                 lab_linkbase = xbrl.get_linkbase(self.filename, "lab")
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "xsd")
                 return
 
             try:
                 xsd_tree = namespace.parse_xmlns(xsd)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "xsd")
                 return
 
             try:
                 pre_tree = namespace.parse_xmlns(pre_linkbase)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "pre")
                 return
 
             try:
                 def_tree = namespace.parse_xmlns(def_linkbase)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "def")
                 return
 
             try:
                 cal_tree = namespace.parse_xmlns(cal_linkbase)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "cal")
                 return
 
             try:
                 lab_tree = namespace.parse_xmlns(lab_linkbase)
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "lab")
                 return
 
@@ -373,7 +360,6 @@ class ThinX(QtWidgets.QMainWindow):
                 lab_root,
                 xsd.split("/")[-1]
             )
-            self.ui.textLog.clear()
             if not log:
                 self.status.setText("No Unused Concepts Found in File ")
             else:
@@ -396,17 +382,15 @@ class ThinX(QtWidgets.QMainWindow):
             )
             return
         else:
+            self.ui.textLog.clear()
             try:
                 calc_linkbase = xbrl.get_linkbase(self.filename, "cal")
             except:
-                self.ui.textLog.clear()
                 self.open_fail(self.filename, "cal")
                 return
-
             tree = namespace.parse_xmlns(calc_linkbase)
             root = tree.getroot()
             log = xbrl.dup_calcs(root)
-            self.ui.textLog.clear()
             if not log:
                 self.status.setText("No Duplicate Calculations Found ")
             else:
