@@ -37,3 +37,17 @@ class Calculations(unittest.TestCase):
         for expt in extps:
             self.assertIn(expt, result)
         self.assertEqual(len(result), 19)
+
+    def test_rename_refs(self):
+        files = [("abc-20130331.xsd", "abc-current_taxonomy.xsd"),
+                 ("abc-20130331_pre.xml", "abc-current_taxonomy_pre.xml"),
+                 ("abc-20130331_def.xml", "abc-current_taxonomy_def.xml"),
+                 ("abc-20130331_cal.xml", "abc-current_taxonomy_cal.xml"),
+                 ("abc-20130331_lab.xml", "abc-current_taxonomy_lab.xml"),
+                 ("abc-20130331.xml", "*Deleted*")]
+
+        result = xbrl.rename_refs(self.xsd_root, "xsd")
+
+        for tup in files:
+            self.assertIn(tup, result)
+        self.assertEqual(len(result), 6)
