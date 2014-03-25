@@ -733,3 +733,36 @@ def remove_namespace_date(elem):
             break
 
     return (old_namespace, new_namespace)
+
+def rename_refs(elem, linkbase):
+    """Rename linkbase references in element to tic-current_taxonomy."""
+    log = []
+    filename = re.compile("^(.*)(\d{8})(.*)$")
+    href_attr_xpath = "{http://www.w3.org/1999/xlink}href"
+    path = re.compile("^(?!http://)(.+-)(\d{8})(\.xsd)(#.+)$")
+    if linkbase == "xsd":
+        link_refs_xpath = ".//{http://www.xbrl.org/2003/linkbase}linkbaseRef"
+        link_refs = elem.findall(link_refs_xpath)
+        for link_ref in link_refs:
+            old_path = link_ref.get(href_attr_xpath)
+            match = filename.search(old_path)
+            new_path = match.group(1) + "current_taxonomy" + match.group(3)
+            link_ref.set(href_attr_xpath, new_path)
+            log.append((old_path, new_path))
+        base = match.group(1) + match.group(2)
+        log.append((base + ".xsd", match.group(1) + "current_taxonomy.xsd"))
+        log.append((base + ".xml", "*Deleted*"))
+    else:
+        links = ["loc"]
+        if linkbase == "linkbase":
+            links.append("roleRef")
+        for link in links:
+            xpath = ".//{http://www.xbrl.org/2003/linkbase}%s" % link
+            link_refs = elem.findall(xpath)
+            for link_ref in link_refs:
+                match = path.search(link_ref.get(href_attr_xpath))
+                if match:
+                    xsd = match.group(1) + "current_taxonomy" + match.group(3)
+                    link_ref.set(href_attr_xpath, xsd + match.group(4))
+
+    return log
