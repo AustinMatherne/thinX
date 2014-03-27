@@ -5,7 +5,7 @@ from thinX import namespace
 from thinX import xbrl
 
 
-class Labels(unittest.TestCase):
+class Link_Roles(unittest.TestCase):
 
     def setUp(self):
         schema = "assets/abc-20130331.xsd"
