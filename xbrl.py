@@ -793,3 +793,11 @@ def get_active_link_roles(linkbases):
 
     return set(log)
 
+def compare_link_roles(roles, active_roles):
+    """Return any extension link roles which are not active."""
+    log = []
+    for role in roles:
+        if role not in active_roles:
+            log.append(role)
+
+    return log
