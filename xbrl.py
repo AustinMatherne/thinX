@@ -678,3 +678,91 @@ def dup_calcs(elem):
                 base_calcs[total] = [store[linkrole][total]]
 
     return warnings
+
+def link_role_sort(elem):
+    """Update link role sort codes to improve compatibility with Crossfire."""
+    log = []
+
+    dei = "0000"
+    face_fin = re.compile("^00[1-9]0$")
+    face_par = re.compile("^00[1-9]{2}$")
+    text_block = re.compile("^[1-3]\d{3}$")
+    level_four = re.compile("^4\d{3}$")
+    eights = re.compile("^8\d{3}$")
+    sort_reg = re.compile("^(\d+)(.+)$")
+
+    linkbase_refs_xpath = ".//{http://www.xbrl.org/2003/linkbase}definition"
+    linkbase_refs = elem.findall(linkbase_refs_xpath)
+
+    for linkbase_ref in linkbase_refs:
+        match = sort_reg.search(linkbase_ref.text)
+        sort = match.group(1)
+        link_def = match.group(2)
+        new_sort = sort
+        if sort == dei:
+            new_sort = "00090"
+        elif face_par.search(sort):
+            new_sort = sort[:3] + "0" + sort[-1:]
+        elif text_block.search(sort):
+            new_sort = sort[:3] + "0" + sort[:1]
+        elif face_fin.search(sort) or eights.search(sort):
+            new_sort = sort + "0"
+        elif level_four.search(sort):
+            code = int(sort[-1:]) + 1
+            if code < 10:
+                new_sort = sort[:-1] + "0" + str(code)
+            else:
+                new_sort = sort[:-1] + str(code)
+
+        if sort != new_sort:
+            log.append((sort, new_sort))
+            linkbase_ref.text = new_sort + link_def
+    log.sort(key=lambda tup: tup[0])
+
+    return log
+
+def remove_namespace_date(elem):
+    """Remove the date from the targetNamespcae."""
+    old_namespace = elem.get("targetNamespace")
+    new_namespace = re.search("(^.*)/\d{8}$", old_namespace).group(1)
+    elem.set("targetNamespace", new_namespace)
+    attrs = elem.items()
+    for attr in attrs:
+        if attr[-1] == old_namespace:
+            elem.set(attr[0], new_namespace)
+            break
+
+    return (old_namespace, new_namespace)
+
+def rename_refs(elem, linkbase):
+    """Rename linkbase references in element to tic-current_taxonomy."""
+    log = []
+    filename = re.compile("^(.*)(\d{8})(.*)$")
+    href_attr_xpath = "{http://www.w3.org/1999/xlink}href"
+    path = re.compile("^(?!http://)(.+-)(\d{8})(\.xsd)(#.+)$")
+    if linkbase == "xsd":
+        link_refs_xpath = ".//{http://www.xbrl.org/2003/linkbase}linkbaseRef"
+        link_refs = elem.findall(link_refs_xpath)
+        for link_ref in link_refs:
+            old_path = link_ref.get(href_attr_xpath)
+            match = filename.search(old_path)
+            new_path = match.group(1) + "current_taxonomy" + match.group(3)
+            link_ref.set(href_attr_xpath, new_path)
+            log.append((old_path, new_path))
+        base = match.group(1) + match.group(2)
+        log.append((base + ".xsd", match.group(1) + "current_taxonomy.xsd"))
+        log.append((base + ".xml", "*Deleted*"))
+    else:
+        links = ["loc"]
+        if linkbase == "linkbase":
+            links.append("roleRef")
+        for link in links:
+            xpath = ".//{http://www.xbrl.org/2003/linkbase}%s" % link
+            link_refs = elem.findall(xpath)
+            for link_ref in link_refs:
+                match = path.search(link_ref.get(href_attr_xpath))
+                if match:
+                    xsd = match.group(1) + "current_taxonomy" + match.group(3)
+                    link_ref.set(href_attr_xpath, xsd + match.group(4))
+
+    return log

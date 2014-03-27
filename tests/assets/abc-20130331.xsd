@@ -31,7 +31,7 @@
         <link:usedOn>link:definitionLink</link:usedOn>
       </link:roleType>
       <link:roleType roleURI="http://www.example.com/role/BalanceSheetComponentsInventoriesDetails" id="BalanceSheetComponentsInventoriesDetails">
-        <link:definition>4020 - Disclosure - Balance Sheet Components (Inventories) (Details)</link:definition>
+        <link:definition>40200 - Disclosure - Balance Sheet Components (Inventories) (Details)</link:definition>
         <link:usedOn>link:presentationLink</link:usedOn>
         <link:usedOn>link:calculationLink</link:usedOn>
         <link:usedOn>link:definitionLink</link:usedOn>

@@ -3,6 +3,8 @@
 import namespace
 import sys
 import re
+import os
+import xml.etree.ElementTree as ET
 from PyQt5 import QtWidgets
 from ui_thinX import Ui_MainWindow
 import xbrl
@@ -30,6 +32,8 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionLabels.triggered.connect(self.labels)
         self.ui.actionConsolidateLabels.triggered.connect(self.redundant_labels)
         self.ui.actionConcepts.triggered.connect(self.concepts)
+        self.ui.actionMerrillBridgeSort.triggered.connect(self.bridge_sort)
+        self.ui.actionMerrillBridgePrep.triggered.connect(self.bridge_prep)
 
     def __init_statusbar(self):
         self.status = QtWidgets.QLabel()
@@ -403,6 +407,88 @@ class ThinX(QtWidgets.QMainWindow):
                         self.ui.textLog.append(calc + " *" + str(mutliples + 1))
                     else:
                         self.ui.textLog.append(calc)
+
+    def bridge_sort(self):
+        """Update link role sorting for Merrill Bridge."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            self.ui.textLog.clear()
+            try:
+                schema = xbrl.get_linkbase(self.filename, "xsd")
+            except:
+                self.open_fail(self.filename, "xsd")
+                return
+            tree = namespace.parse_xmlns(schema)
+            root = tree.getroot()
+            log = xbrl.link_role_sort(root)
+            namespace.fixup_xmlns(root)
+            tree.write(schema, xml_declaration=True)
+            self.ui.textLog.append("<strong>Sort Codes:</strong>")
+            for link in log:
+                self.ui.textLog.append(link[0] + " > " + link[1])
+            self.status.setText("Ready for Compare ")
+
+    def bridge_prep(self):
+        """Prep taxonomy for import into Merrill Bridge."""
+        comment = ('<?xml version="1.0" encoding="utf-8"?>\n<!--XBRL document '
+                   'created with Crossfire by Rivet Software version 5.7.123.0 '
+                   'http://www.rivetsoftware.com-->\n<!--Based on XBRL 2.1-->\n'
+                   '<!--Created on: 2/13/2014 12:47:00 PM-->\n<!--Modified on: '
+                   '2/13/2014 12:48:00 PM-->\n')
+
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            self.ui.textLog.clear()
+            try:
+                schema = xbrl.get_linkbase(self.filename, "xsd")
+                pres = xbrl.get_linkbase(self.filename, "pre")
+                defs = xbrl.get_linkbase(self.filename, "def")
+                calc = xbrl.get_linkbase(self.filename, "cal")
+                labs = xbrl.get_linkbase(self.filename, "lab")
+                linkbases = [schema, pres, defs, calc, labs]
+            except:
+                self.open_fail(self.filename, "xsd")
+                return
+            path = re.compile("^(.+)\d{8}([\.-abcdeflmprsx]{4,8})$")
+            name = "current_taxonomy"
+            os.remove(self.filename)
+            for linkbase in linkbases:
+                tree = namespace.parse_xmlns(linkbase)
+                root = tree.getroot()
+                if linkbase == schema:
+                    log = xbrl.link_role_sort(root)
+                    ns_change = xbrl.remove_namespace_date(root)
+                    refs = xbrl.rename_refs(root, "xsd")
+                elif linkbase == labs:
+                    lab_log = xbrl.rename_refs(root, "labs")
+                else:
+                    ref_log = xbrl.rename_refs(root, "linkbase")
+                namespace.fixup_xmlns(root)
+                content = ET.tostring(root, encoding="unicode")
+                match = path.search(linkbase)
+                new_name = match.group(1) + name + match.group(2)
+                f = open(new_name, 'w', encoding="utf8")
+                f.write(comment + content)
+                f.close()
+                os.remove(linkbase)
+            self.ui.textLog.append("<strong>Sort Codes:</strong>")
+            for link in log:
+                self.ui.textLog.append(link[0] + " > " + link[1])
+            self.ui.textLog.append("<br><strong>Files:</strong>")
+            for ref in refs:
+                self.ui.textLog.append(ref[0] + " > " + ref[1])
+            self.ui.textLog.append("<br><strong>Namespace:</strong>")
+            self.ui.textLog.append(ns_change[0] + " > " + ns_change[1])
+            self.status.setText("Ready for Bridge ")
+
 
 def main():
     """Launches Qt and creates an instance of ThinX."""
