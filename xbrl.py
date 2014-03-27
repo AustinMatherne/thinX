@@ -777,3 +777,19 @@ def get_link_roles(elem):
         log.append(link_role.get("roleURI"))
 
     return log
+
+def get_active_link_roles(linkbases):
+    """Return a set of all extension link roles in use by the given linkbases."""
+    log = []
+    xpaths = {"pre": ".//{http://www.xbrl.org/2003/linkbase}presentationLink",
+              "def": ".//{http://www.xbrl.org/2003/linkbase}definitionLink",
+              "cal": ".//{http://www.xbrl.org/2003/linkbase}calculationLink"}
+    role_attr_xpath = "{http://www.w3.org/1999/xlink}role"
+
+    for key, value in linkbases.items():
+        link_roles = value.findall(xpaths[key])
+        for link_role in link_roles:
+            log.append(link_role.get(role_attr_xpath))
+
+    return set(log)
+
