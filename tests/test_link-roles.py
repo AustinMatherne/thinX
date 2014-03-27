@@ -17,9 +17,9 @@ class Link_Roles(unittest.TestCase):
         def_tree = namespace.parse_xmlns(def_linkbase)
         cal_tree = namespace.parse_xmlns(cal_linkbase)
         self.xsd_root = xsd_tree.getroot()
-        self.pre_root = pre_tree.getroot()
-        self.def_root = def_tree.getroot()
-        self.cal_root = cal_tree.getroot()
+        self.linkbases = {"pre": pre_tree.getroot(),
+                          "def": def_tree.getroot(),
+                          "cal": cal_tree.getroot()}
 
         self.active_link_roles = [
             "http://www.example.com/role/BalanceSheetComponents",
@@ -40,11 +40,7 @@ class Link_Roles(unittest.TestCase):
         self.assertEqual(len(result), 22)
 
     def test_get_active_link_roles(self):
-        linkbases = {"pre": self.pre_root,
-                     "def": self.def_root,
-                     "cal": self.cal_root}
-
-        result = xbrl.get_active_link_roles(linkbases)
+        result = xbrl.get_active_link_roles(self.linkbases)
 
         for role in self.active_link_roles:
             self.assertIn(role, result)
@@ -52,7 +48,7 @@ class Link_Roles(unittest.TestCase):
 
     def test_compare_link_roles(self):
         roles = xbrl.get_link_roles(self.xsd_root)
-        active = xbrl.get_active_link_roles(linkbases)
+        active = xbrl.get_active_link_roles(self.linkbases)
 
         result = xbrl.compare_link_roles(roles, active)
 
