@@ -61,4 +61,9 @@ The Unused Contexts utility searches the selected instance document for declared
 The UTR utility adds each namespace supplied in the units.ini configuration file and searches the selected instance document for measures which match those defined in units.ini. If a match is found under a different namespace, the prefix for the proper namespace is used, and the capitalization of the measure is corrected if necessary.
 
 
+### Merrill Bridge Prep
+
+The Merrill Bridge Prep utility prepares a taxonomy for import into Merrill Bridge. It removes the date from the entity namespace, adds a comment header to all of the files, converts link role sort codes to the Bridge standard (from the previous Merrill sorting standard), deletes the instance document, and renames the schema and linkbases to remove the date.
+
+
 [1]: http://scottchacon.com/2011/08/31/github-flow.html
