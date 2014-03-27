@@ -62,6 +62,7 @@
      <string>Utilities</string>
     </property>
     <addaction name="actionConcepts"/>
+    <addaction name="actionLinkRoles"/>
     <addaction name="actionLabels"/>
     <addaction name="actionConsolidateLabels"/>
     <addaction name="actionCalculations"/>
@@ -94,6 +95,8 @@
    <addaction name="actionOpen"/>
    <addaction name="separator"/>
    <addaction name="actionConcepts"/>
+   <addaction name="separator"/>
+   <addaction name="actionLinkRoles"/>
    <addaction name="separator"/>
    <addaction name="actionLabels"/>
    <addaction name="separator"/>
@@ -219,6 +222,18 @@
    </property>
    <property name="toolTip">
     <string>Merrill Bridge Sort</string>
+   </property>
+  </action>
+  <action name="actionLinkRoles">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_157_show_thumbnails_with_lines.png</normaloff>:/Glyphicons/icons/glyphicons_157_show_thumbnails_with_lines.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Unused Link Roles</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Unused Link Roles</string>
    </property>
   </action>
  </widget>

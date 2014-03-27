@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Thu Mar 27 13:39:41 2014
+# Created: Thu Mar 27 16:38:31 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -99,10 +99,16 @@ class Ui_MainWindow(object):
         icon11.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_080_retweet.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionMerrillBridgeSort.setIcon(icon11)
         self.actionMerrillBridgeSort.setObjectName("actionMerrillBridgeSort")
+        self.actionLinkRoles = QtWidgets.QAction(MainWindow)
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_157_show_thumbnails_with_lines.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionLinkRoles.setIcon(icon12)
+        self.actionLinkRoles.setObjectName("actionLinkRoles")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuUtilities.addAction(self.actionConcepts)
+        self.menuUtilities.addAction(self.actionLinkRoles)
         self.menuUtilities.addAction(self.actionLabels)
         self.menuUtilities.addAction(self.actionConsolidateLabels)
         self.menuUtilities.addAction(self.actionCalculations)
@@ -117,6 +123,8 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionOpen)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionConcepts)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionLinkRoles)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionLabels)
         self.toolBar.addSeparator()
@@ -158,5 +166,7 @@ class Ui_MainWindow(object):
         self.actionMerrillBridgePrep.setText(_translate("MainWindow", "Merrill Bridge Prep"))
         self.actionMerrillBridgeSort.setText(_translate("MainWindow", "Merrill Bridge Sort"))
         self.actionMerrillBridgeSort.setToolTip(_translate("MainWindow", "Merrill Bridge Sort"))
+        self.actionLinkRoles.setText(_translate("MainWindow", "Remove Unused Link Roles"))
+        self.actionLinkRoles.setToolTip(_translate("MainWindow", "Remove Unused Link Roles"))
 
 import icons_rc
