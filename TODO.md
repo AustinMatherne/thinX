@@ -2,6 +2,7 @@ To-Do
 =====
 
 1. Create two day context detecting utility.
+* Create utility for deleting unused link roles.
 * Create taxonomy renaming utility.
 * Create Inno Setup application updater.
 * Create a process for automatically updating extension taxonomies to new versions of the US-GAAP taxonomy that is capable of handling one to one element replacements.
