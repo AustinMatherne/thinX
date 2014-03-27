@@ -67,6 +67,7 @@
     <addaction name="actionCalculations"/>
     <addaction name="actionContexts"/>
     <addaction name="actionUnits"/>
+    <addaction name="actionMerrillBridgePrep"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -102,6 +103,8 @@
    <addaction name="actionContexts"/>
    <addaction name="separator"/>
    <addaction name="actionUnits"/>
+   <addaction name="separator"/>
+   <addaction name="actionMerrillBridgePrep"/>
    <addaction name="separator"/>
   </widget>
   <action name="actionOpen">
@@ -192,6 +195,15 @@
    </property>
    <property name="text">
     <string>Consolidate Labels</string>
+   </property>
+  </action>
+  <action name="actionMerrillBridgePrep">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_026_road.png</normaloff>:/Glyphicons/icons/glyphicons_026_road.png</iconset>
+   </property>
+   <property name="text">
+    <string>Merrill Bridge Prep</string>
    </property>
   </action>
  </widget>

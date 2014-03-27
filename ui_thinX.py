@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Fri Jun 28 14:37:54 2013
-#      by: PyQt5 UI code generator 5.0
+# Created: Thu Mar 27 12:34:47 2014
+#      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -89,6 +89,11 @@ class Ui_MainWindow(object):
         icon9.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_100_font.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionConsolidateLabels.setIcon(icon9)
         self.actionConsolidateLabels.setObjectName("actionConsolidateLabels")
+        self.actionMerrillBridgePrep = QtWidgets.QAction(MainWindow)
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_026_road.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionMerrillBridgePrep.setIcon(icon10)
+        self.actionMerrillBridgePrep.setObjectName("actionMerrillBridgePrep")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
@@ -98,6 +103,7 @@ class Ui_MainWindow(object):
         self.menuUtilities.addAction(self.actionCalculations)
         self.menuUtilities.addAction(self.actionContexts)
         self.menuUtilities.addAction(self.actionUnits)
+        self.menuUtilities.addAction(self.actionMerrillBridgePrep)
         self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuUtilities.menuAction())
@@ -115,6 +121,8 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionContexts)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionUnits)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionMerrillBridgePrep)
         self.toolBar.addSeparator()
 
         self.retranslateUi(MainWindow)
@@ -139,5 +147,6 @@ class Ui_MainWindow(object):
         self.actionConcepts.setText(_translate("MainWindow", "Remove Unused Extension Concepts"))
         self.actionConcepts.setToolTip(_translate("MainWindow", "Remove Unused Extension Concepts"))
         self.actionConsolidateLabels.setText(_translate("MainWindow", "Consolidate Labels"))
+        self.actionMerrillBridgePrep.setText(_translate("MainWindow", "Merrill Bridge Prep"))
 
 import icons_rc
