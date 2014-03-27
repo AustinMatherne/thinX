@@ -67,6 +67,7 @@
     <addaction name="actionCalculations"/>
     <addaction name="actionContexts"/>
     <addaction name="actionUnits"/>
+    <addaction name="actionMerrillBridgeSort"/>
     <addaction name="actionMerrillBridgePrep"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -103,6 +104,8 @@
    <addaction name="actionContexts"/>
    <addaction name="separator"/>
    <addaction name="actionUnits"/>
+   <addaction name="separator"/>
+   <addaction name="actionMerrillBridgeSort"/>
    <addaction name="separator"/>
    <addaction name="actionMerrillBridgePrep"/>
    <addaction name="separator"/>
@@ -204,6 +207,18 @@
    </property>
    <property name="text">
     <string>Merrill Bridge Prep</string>
+   </property>
+  </action>
+  <action name="actionMerrillBridgeSort">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_080_retweet.png</normaloff>:/Glyphicons/icons/glyphicons_080_retweet.png</iconset>
+   </property>
+   <property name="text">
+    <string>Merrill Bridge Sort</string>
+   </property>
+   <property name="toolTip">
+    <string>Merrill Bridge Sort</string>
    </property>
   </action>
  </widget>
