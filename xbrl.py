@@ -766,3 +766,14 @@ def rename_refs(elem, linkbase):
                     link_ref.set(href_attr_xpath, xsd + match.group(4))
 
     return log
+
+def get_link_roles(elem):
+    """Return all extension link role URIs found in the given element."""
+    log = []
+    role_type_xpath = ".//{http://www.xbrl.org/2003/linkbase}roleType"
+    link_roles = elem.findall(role_type_xpath)
+
+    for link_role in link_roles:
+        log.append(link_role.get("roleURI"))
+
+    return log
