@@ -36,7 +36,7 @@ class Calculations(unittest.TestCase):
 
         for expt in extps:
             self.assertIn(expt, result)
-        self.assertEqual(len(result), 19)
+        self.assertEqual(len(result), 21)
 
     def test_rename_refs(self):
         files = [("abc-20130331.xsd", "abc-current_taxonomy.xsd"),

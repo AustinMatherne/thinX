@@ -126,6 +126,18 @@
         <link:usedOn>link:calculationLink</link:usedOn>
         <link:usedOn>link:definitionLink</link:usedOn>
       </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/InactiveDetails" id="InactiveDetails">
+        <link:definition>4030 - Disclosure - Inactive (Details)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
+      <link:roleType roleURI="http://www.example.com/role/NotUsedDetails" id="NotUsedDetails">
+        <link:definition>4040 - Disclosure - Not Used (Details)</link:definition>
+        <link:usedOn>link:presentationLink</link:usedOn>
+        <link:usedOn>link:calculationLink</link:usedOn>
+        <link:usedOn>link:definitionLink</link:usedOn>
+      </link:roleType>
     </xsd:appinfo>
   </xsd:annotation>
   <xsd:import namespace="http://fasb.org/us-gaap/2012-01-31" schemaLocation="http://xbrl.fasb.org/us-gaap/2012/elts/us-gaap-2012-01-31.xsd"/>
