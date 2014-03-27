@@ -32,6 +32,7 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionLabels.triggered.connect(self.labels)
         self.ui.actionConsolidateLabels.triggered.connect(self.redundant_labels)
         self.ui.actionConcepts.triggered.connect(self.concepts)
+        self.ui.actionMerrillBridgeSort.triggered.connect(self.bridge_sort)
         self.ui.actionMerrillBridgePrep.triggered.connect(self.bridge_prep)
 
     def __init_statusbar(self):
@@ -422,6 +423,30 @@ class ThinX(QtWidgets.QMainWindow):
                         self.ui.textLog.append(calc + " *" + str(mutliples + 1))
                     else:
                         self.ui.textLog.append(calc)
+
+    def bridge_sort(self):
+        """Update link role sorting for Merrill Bridge."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            self.ui.textLog.clear()
+            try:
+                schema = xbrl.get_linkbase(self.filename, "xsd")
+            except:
+                self.open_fail(self.filename, "xsd")
+                return
+            tree = namespace.parse_xmlns(schema)
+            root = tree.getroot()
+            log = xbrl.link_role_sort(root)
+            namespace.fixup_xmlns(root)
+            tree.write(schema, xml_declaration=True)
+            self.ui.textLog.append("<strong>Sort Codes:</strong>")
+            for link in log:
+                self.ui.textLog.append(link[0] + " > " + link[1])
+            self.status.setText("Ready for Compare ")
 
     def bridge_prep(self):
         """Prep taxonomy for import into Merrill Bridge."""
