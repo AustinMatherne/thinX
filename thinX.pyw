@@ -466,8 +466,10 @@ class ThinX(QtWidgets.QMainWindow):
                 xbrl.delete_link_roles(xsd_root, log)
                 namespace.fixup_xmlns(xsd_root)
                 xsd_tree.write(xsd, xml_declaration=True)
+                self.ui.textLog.append("<strong>Inactive Link Roles:</strong>")
                 for role in log:
                     self.ui.textLog.append(role)
+                self.ui.textLog.append("")
                 self.status.setText(
                     "The Above Unused Link Roles Have Been Removed "
                 )
@@ -511,6 +513,7 @@ class ThinX(QtWidgets.QMainWindow):
             return
         else:
             self.ui.textLog.clear()
+            self.link_role()
             try:
                 schema = xbrl.get_linkbase(self.filename, "xsd")
                 pres = xbrl.get_linkbase(self.filename, "pre")
