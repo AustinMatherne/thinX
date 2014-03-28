@@ -801,3 +801,16 @@ def compare_link_roles(roles, active_roles):
             log.append(role)
 
     return log
+
+def delete_link_roles(elem, link_roles):
+    """Delete the provided link roles from the given element."""
+    role_type_attr_xpath = ".//*[@roleURI='%s']"
+    app_info = elem.find(".//{http://www.w3.org/2001/XMLSchema}appinfo")
+    log = []
+
+    for link_role in link_roles:
+        role = elem.find(role_type_attr_xpath % link_role)
+        app_info.remove(role)
+        log.append(link_role)
+
+    return log
