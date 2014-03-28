@@ -32,6 +32,7 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionLabels.triggered.connect(self.labels)
         self.ui.actionConsolidateLabels.triggered.connect(self.redundant_labels)
         self.ui.actionConcepts.triggered.connect(self.concepts)
+        self.ui.actionLinkRoles.triggered.connect(self.link_role)
         self.ui.actionMerrillBridgeSort.triggered.connect(self.bridge_sort)
         self.ui.actionMerrillBridgePrep.triggered.connect(self.bridge_prep)
 
@@ -407,6 +408,69 @@ class ThinX(QtWidgets.QMainWindow):
                         self.ui.textLog.append(calc + " *" + str(mutliples + 1))
                     else:
                         self.ui.textLog.append(calc)
+
+    def link_role(self):
+        """Find, report, and delete any inactive link roles."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            self.ui.textLog.clear()
+            try:
+                xsd = xbrl.get_linkbase(self.filename, "xsd")
+                pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
+                def_linkbase = xbrl.get_linkbase(self.filename, "def")
+                cal_linkbase = xbrl.get_linkbase(self.filename, "cal")
+            except:
+                self.open_fail(self.filename, "xsd")
+                return
+
+            try:
+                xsd_tree = namespace.parse_xmlns(xsd)
+            except:
+                self.open_fail(self.filename, "xsd")
+                return
+
+            try:
+                pre_tree = namespace.parse_xmlns(pre_linkbase)
+            except:
+                self.open_fail(self.filename, "pre")
+                return
+
+            try:
+                def_tree = namespace.parse_xmlns(def_linkbase)
+            except:
+                self.open_fail(self.filename, "def")
+                return
+
+            try:
+                cal_tree = namespace.parse_xmlns(cal_linkbase)
+            except:
+                self.open_fail(self.filename, "cal")
+                return
+
+            xsd_root = xsd_tree.getroot()
+            linkbases = {"pre": pre_tree.getroot(),
+                         "def": def_tree.getroot(),
+                         "cal": cal_tree.getroot()}
+
+            link_roles = xbrl.get_link_roles(xsd_root)
+            active_link_roles = xbrl.get_active_link_roles(linkbases)
+            log = xbrl.compare_link_roles(link_roles, active_link_roles)
+
+            if not log:
+                self.status.setText("No Unused Link Roles Found in File ")
+            else:
+                xbrl.delete_link_roles(xsd_root, log)
+                namespace.fixup_xmlns(xsd_root)
+                xsd_tree.write(xsd, xml_declaration=True)
+                for role in log:
+                    self.ui.textLog.append(role)
+                self.status.setText(
+                    "The Above Unused Link Roles Have Been Removed "
+                )
 
     def bridge_sort(self):
         """Update link role sorting for Merrill Bridge."""
