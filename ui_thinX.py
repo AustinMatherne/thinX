@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Thu Mar 27 16:38:31 2014
+# Created: Mon Mar 31 16:38:30 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -104,6 +104,11 @@ class Ui_MainWindow(object):
         icon12.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_157_show_thumbnails_with_lines.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionLinkRoles.setIcon(icon12)
         self.actionLinkRoles.setObjectName("actionLinkRoles")
+        self.actionTwoDayContexts = QtWidgets.QAction(MainWindow)
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_214_resize_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionTwoDayContexts.setIcon(icon13)
+        self.actionTwoDayContexts.setObjectName("actionTwoDayContexts")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
@@ -112,6 +117,7 @@ class Ui_MainWindow(object):
         self.menuUtilities.addAction(self.actionLabels)
         self.menuUtilities.addAction(self.actionConsolidateLabels)
         self.menuUtilities.addAction(self.actionCalculations)
+        self.menuUtilities.addAction(self.actionTwoDayContexts)
         self.menuUtilities.addAction(self.actionContexts)
         self.menuUtilities.addAction(self.actionUnits)
         self.menuUtilities.addAction(self.actionMerrillBridgeSort)
@@ -131,6 +137,8 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionConsolidateLabels)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionCalculations)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionTwoDayContexts)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionContexts)
         self.toolBar.addSeparator()
@@ -157,7 +165,8 @@ class Ui_MainWindow(object):
         self.actionUnits.setText(_translate("MainWindow", "Comply with UTR"))
         self.actionContexts.setText(_translate("MainWindow", "Remove Unused Contexts"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
-        self.actionCalculations.setText(_translate("MainWindow", "Find Duplicate Calculations"))
+        self.actionCalculations.setText(_translate("MainWindow", "Report Duplicate Calculations"))
+        self.actionCalculations.setToolTip(_translate("MainWindow", "Report Duplicate Calculations"))
         self.actionLabels.setText(_translate("MainWindow", "Remove Unused Labels"))
         self.actionLabels.setToolTip(_translate("MainWindow", "Remove Unused Labels"))
         self.actionConcepts.setText(_translate("MainWindow", "Remove Unused Extension Concepts"))
@@ -168,5 +177,7 @@ class Ui_MainWindow(object):
         self.actionMerrillBridgeSort.setToolTip(_translate("MainWindow", "Merrill Bridge Sort"))
         self.actionLinkRoles.setText(_translate("MainWindow", "Remove Unused Link Roles"))
         self.actionLinkRoles.setToolTip(_translate("MainWindow", "Remove Unused Link Roles"))
+        self.actionTwoDayContexts.setText(_translate("MainWindow", "Report Two Day Contexts"))
+        self.actionTwoDayContexts.setToolTip(_translate("MainWindow", "Report Two Day Contexts"))
 
 import icons_rc

@@ -66,6 +66,7 @@
     <addaction name="actionLabels"/>
     <addaction name="actionConsolidateLabels"/>
     <addaction name="actionCalculations"/>
+    <addaction name="actionTwoDayContexts"/>
     <addaction name="actionContexts"/>
     <addaction name="actionUnits"/>
     <addaction name="actionMerrillBridgeSort"/>
@@ -103,6 +104,8 @@
    <addaction name="actionConsolidateLabels"/>
    <addaction name="separator"/>
    <addaction name="actionCalculations"/>
+   <addaction name="separator"/>
+   <addaction name="actionTwoDayContexts"/>
    <addaction name="separator"/>
    <addaction name="actionContexts"/>
    <addaction name="separator"/>
@@ -167,7 +170,10 @@
      <normaloff>:/Glyphicons/icons/glyphicons_041_charts.png</normaloff>:/Glyphicons/icons/glyphicons_041_charts.png</iconset>
    </property>
    <property name="text">
-    <string>Find Duplicate Calculations</string>
+    <string>Report Duplicate Calculations</string>
+   </property>
+   <property name="toolTip">
+    <string>Report Duplicate Calculations</string>
    </property>
   </action>
   <action name="actionLabels">
@@ -234,6 +240,18 @@
    </property>
    <property name="toolTip">
     <string>Remove Unused Link Roles</string>
+   </property>
+  </action>
+  <action name="actionTwoDayContexts">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_214_resize_small.png</normaloff>:/Glyphicons/icons/glyphicons_214_resize_small.png</iconset>
+   </property>
+   <property name="text">
+    <string>Report Two Day Contexts</string>
+   </property>
+   <property name="toolTip">
+    <string>Report Two Day Contexts</string>
    </property>
   </action>
  </widget>
