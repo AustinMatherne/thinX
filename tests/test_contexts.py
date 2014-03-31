@@ -22,7 +22,8 @@ class Contexts(unittest.TestCase):
             "I2012Q2_AccumulatedNetGainLossFromDesignatedOrQualifyingCashFlow" \
                 "HedgesMember",
             "D2012Q2_M0630",
-            "D2013Q1_M0201_CostOfSalesMember"
+            "D2013Q1_M0201_CostOfSalesMember",
+            "D2012Q1_M0101"
         ])
         unused_contexts = sorted(xbrl.clean_contexts(self.root))
 
@@ -39,7 +40,9 @@ class Contexts(unittest.TestCase):
             self.assertNotIn(context, context_ids)
 
     def test_two_day_contexts(self):
-        two_day_contexts = ["D2012Q2_M0630", "D2013Q1_M0201_CostOfSalesMember"]
+        two_day_contexts = ["D2012Q2_M0630",
+                            "D2013Q1_M0201_CostOfSalesMember",
+                            "D2012Q1_M0101"]
 
         result = xbrl.two_day_contexts(self.root)
 

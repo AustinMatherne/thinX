@@ -601,6 +601,15 @@
       <xbrli:endDate>2013-02-01</xbrli:endDate>
     </xbrli:period>
   </xbrli:context>
+  <xbrli:context id="D2012Q1_M0101">
+    <xbrli:entity>
+      <xbrli:identifier scheme="http://www.sec.gov/CIK">0000000000</xbrli:identifier>
+    </xbrli:entity>
+    <xbrli:period>
+      <xbrli:startDate>2011-12-31</xbrli:startDate>
+      <xbrli:endDate>2012-01-01</xbrli:endDate>
+    </xbrli:period>
+  </xbrli:context>
   <xbrli:unit id="Shares">
     <xbrli:measure>xbrli:shares</xbrli:measure>
   </xbrli:unit>
