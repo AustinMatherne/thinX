@@ -767,6 +767,22 @@ def rename_refs(elem, linkbase):
 
     return log
 
+def retrieve_base(elem):
+    """Return the base taxonomy from the provided schema element."""
+    version = ""
+    ugt = re.compile("(us-gaap-\d{4}-\d{2}-\d{2})\.xsd$")
+    imports = elem.findall("{http://www.w3.org/2001/XMLSchema}import")
+
+    for schema in imports:
+        print(schema)
+        location = ugt.search(schema.get("schemaLocation"))
+        print(location)
+        if location:
+            version = location.group(1)
+            break
+
+    return version
+
 def get_link_roles(elem):
     """Return all extension link role URIs found in the given element."""
     log = []
