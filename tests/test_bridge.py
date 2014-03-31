@@ -58,3 +58,10 @@ class Calculations(unittest.TestCase):
         result = xbrl.remove_namespace_date(self.xsd_root)
 
         self.assertEqual(result, ns)
+
+    def test_retrieve_base(self):
+        base = "us-gaap-2012-01-31"
+
+        result = xbrl.retrieve_base(self.xsd_root)
+
+        self.assertEqual(result, base)
