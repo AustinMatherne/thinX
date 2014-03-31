@@ -192,6 +192,7 @@ class ThinX(QtWidgets.QMainWindow):
                 self.status.setText(
                     "The Above Unreferenced Contexts Have Been Removed "
                 )
+                self.ui.textLog.append("<strong>Unused Contexts:</strong>")
                 for item in log:
                     self.ui.textLog.append(item)
 
@@ -266,7 +267,7 @@ class ThinX(QtWidgets.QMainWindow):
                     self.ui.textLog.append(
                         "<strong>"
                         + element.rsplit("#")[-1]
-                        + "</strong>"
+                        + ":</strong>"
                     )
                     for label_type, label in labels.items():
                         self.ui.textLog.append(
@@ -321,7 +322,7 @@ class ThinX(QtWidgets.QMainWindow):
                     self.ui.textLog.append(
                         "<strong>"
                         + element.rsplit("#")[-1]
-                        + "</strong>"
+                        + ":</strong>"
                     )
                     for label_type, label in labels.items():
                         self.ui.textLog.append(
@@ -401,6 +402,7 @@ class ThinX(QtWidgets.QMainWindow):
                 self.status.setText(
                     "The Above Unreferenced Concepts Have Been Removed "
                 )
+                self.ui.textLog.append("<strong>Unused Concepts:</strong>")
                 for concept in log:
                     self.ui.textLog.append(concept)
 
@@ -430,6 +432,9 @@ class ThinX(QtWidgets.QMainWindow):
                 self.status.setText(
                     "Duplicate Calculations For The Above Total Concepts Have "
                     "Been Found "
+                )
+                self.ui.textLog.append(
+                    "<strong>Duplicate Calculations:</strong>"
                 )
                 for calc, mutliples in log.items():
                     if mutliples > 0:
@@ -494,7 +499,7 @@ class ThinX(QtWidgets.QMainWindow):
                 xbrl.delete_link_roles(xsd_root, log)
                 namespace.fixup_xmlns(xsd_root)
                 xsd_tree.write(xsd, xml_declaration=True)
-                self.ui.textLog.append("<strong>Inactive Link Roles:</strong>")
+                self.ui.textLog.append("<strong>Unused Link Roles:</strong>")
                 for role in log:
                     self.ui.textLog.append(role)
                 self.ui.textLog.append("")
