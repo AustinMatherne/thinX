@@ -48,4 +48,4 @@ class Contexts(unittest.TestCase):
 
         for context in two_day_contexts:
             self.assertIn(context, result)
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 3)
