@@ -28,6 +28,7 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionAbout.triggered.connect(self.about)
         self.ui.actionUnits.triggered.connect(self.units)
         self.ui.actionContexts.triggered.connect(self.contexts)
+        self.ui.actionTwoDayContexts.triggered.connect(self.two_day_contexts)
         self.ui.actionCalculations.triggered.connect(self.calculations)
         self.ui.actionLabels.triggered.connect(self.labels)
         self.ui.actionConsolidateLabels.triggered.connect(self.redundant_labels)
@@ -191,6 +192,33 @@ class ThinX(QtWidgets.QMainWindow):
                 self.status.setText(
                     "The Above Unreferenced Contexts Have Been Removed "
                 )
+                for item in log:
+                    self.ui.textLog.append(item)
+
+    def two_day_contexts(self):
+        """Report two day contexts."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            self.ui.textLog.clear()
+            try:
+                tree = namespace.parse_xmlns(self.filename)
+            except:
+                self.open_fail(self.filename)
+                return
+
+            root = tree.getroot()
+            log = xbrl.two_day_contexts(root)
+            if not log:
+                self.status.setText("No Two Day Contexts Found in File ")
+            else:
+                self.status.setText(
+                    "The Above Two Day Contexts Were Found "
+                )
+                self.ui.textLog.append("<strong>Two Day Contexts:</strong>")
                 for item in log:
                     self.ui.textLog.append(item)
 
