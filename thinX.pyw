@@ -534,6 +534,7 @@ class ThinX(QtWidgets.QMainWindow):
                     log = xbrl.link_role_sort(root)
                     ns_change = xbrl.remove_namespace_date(root)
                     refs = xbrl.rename_refs(root, "xsd")
+                    base = xbrl.retrieve_base(root)
                 elif linkbase == labs:
                     lab_log = xbrl.rename_refs(root, "labs")
                 else:
@@ -554,6 +555,8 @@ class ThinX(QtWidgets.QMainWindow):
                 self.ui.textLog.append(ref[0] + " > " + ref[1])
             self.ui.textLog.append("<br><strong>Namespace:</strong>")
             self.ui.textLog.append(ns_change[0] + " > " + ns_change[1])
+            self.ui.textLog.append("<br><strong>Base Taxonomy:</strong>")
+            self.ui.textLog.append(base)
             self.status.setText("Ready for Bridge ")
 
 
