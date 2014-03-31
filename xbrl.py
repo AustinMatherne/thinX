@@ -3,6 +3,7 @@
 import configparser
 import collections
 import re
+from datetime import datetime
 from thinX import namespace
 
 
@@ -511,6 +512,29 @@ def delete_label(removed_labels, concept, label_link, label_types=False):
             label_link.remove(loc_to_delete)
     #Return the log of delete labels and the element they were deleted from.
     return (removed_labels, label_link)
+
+def two_day_contexts(elem):
+    """Return durational two day contexts defined in the provided element."""
+
+    def days_between(d1, d2):
+        d1 = datetime.strptime(d1, "%Y-%m-%d")
+        d2 = datetime.strptime(d2, "%Y-%m-%d")
+        return abs((d2 - d1).days)
+
+    contexts = []
+    context_xpath = ".//{http://www.xbrl.org/2003/instance}context"
+    start_xpath = ".//{http://www.xbrl.org/2003/instance}startDate"
+    end_xpath = ".//{http://www.xbrl.org/2003/instance}endDate"
+    current_contexts = elem.findall(context_xpath)
+
+    for context in current_contexts:
+        start = context.find(start_xpath)
+        if start != None:
+            end = context.find(end_xpath)
+            if days_between(start.text, end.text) == 1:
+                contexts.append(context.get("id"))
+
+    return contexts
 
 def clean_contexts(elem):
     """Search through the provided element's children for contexts. Find the
