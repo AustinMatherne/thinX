@@ -60,18 +60,11 @@
    </widget>
    <widget class="QMenu" name="menuUtilities">
     <property name="title">
-     <string>Utilities</string>
+     <string>Instance Utilities</string>
     </property>
-    <addaction name="actionConcepts"/>
-    <addaction name="actionLinkRoles"/>
-    <addaction name="actionLabels"/>
-    <addaction name="actionConsolidateLabels"/>
-    <addaction name="actionCalculations"/>
-    <addaction name="actionTwoDayContexts"/>
     <addaction name="actionContexts"/>
+    <addaction name="actionTwoDayContexts"/>
     <addaction name="actionUnits"/>
-    <addaction name="actionMerrillBridgeSort"/>
-    <addaction name="actionMerrillBridgePrep"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -79,8 +72,27 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuBridge_Utilities">
+    <property name="title">
+     <string>Bridge Utilities</string>
+    </property>
+    <addaction name="actionMerrillBridgePrep"/>
+    <addaction name="actionMerrillBridgeSort"/>
+   </widget>
+   <widget class="QMenu" name="menuSchema_Utilities">
+    <property name="title">
+     <string>Schema Utilities</string>
+    </property>
+    <addaction name="actionLinkRoles"/>
+    <addaction name="actionLabels"/>
+    <addaction name="actionConsolidateLabels"/>
+    <addaction name="actionConcepts"/>
+    <addaction name="actionCalculations"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuSchema_Utilities"/>
    <addaction name="menuUtilities"/>
+   <addaction name="menuBridge_Utilities"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -96,25 +108,25 @@
    </attribute>
    <addaction name="actionOpen"/>
    <addaction name="separator"/>
-   <addaction name="actionConcepts"/>
-   <addaction name="separator"/>
    <addaction name="actionLinkRoles"/>
    <addaction name="separator"/>
    <addaction name="actionLabels"/>
    <addaction name="separator"/>
    <addaction name="actionConsolidateLabels"/>
    <addaction name="separator"/>
-   <addaction name="actionCalculations"/>
+   <addaction name="actionConcepts"/>
    <addaction name="separator"/>
-   <addaction name="actionTwoDayContexts"/>
+   <addaction name="actionCalculations"/>
    <addaction name="separator"/>
    <addaction name="actionContexts"/>
    <addaction name="separator"/>
+   <addaction name="actionTwoDayContexts"/>
+   <addaction name="separator"/>
    <addaction name="actionUnits"/>
    <addaction name="separator"/>
-   <addaction name="actionMerrillBridgeSort"/>
-   <addaction name="separator"/>
    <addaction name="actionMerrillBridgePrep"/>
+   <addaction name="separator"/>
+   <addaction name="actionMerrillBridgeSort"/>
    <addaction name="separator"/>
   </widget>
   <action name="actionOpen">
@@ -140,6 +152,9 @@
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
   </action>
   <action name="actionUnits">
    <property name="icon">
@@ -149,6 +164,9 @@
    <property name="text">
     <string>Comply with UTR</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+I, Alt+3</string>
+   </property>
   </action>
   <action name="actionContexts">
    <property name="icon">
@@ -157,6 +175,9 @@
    </property>
    <property name="text">
     <string>Remove Unused Contexts</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+I, Alt+1</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -179,6 +200,9 @@
    <property name="toolTip">
     <string>Report Duplicate Calculations</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+S, Alt+5</string>
+   </property>
   </action>
   <action name="actionLabels">
    <property name="icon">
@@ -190,6 +214,9 @@
    </property>
    <property name="toolTip">
     <string>Remove Unused Labels</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S, Alt+2</string>
    </property>
   </action>
   <action name="actionConcepts">
@@ -203,6 +230,9 @@
    <property name="toolTip">
     <string>Remove Unused Extension Concepts</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+S, Alt+4</string>
+   </property>
   </action>
   <action name="actionConsolidateLabels">
    <property name="icon">
@@ -212,6 +242,9 @@
    <property name="text">
     <string>Consolidate Labels</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+S, Alt+3</string>
+   </property>
   </action>
   <action name="actionMerrillBridgePrep">
    <property name="icon">
@@ -220,6 +253,9 @@
    </property>
    <property name="text">
     <string>Merrill Bridge Prep</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+B, Alt+1</string>
    </property>
   </action>
   <action name="actionMerrillBridgeSort">
@@ -233,6 +269,9 @@
    <property name="toolTip">
     <string>Merrill Bridge Sort</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+B, Alt+2</string>
+   </property>
   </action>
   <action name="actionLinkRoles">
    <property name="icon">
@@ -245,6 +284,9 @@
    <property name="toolTip">
     <string>Remove Unused Link Roles</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+S, Alt+1</string>
+   </property>
   </action>
   <action name="actionTwoDayContexts">
    <property name="icon">
@@ -256,6 +298,9 @@
    </property>
    <property name="toolTip">
     <string>Report Two Day Contexts</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+I, Alt+2</string>
    </property>
   </action>
   <action name="actionClose">
