@@ -58,8 +58,8 @@ class ThinX(QtWidgets.QMainWindow):
         """Displays project information."""
         self.ui.textLog.clear()
         self.ui.textLog.append(
-            "<html><head/><body><p align=\"center\" style=\"font-size:24pt; "
-            "font-weight:600;\">thinX</p><p align=\"center\"><span style=\" "
+            "<html><head/><body><br><p align=\"center\" style=\"font-size:24pt;"
+            " font-weight:600;\">thinX</p><p align=\"center\"><span style=\" "
             "font-size:10pt;\">thinX is an open source XBRL toolkit developed "
             "and maintained<br>by Austin M. Matherne and released under the "
             "WTFPL.</span></p><p align=\"center\">https://github.com/Austin"

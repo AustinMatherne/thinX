@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Mon Mar 31 16:38:30 2014
+# Created: Tue Apr  1 12:26:09 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(600, 350)
+        MainWindow.resize(900, 500)
         MainWindow.setMinimumSize(QtCore.QSize(600, 350))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_001_leaf.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.textLog)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 600, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 900, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
