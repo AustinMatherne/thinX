@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Tue Apr  1 12:28:24 2014
+# Created: Tue Apr  1 12:32:58 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -109,7 +109,13 @@ class Ui_MainWindow(object):
         icon13.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_214_resize_small.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionTwoDayContexts.setIcon(icon13)
         self.actionTwoDayContexts.setObjectName("actionTwoDayContexts")
+        self.actionClose = QtWidgets.QAction(MainWindow)
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_197_remove.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionClose.setIcon(icon14)
+        self.actionClose.setObjectName("actionClose")
         self.menuFile.addAction(self.actionOpen)
+        self.menuFile.addAction(self.actionClose)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuUtilities.addAction(self.actionConcepts)
@@ -180,5 +186,8 @@ class Ui_MainWindow(object):
         self.actionLinkRoles.setToolTip(_translate("MainWindow", "Remove Unused Link Roles"))
         self.actionTwoDayContexts.setText(_translate("MainWindow", "Report Two Day Contexts"))
         self.actionTwoDayContexts.setToolTip(_translate("MainWindow", "Report Two Day Contexts"))
+        self.actionClose.setText(_translate("MainWindow", "Close Files"))
+        self.actionClose.setToolTip(_translate("MainWindow", "Close Files"))
+        self.actionClose.setShortcut(_translate("MainWindow", "Ctrl+W"))
 
 import icons_rc

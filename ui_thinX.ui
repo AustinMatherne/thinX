@@ -54,6 +54,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionClose"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -255,6 +256,21 @@
    </property>
    <property name="toolTip">
     <string>Report Two Day Contexts</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_197_remove.png</normaloff>:/Glyphicons/icons/glyphicons_197_remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close Files</string>
+   </property>
+   <property name="toolTip">
+    <string>Close Files</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>

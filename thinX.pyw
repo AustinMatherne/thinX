@@ -24,6 +24,7 @@ class ThinX(QtWidgets.QMainWindow):
 
     def __init_connections(self):
         self.ui.actionOpen.triggered.connect(self.open)
+        self.ui.actionClose.triggered.connect(self.close)
         self.ui.actionExit.triggered.connect(sys.exit)
         self.ui.actionAbout.triggered.connect(self.about)
         self.ui.actionUnits.triggered.connect(self.units)
@@ -104,6 +105,13 @@ class ThinX(QtWidgets.QMainWindow):
             self.status.setText(self.filename)
         else:
             self.reset_status()
+
+    def close(self):
+        """Closes any open files and resets the interface."""
+        self.filename = ""
+        self.reset_status()
+        self.ui.textLog.clear()
+        self.about()
 
     def units(self):
         """Adds the namespaces supplied in unit_config_file to self.filename
