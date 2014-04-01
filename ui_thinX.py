@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Tue Apr  1 12:26:09 2014
+# Created: Tue Apr  1 12:28:24 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -161,6 +161,7 @@ class Ui_MainWindow(object):
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.actionOpen.setText(_translate("MainWindow", "Open"))
         self.actionOpen.setToolTip(_translate("MainWindow", "Open Instance Document"))
+        self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
         self.actionUnits.setText(_translate("MainWindow", "Comply with UTR"))
         self.actionContexts.setText(_translate("MainWindow", "Remove Unused Contexts"))

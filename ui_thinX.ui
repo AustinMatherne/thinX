@@ -127,6 +127,9 @@
    <property name="toolTip">
     <string>Open Instance Document</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionExit">
    <property name="icon">
