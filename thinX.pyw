@@ -588,10 +588,12 @@ class ThinX(QtWidgets.QMainWindow):
                 f.write(comment + content)
                 f.close()
                 os.remove(linkbase)
-            self.ui.textLog.append("<strong>Sort Codes:</strong>")
-            for link in log:
-                self.ui.textLog.append(link[0] + " > " + link[1])
-            self.ui.textLog.append("<br><strong>Files:</strong>")
+            if log:
+                self.ui.textLog.append("<strong>Sort Codes:</strong>")
+                for link in log:
+                    self.ui.textLog.append(link[0] + " > " + link[1])
+                self.ui.textLog.append("")
+            self.ui.textLog.append("<strong>Files:</strong>")
             for ref in refs:
                 self.ui.textLog.append(ref[0] + " > " + ref[1])
             self.ui.textLog.append("<br><strong>Namespace:</strong>")
