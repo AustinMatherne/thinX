@@ -798,9 +798,7 @@ def retrieve_base(elem):
     imports = elem.findall("{http://www.w3.org/2001/XMLSchema}import")
 
     for schema in imports:
-        print(schema)
         location = ugt.search(schema.get("schemaLocation"))
-        print(location)
         if location:
             version = location.group(1)
             break
