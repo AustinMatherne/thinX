@@ -72,7 +72,7 @@ The Merrill Bridge Prep utility prepares a taxonomy for import into Merrill Brid
 
 ### Merrill Bridge Sort
 
-The Merrill Bridge Sort utility converts link role sort codes to the Bridge standard from the previous Merrill sorting standard. This is useful for comparing a taxonomy from a previous filing prepared by Merill outside of Bridge to a current filing prepared in Bridge.
+The Merrill Bridge Sort utility converts link role sort codes to the Bridge standard from the previous Merrill sorting standard. This is useful for comparing a taxonomy from a previous filing prepared by Merrill outside of Bridge to a current filing prepared in Bridge.
 
 
 [1]: http://scottchacon.com/2011/08/31/github-flow.html
