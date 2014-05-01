@@ -27,21 +27,16 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionClose.triggered.connect(self.close)
         self.ui.actionExit.triggered.connect(sys.exit)
         self.ui.actionAbout.triggered.connect(self.about)
-        self.ui.actionUnits.triggered.connect(self.units)
-        self.ui.actionContexts.triggered.connect(self.contexts)
-        self.ui.actionTwoDayContexts.triggered.connect(self.two_day_contexts)
-        self.ui.actionCalculations.triggered.connect(self.calculations)
+        self.ui.actionLinkRoles.triggered.connect(self.link_role)
         self.ui.actionLabels.triggered.connect(self.labels)
         self.ui.actionConsolidateLabels.triggered.connect(self.redundant_labels)
         self.ui.actionConcepts.triggered.connect(self.concepts)
-        self.ui.actionLinkRoles.triggered.connect(self.link_role)
-        self.ui.actionMerrillBridgeSort.triggered.connect(self.bridge_sort)
+        self.ui.actionCalculations.triggered.connect(self.calculations)
+        self.ui.actionContexts.triggered.connect(self.contexts)
+        self.ui.actionTwoDayContexts.triggered.connect(self.two_day_contexts)
+        self.ui.actionUnits.triggered.connect(self.units)
         self.ui.actionMerrillBridgePrep.triggered.connect(self.bridge_prep)
-
-    def __init_statusbar(self):
-        self.status = QtWidgets.QLabel()
-        self.reset_status()
-        self.statusBar().addPermanentWidget(self.status)
+        self.ui.actionMerrillBridgeSort.triggered.connect(self.bridge_sort)
 
     def get_version(self):
         try:
@@ -55,18 +50,10 @@ class ThinX(QtWidgets.QMainWindow):
                 return ver
         return None
 
-    def about(self):
-        """Displays project information."""
-        self.ui.textLog.clear()
-        self.ui.textLog.append(
-            "<html><head/><body><br><p align=\"center\" style=\"font-size:24pt;"
-            " font-weight:600;\">thinX</p><p align=\"center\"><span style=\" "
-            "font-size:10pt;\">thinX is an open source XBRL toolkit developed "
-            "and maintained<br>by Austin M. Matherne and released under the "
-            "WTFPL.</span></p><p align=\"center\">https://github.com/Austin"
-            "Matherne/thinX</p><p align=\"center\" style=\"font-size:8pt;\">"
-            + str(self.get_version()) + "</p></body></html>"
-        )
+    def __init_statusbar(self):
+        self.status = QtWidgets.QLabel()
+        self.reset_status()
+        self.statusBar().addPermanentWidget(self.status)
 
     def reset_status(self):
         """Resets the text in the status bar."""
@@ -113,70 +100,21 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.textLog.clear()
         self.about()
 
-    def units(self):
-        """Adds the namespaces supplied in unit_config_file to self.filename
-        and swaps out all measures in self.filename that are also in the
-        unit_config_file. The measure that is swapped in also uses its
-        matching namespace and prefix from the unit_config_file.
+    def about(self):
+        """Displays project information."""
+        self.ui.textLog.clear()
+        self.ui.textLog.append(
+            "<html><head/><body><br><p align=\"center\" style=\"font-size:24pt;"
+            " font-weight:600;\">thinX</p><p align=\"center\"><span style=\" "
+            "font-size:10pt;\">thinX is an open source XBRL toolkit developed "
+            "and maintained<br>by Austin M. Matherne and released under the "
+            "WTFPL.</span></p><p align=\"center\">https://github.com/Austin"
+            "Matherne/thinX</p><p align=\"center\" style=\"font-size:8pt;\">"
+            + str(self.get_version()) + "</p></body></html>"
+        )
 
-        """
-        if self.filename == "":
-            self.status.setText(
-                "You Must Open an Instance Document Before Processing "
-            )
-            return
-        else:
-            self.ui.textLog.clear()
-            fixed = False
-            logs = []
-            try:
-                tree = namespace.parse_xmlns(self.filename)
-            except:
-                self.open_fail(self.filename)
-                return
-
-            root = tree.getroot()
-            registries = xbrl.get_units(self.unit_config_file, self.filename)
-            prefixes = []
-            for key, registry in registries.items():
-                prefix = "xmlns:" + registry["Prefix"]
-                prefixes.append(prefix)
-                ns = registry["Namespace"]
-                measures = registry["Measures"]
-                log = xbrl.add_namespace(root, prefix, ns, measures)
-                if log:
-                    logs.append(log)
-                    fixed = True
-            check = xbrl.unknown_measures(
-                root,
-                self.unit_config_file,
-                self.filename
-            )
-            namespace.fixup_xmlns(root)
-            tree.write(self.filename, xml_declaration=True)
-            if fixed:
-                self.status.setText("XBRL International Units Registry ")
-                self.ui.textLog.append(
-                    "<strong>The Following Measures Have Been Modified:"
-                    "</strong>"
-                )
-                for dictionary in logs:
-                    for item in dictionary:
-                        self.ui.textLog.append(item + " > " + dictionary[item])
-                self.ui.textLog.append("<br>")
-            else:
-                self.status.setText("No Units Found to Fix ")
-
-            if len(check) > 0:
-                self.ui.textLog.append(
-                    "<strong>The Following Measures Are Not Part Of Any Known "
-                    "Units Database:</strong>"
-                )
-                for measure in check:
-                    self.ui.textLog.append(measure)
-
-    def contexts(self):
-        """Removes unused contexts from self.filename."""
+    def link_role(self):
+        """Find, report, and delete any inactive link roles."""
         if self.filename == "":
             self.status.setText(
                 "You Must Open an Instance Document Before Processing "
@@ -185,51 +123,60 @@ class ThinX(QtWidgets.QMainWindow):
         else:
             self.ui.textLog.clear()
             try:
-                tree = namespace.parse_xmlns(self.filename)
+                xsd = xbrl.get_linkbase(self.filename, "xsd")
+                pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
+                def_linkbase = xbrl.get_linkbase(self.filename, "def")
+                cal_linkbase = xbrl.get_linkbase(self.filename, "cal")
             except:
-                self.open_fail(self.filename)
+                self.open_fail(self.filename, "xsd")
                 return
 
-            root = tree.getroot()
-            log = xbrl.clean_contexts(root)
-            namespace.fixup_xmlns(root)
-            tree.write(self.filename, xml_declaration=True)
+            try:
+                xsd_tree = namespace.parse_xmlns(xsd)
+            except:
+                self.open_fail(self.filename, "xsd")
+                return
+
+            try:
+                pre_tree = namespace.parse_xmlns(pre_linkbase)
+            except:
+                self.open_fail(self.filename, "pre")
+                return
+
+            try:
+                def_tree = namespace.parse_xmlns(def_linkbase)
+            except:
+                self.open_fail(self.filename, "def")
+                return
+
+            try:
+                cal_tree = namespace.parse_xmlns(cal_linkbase)
+            except:
+                self.open_fail(self.filename, "cal")
+                return
+
+            xsd_root = xsd_tree.getroot()
+            linkbases = {"pre": pre_tree.getroot(),
+                         "def": def_tree.getroot(),
+                         "cal": cal_tree.getroot()}
+
+            link_roles = xbrl.get_link_roles(xsd_root)
+            active_link_roles = xbrl.get_active_link_roles(linkbases)
+            log = xbrl.compare_link_roles(link_roles, active_link_roles)
+
             if not log:
-                self.status.setText("No Unused Contexts Found in File ")
+                self.status.setText("No Unused Link Roles Found in File ")
             else:
+                xbrl.delete_link_roles(xsd_root, log)
+                namespace.fixup_xmlns(xsd_root)
+                xsd_tree.write(xsd, xml_declaration=True)
+                self.ui.textLog.append("<strong>Unused Link Roles:</strong>")
+                for role in log:
+                    self.ui.textLog.append(role)
+                self.ui.textLog.append("")
                 self.status.setText(
-                    "The Above Unreferenced Contexts Have Been Removed "
+                    "The Above Unused Link Roles Have Been Removed "
                 )
-                self.ui.textLog.append("<strong>Unused Contexts:</strong>")
-                for item in log:
-                    self.ui.textLog.append(item)
-
-    def two_day_contexts(self):
-        """Report two day contexts."""
-        if self.filename == "":
-            self.status.setText(
-                "You Must Open an Instance Document Before Processing "
-            )
-            return
-        else:
-            self.ui.textLog.clear()
-            try:
-                tree = namespace.parse_xmlns(self.filename)
-            except:
-                self.open_fail(self.filename)
-                return
-
-            root = tree.getroot()
-            log = xbrl.two_day_contexts(root)
-            if not log:
-                self.status.setText("No Two Day Contexts Found in File ")
-            else:
-                self.status.setText(
-                    "The Above Two Day Contexts Were Found "
-                )
-                self.ui.textLog.append("<strong>Two Day Contexts:</strong>")
-                for item in log:
-                    self.ui.textLog.append(item)
 
     def labels(self):
         """Removes and logs labels which are not in use."""
@@ -450,8 +397,8 @@ class ThinX(QtWidgets.QMainWindow):
                     else:
                         self.ui.textLog.append(calc)
 
-    def link_role(self):
-        """Find, report, and delete any inactive link roles."""
+    def contexts(self):
+        """Removes unused contexts from self.filename."""
         if self.filename == "":
             self.status.setText(
                 "You Must Open an Instance Document Before Processing "
@@ -460,84 +407,113 @@ class ThinX(QtWidgets.QMainWindow):
         else:
             self.ui.textLog.clear()
             try:
-                xsd = xbrl.get_linkbase(self.filename, "xsd")
-                pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
-                def_linkbase = xbrl.get_linkbase(self.filename, "def")
-                cal_linkbase = xbrl.get_linkbase(self.filename, "cal")
+                tree = namespace.parse_xmlns(self.filename)
             except:
-                self.open_fail(self.filename, "xsd")
+                self.open_fail(self.filename)
                 return
 
-            try:
-                xsd_tree = namespace.parse_xmlns(xsd)
-            except:
-                self.open_fail(self.filename, "xsd")
-                return
-
-            try:
-                pre_tree = namespace.parse_xmlns(pre_linkbase)
-            except:
-                self.open_fail(self.filename, "pre")
-                return
-
-            try:
-                def_tree = namespace.parse_xmlns(def_linkbase)
-            except:
-                self.open_fail(self.filename, "def")
-                return
-
-            try:
-                cal_tree = namespace.parse_xmlns(cal_linkbase)
-            except:
-                self.open_fail(self.filename, "cal")
-                return
-
-            xsd_root = xsd_tree.getroot()
-            linkbases = {"pre": pre_tree.getroot(),
-                         "def": def_tree.getroot(),
-                         "cal": cal_tree.getroot()}
-
-            link_roles = xbrl.get_link_roles(xsd_root)
-            active_link_roles = xbrl.get_active_link_roles(linkbases)
-            log = xbrl.compare_link_roles(link_roles, active_link_roles)
-
-            if not log:
-                self.status.setText("No Unused Link Roles Found in File ")
-            else:
-                xbrl.delete_link_roles(xsd_root, log)
-                namespace.fixup_xmlns(xsd_root)
-                xsd_tree.write(xsd, xml_declaration=True)
-                self.ui.textLog.append("<strong>Unused Link Roles:</strong>")
-                for role in log:
-                    self.ui.textLog.append(role)
-                self.ui.textLog.append("")
-                self.status.setText(
-                    "The Above Unused Link Roles Have Been Removed "
-                )
-
-    def bridge_sort(self):
-        """Update link role sorting for Merrill Bridge."""
-        if self.filename == "":
-            self.status.setText(
-                "You Must Open an Instance Document Before Processing "
-            )
-            return
-        else:
-            self.ui.textLog.clear()
-            try:
-                schema = xbrl.get_linkbase(self.filename, "xsd")
-            except:
-                self.open_fail(self.filename, "xsd")
-                return
-            tree = namespace.parse_xmlns(schema)
             root = tree.getroot()
-            log = xbrl.link_role_sort(root)
+            log = xbrl.clean_contexts(root)
             namespace.fixup_xmlns(root)
-            tree.write(schema, xml_declaration=True)
-            self.ui.textLog.append("<strong>Sort Codes:</strong>")
-            for link in log:
-                self.ui.textLog.append(link[0] + " > " + link[1])
-            self.status.setText("Ready for Compare ")
+            tree.write(self.filename, xml_declaration=True)
+            if not log:
+                self.status.setText("No Unused Contexts Found in File ")
+            else:
+                self.status.setText(
+                    "The Above Unreferenced Contexts Have Been Removed "
+                )
+                self.ui.textLog.append("<strong>Unused Contexts:</strong>")
+                for item in log:
+                    self.ui.textLog.append(item)
+
+    def two_day_contexts(self):
+        """Report two day contexts."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            self.ui.textLog.clear()
+            try:
+                tree = namespace.parse_xmlns(self.filename)
+            except:
+                self.open_fail(self.filename)
+                return
+
+            root = tree.getroot()
+            log = xbrl.two_day_contexts(root)
+            if not log:
+                self.status.setText("No Two Day Contexts Found in File ")
+            else:
+                self.status.setText(
+                    "The Above Two Day Contexts Were Found "
+                )
+                self.ui.textLog.append("<strong>Two Day Contexts:</strong>")
+                for item in log:
+                    self.ui.textLog.append(item)
+
+    def units(self):
+        """Adds the namespaces supplied in unit_config_file to self.filename
+        and swaps out all measures in self.filename that are also in the
+        unit_config_file. The measure that is swapped in also uses its
+        matching namespace and prefix from the unit_config_file.
+
+        """
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            self.ui.textLog.clear()
+            fixed = False
+            logs = []
+            try:
+                tree = namespace.parse_xmlns(self.filename)
+            except:
+                self.open_fail(self.filename)
+                return
+
+            root = tree.getroot()
+            registries = xbrl.get_units(self.unit_config_file, self.filename)
+            prefixes = []
+            for key, registry in registries.items():
+                prefix = "xmlns:" + registry["Prefix"]
+                prefixes.append(prefix)
+                ns = registry["Namespace"]
+                measures = registry["Measures"]
+                log = xbrl.add_namespace(root, prefix, ns, measures)
+                if log:
+                    logs.append(log)
+                    fixed = True
+            check = xbrl.unknown_measures(
+                root,
+                self.unit_config_file,
+                self.filename
+            )
+            namespace.fixup_xmlns(root)
+            tree.write(self.filename, xml_declaration=True)
+            if fixed:
+                self.status.setText("XBRL International Units Registry ")
+                self.ui.textLog.append(
+                    "<strong>The Following Measures Have Been Modified:"
+                    "</strong>"
+                )
+                for dictionary in logs:
+                    for item in dictionary:
+                        self.ui.textLog.append(item + " > " + dictionary[item])
+                self.ui.textLog.append("<br>")
+            else:
+                self.status.setText("No Units Found to Fix ")
+
+            if len(check) > 0:
+                self.ui.textLog.append(
+                    "<strong>The Following Measures Are Not Part Of Any Known "
+                    "Units Database:</strong>"
+                )
+                for measure in check:
+                    self.ui.textLog.append(measure)
 
     def bridge_prep(self):
         """Prep taxonomy for import into Merrill Bridge."""
@@ -602,6 +578,29 @@ class ThinX(QtWidgets.QMainWindow):
             self.ui.textLog.append(base)
             self.status.setText("Ready for Bridge ")
 
+    def bridge_sort(self):
+        """Update link role sorting for Merrill Bridge."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            self.ui.textLog.clear()
+            try:
+                schema = xbrl.get_linkbase(self.filename, "xsd")
+            except:
+                self.open_fail(self.filename, "xsd")
+                return
+            tree = namespace.parse_xmlns(schema)
+            root = tree.getroot()
+            log = xbrl.link_role_sort(root)
+            namespace.fixup_xmlns(root)
+            tree.write(schema, xml_declaration=True)
+            self.ui.textLog.append("<strong>Sort Codes:</strong>")
+            for link in log:
+                self.ui.textLog.append(link[0] + " > " + link[1])
+            self.status.setText("Ready for Compare ")
 
 def main():
     """Launches Qt and creates an instance of ThinX."""
