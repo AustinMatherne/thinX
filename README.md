@@ -6,7 +6,7 @@ thinX is a set of utilities for manipulating XBRL files.
 
 ### Dependencies
 
-thinX is developed with Python 3 and PyQt 5.
+thinX is developed with Python 3, PyQt 5, nose for testing, and cx-Freeze for binary distribution.
 
 
 ### Versioning
