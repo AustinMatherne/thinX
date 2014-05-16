@@ -593,10 +593,9 @@ class ThinX(QtWidgets.QMainWindow):
     def bridge_prep(self):
         """Prep taxonomy for import into Merrill Bridge."""
         comment = ('<?xml version="1.0" encoding="utf-8"?>\n<!--XBRL document '
-                   'created with Crossfire by Rivet Software version 5.7.123.0 '
-                   'http://www.rivetsoftware.com-->\n<!--Based on XBRL 2.1-->\n'
-                   '<!--Created on: 2/13/2014 12:47:00 PM-->\n<!--Modified on: '
-                   '2/13/2014 12:48:00 PM-->\n')
+                   'created with Merrill Bridge Powered by Crossfire 5.9.112.0 '
+                   '-->\n<!--Based on XBRL 2.1-->\n<!--Created on: 5/14/2014 '
+                   '3:24:21 PM-->\n<!--Modified on: 5/14/2014 3:24:21 PM-->\n')
 
         if self.filename == "":
             self.status.setText(
