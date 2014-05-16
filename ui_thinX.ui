@@ -65,6 +65,7 @@
     <addaction name="actionContexts"/>
     <addaction name="actionTwoDayContexts"/>
     <addaction name="actionUnits"/>
+    <addaction name="actionInconsistencies"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -123,6 +124,8 @@
    <addaction name="actionTwoDayContexts"/>
    <addaction name="separator"/>
    <addaction name="actionUnits"/>
+   <addaction name="separator"/>
+   <addaction name="actionInconsistencies"/>
    <addaction name="separator"/>
    <addaction name="actionMerrillBridgePrep"/>
    <addaction name="separator"/>
@@ -316,6 +319,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionInconsistencies">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_323_calculator.png</normaloff>:/Glyphicons/icons/glyphicons_323_calculator.png</iconset>
+   </property>
+   <property name="text">
+    <string>Calculation Inconsistencies</string>
+   </property>
+   <property name="toolTip">
+    <string>Calculation Inconsistencies</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+I, Alt+4</string>
    </property>
   </action>
  </widget>

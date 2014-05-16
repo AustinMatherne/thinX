@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Tue Apr  1 12:49:51 2014
+# Created: Thu May  1 14:17:26 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -118,6 +118,11 @@ class Ui_MainWindow(object):
         icon14.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_197_remove.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionClose.setIcon(icon14)
         self.actionClose.setObjectName("actionClose")
+        self.actionInconsistencies = QtWidgets.QAction(MainWindow)
+        icon15 = QtGui.QIcon()
+        icon15.addPixmap(QtGui.QPixmap(":/Glyphicons/icons/glyphicons_323_calculator.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionInconsistencies.setIcon(icon15)
+        self.actionInconsistencies.setObjectName("actionInconsistencies")
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionClose)
         self.menuFile.addSeparator()
@@ -125,6 +130,7 @@ class Ui_MainWindow(object):
         self.menuUtilities.addAction(self.actionContexts)
         self.menuUtilities.addAction(self.actionTwoDayContexts)
         self.menuUtilities.addAction(self.actionUnits)
+        self.menuUtilities.addAction(self.actionInconsistencies)
         self.menuHelp.addAction(self.actionAbout)
         self.menuBridge_Utilities.addAction(self.actionMerrillBridgePrep)
         self.menuBridge_Utilities.addAction(self.actionMerrillBridgeSort)
@@ -155,6 +161,8 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionTwoDayContexts)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionUnits)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionInconsistencies)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionMerrillBridgePrep)
         self.toolBar.addSeparator()
@@ -208,5 +216,8 @@ class Ui_MainWindow(object):
         self.actionClose.setText(_translate("MainWindow", "Close Files"))
         self.actionClose.setToolTip(_translate("MainWindow", "Close Files"))
         self.actionClose.setShortcut(_translate("MainWindow", "Ctrl+W"))
+        self.actionInconsistencies.setText(_translate("MainWindow", "Calculation Inconsistencies"))
+        self.actionInconsistencies.setToolTip(_translate("MainWindow", "Calculation Inconsistencies"))
+        self.actionInconsistencies.setShortcut(_translate("MainWindow", "Alt+I, Alt+4"))
 
 import icons_rc
