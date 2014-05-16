@@ -744,6 +744,33 @@ def calc_values(elem, calcs):
 
     return warnings
 
+def insert_labels(elem, calcs):
+    """Take a list of calcs and insert standard labels before each concept."""
+    xlink = "{http://www.w3.org/1999/xlink}%s"
+    loc_xpath = ".//*[@{http://www.w3.org/1999/xlink}href='%s']"
+    arc_xpath = ".//*[@{http://www.w3.org/1999/xlink}from='%s']"
+    lab_xpath = ".//*[@{http://www.w3.org/1999/xlink}label='%s']"
+    locs = elem.findall(".//{http://www.xbrl.org/2003/linkbase}loc")
+    concepts = {}
+    for loc in locs:
+        href = loc.get(xlink % "href")
+        concepts[href.split("#")[-1]] = href
+    for calc in calcs:
+        stn_lab = ""
+        if calc[1] in concepts:
+            href = concepts[calc[1]]
+            label = elem.find(loc_xpath % href).get(xlink % "label")
+            arcs = elem.findall(arc_xpath % label)
+            for arc in arcs:
+                lab = elem.find(lab_xpath % arc.get(xlink % "to"))
+                if lab.get(xlink % "role") == "http://www.xbrl.org/2003/role/label":
+                    stn_lab = lab.text
+                    break
+
+        calc.insert(1, stn_lab)
+
+    return calcs
+
 def link_role_sort(elem):
     """Update link role sort codes to improve compatibility with Crossfire."""
     log = []
