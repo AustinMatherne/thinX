@@ -62,3 +62,8 @@ class Link_Roles(unittest.TestCase):
         for role in self.inactive_link_roles:
             self.assertIn(role, result)
         self.assertEqual(len(result), 2)
+
+    def test_link_role_def(self):
+        role_uri = "http://www.example.com/role/NotUsedDetails"
+        result = "4040 - Disclosure - Not Used (Details)"
+        self.assertEqual(xbrl.link_role_def(self.xsd_root, role_uri), result)
