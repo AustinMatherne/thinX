@@ -704,6 +704,46 @@ def dup_calcs(elem):
 
     return warnings
 
+def calc_values(elem, calcs):
+    """Return all calculation inconsistencies for the given concepts in the
+    provided element.
+
+    """
+    warnings = []
+    namespaces = {}
+    for key, value in elem.items():
+        namespaces[key.split(":")[-1]] = value
+    for link_role, total_elems in calcs.items():
+        for total_elem, line_items in total_elems.items():
+            ns_total_elem = total_elem.split("_")
+            thing = (namespaces[ns_total_elem[0]], ns_total_elem[1])
+            totals = elem.findall(".//{%s}%s" % thing)
+            for total in totals:
+                value = float(total.text)
+                context = total.get("contextRef")
+                calculated_total = 0
+                changed = False
+                for line_item in line_items:
+                    ns_line_item = line_item[0].split("_")
+                    weight = line_item[1]
+                    ns = (namespaces[ns_line_item[0]], ns_line_item[1], context)
+                    new = elem.find(".//{%s}%s[@contextRef='%s']" % ns)
+                    if new is not None:
+                        changed = True
+                        if weight == "1":
+                            calculated_total += float(new.text)
+                        else:
+                            calculated_total -= float(new.text)
+                if calculated_total != value and changed:
+                    warnings.append([link_role,
+                                    total_elem,
+                                    context,
+                                    value,
+                                    calculated_total
+                    ])
+
+    return warnings
+
 def link_role_sort(elem):
     """Update link role sort codes to improve compatibility with Crossfire."""
     log = []
