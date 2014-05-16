@@ -58,3 +58,17 @@ class Calculations(unittest.TestCase):
         duplicate_calcs = xbrl.dup_calcs(self.cal_root)
 
         self.assertEqual(expected_dup_calcs, duplicate_calcs)
+
+    def test_calc_values(self):
+        debt = [
+            "http://www.example.com/role/DebtLongTermDebtDetails",
+            "us-gaap_LongTermDebtNoncurrent",
+            "I2013Q1",
+            2989.0,
+            11.0
+        ]
+
+        calcs = xbrl.get_calcs(self.cal_root)
+        log = xbrl.calc_values(self.root, calcs)
+        self.assertIn(debt, log)
+        self.assertEqual(len(log), 22)
