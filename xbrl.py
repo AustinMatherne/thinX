@@ -744,6 +744,13 @@ def calc_values(elem, calcs):
 
     return warnings
 
+def link_role_def(elem, link_role):
+    """Take a link role URI and return the definition."""
+    xpath = ".//*[@roleURI='%s']/{http://www.xbrl.org/2003/linkbase}definition"
+    definition = elem.find(xpath % link_role).text
+
+    return definition
+
 def insert_labels(elem, calcs):
     """Take a list of calcs and insert standard labels before each concept."""
     xlink = "{http://www.w3.org/1999/xlink}%s"
