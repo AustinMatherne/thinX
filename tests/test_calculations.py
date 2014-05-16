@@ -32,10 +32,10 @@ class Calculations(unittest.TestCase):
         linkrole = "http://www.example.com/role/BalanceSheetComponents" \
                         "InventoriesDetails"
         total = "us-gaap_InventoryNet"
-        elems_to_add = sorted([
-            "us-gaap_InventoryWorkInProcessAndRawMaterialsNetOfReserves",
-            "us-gaap_InventoryFinishedGoodsNetOfReserves"
-        ])
+        elems_to_add = [
+            ("us-gaap_InventoryFinishedGoodsNetOfReserves", "1"),
+            ("us-gaap_InventoryWorkInProcessAndRawMaterialsNetOfReserves", "1")
+        ]
 
         calc_linkroles = xbrl.get_calcs(cal_root)
         total_elements = []
