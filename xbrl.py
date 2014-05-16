@@ -634,6 +634,7 @@ def get_calcs(elem):
         for arc in arcs:
             arc_from = arc.get("{http://www.w3.org/1999/xlink}from")
             arc_to = arc.get("{http://www.w3.org/1999/xlink}to")
+            weight = arc.get("weight")
             label_from = linkrole.find(
                 calc_loc_xpath + label_attr_xpath % arc_from
             )
@@ -648,11 +649,11 @@ def get_calcs(elem):
 
             if parent not in store[link_role_href]:
                 store[link_role_href][parent] = []
-            store[link_role_href][parent].append(child)
+            store[link_role_href][parent].append((child, weight))
 
     for linkrole, totals in store.items():
         for total, sum_elements in totals.items():
-            sum_elements.sort()
+            sum_elements.sort(key=lambda tup: tup[0])
     return store
 
 def dup_calcs(elem):
