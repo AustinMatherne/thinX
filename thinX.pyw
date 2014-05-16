@@ -4,6 +4,8 @@ import namespace
 import sys
 import re
 import os
+from operator import itemgetter
+import csv
 import xml.etree.ElementTree as ET
 from PyQt5 import QtWidgets
 from ui_thinX import Ui_MainWindow
@@ -35,6 +37,7 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionContexts.triggered.connect(self.contexts)
         self.ui.actionTwoDayContexts.triggered.connect(self.two_day_contexts)
         self.ui.actionUnits.triggered.connect(self.units)
+        self.ui.actionInconsistencies.triggered.connect(self.inconsistencies)
         self.ui.actionMerrillBridgePrep.triggered.connect(self.bridge_prep)
         self.ui.actionMerrillBridgeSort.triggered.connect(self.bridge_sort)
 
@@ -514,6 +517,78 @@ class ThinX(QtWidgets.QMainWindow):
                 )
                 for measure in check:
                     self.ui.textLog.append(measure)
+
+    def inconsistencies(self):
+        """Report calculation inconsistencies."""
+        if self.filename == "":
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+        else:
+            self.ui.textLog.clear()
+            try:
+                xsd = xbrl.get_linkbase(self.filename, "xsd")
+                cal_linkbase = xbrl.get_linkbase(self.filename, "cal")
+                lab_linkbase = xbrl.get_linkbase(self.filename, "lab")
+            except:
+                self.open_fail(self.filename, "xsd")
+                return
+
+            tree = namespace.parse_xmlns(self.filename)
+            xsd_tree = namespace.parse_xmlns(xsd)
+            cal_tree = namespace.parse_xmlns(cal_linkbase)
+            lab_tree = namespace.parse_xmlns(lab_linkbase)
+            root = tree.getroot()
+            xsd_root = xsd_tree.getroot()
+            cal_root = cal_tree.getroot()
+            lab_root = lab_tree.getroot()
+            calcs = xbrl.get_calcs(cal_root)
+            log = xbrl.calc_values(root, calcs)
+            if not log:
+                self.status.setText("No Calculation Inconsistencies Found ")
+            else:
+                log = xbrl.insert_labels(lab_root, log)
+                for calc in log:
+                    calc[0] = xbrl.link_role_def(xsd_root, calc[0])
+                    calc[2] = calc[2].replace("_", ":")
+
+                log = sorted(log, key=itemgetter(0, 1, 2, 3))
+                self.ui.textLog.append(
+                    "<strong>Calculation Inconsistencies:</strong>"
+                )
+                link_roles = {}
+                output = []
+                for row in log:
+                    sort = row[0].split(" ", 1)[0]
+                    if sort in link_roles:
+                        if row[2] in link_roles[sort]:
+                            link_roles[sort][row[2]] += 1
+                        else:
+                            link_roles[sort][row[2]] = 1
+                    else:
+                        link_roles[sort] = {row[2]: 1}
+                for link_role, totals in link_roles.items():
+                    for total, value in totals.items():
+                        output.append(link_role + " - " + total + " *" + str(value))
+                output.sort()
+                log.insert(0, ["RoleDefinition",
+                         "ElementLabel",
+                         "Element",
+                         "ContextId",
+                         "Value",
+                         "CalculatedValue"])
+                out_file = self.filename.rsplit(".", 1)[0] + "-calc.csv"
+                with open(out_file, 'w', newline='') as f:
+                    writer = csv.writer(f, dialect='excel', delimiter=',')
+                    writer.writerows(log)
+                for row in output:
+                    self.ui.textLog.append(row)
+                self.status.setText(" ".join([
+                    "Calculation Inconsistency Report Saved to",
+                    out_file,
+                    ""
+                ]))
 
     def bridge_prep(self):
         """Prep taxonomy for import into Merrill Bridge."""
