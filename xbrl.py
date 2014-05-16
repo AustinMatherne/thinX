@@ -728,7 +728,7 @@ def calc_values(elem, calcs):
                     weight = line_item[1]
                     ns = (namespaces[ns_line_item[0]], ns_line_item[1], context)
                     new = elem.find(".//{%s}%s[@contextRef='%s']" % ns)
-                    if new is not None:
+                    if new is not None and new.text is not None:
                         changed = True
                         if weight == "1":
                             calculated_total += float(new.text)
