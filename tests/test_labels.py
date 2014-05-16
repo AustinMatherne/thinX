@@ -11,10 +11,15 @@ class Labels(unittest.TestCase):
         instance_file = "assets/abc-20130331.xml"
         pre_linkbase = xbrl.get_linkbase(instance_file, "pre")
         lab_linkbase = xbrl.get_linkbase(instance_file, "lab")
+        cal_linkbase = xbrl.get_linkbase(instance_file, "cal")
+        tree = namespace.parse_xmlns(instance_file)
         pre_tree = namespace.parse_xmlns(pre_linkbase)
         lab_tree = namespace.parse_xmlns(lab_linkbase)
+        cal_tree = namespace.parse_xmlns(cal_linkbase)
+        self.root = tree.getroot()
         self.pre_root = pre_tree.getroot()
         self.lab_root = lab_tree.getroot()
+        self.cal_root = cal_tree.getroot()
         self.terse_label = "http://www.xbrl.org/2003/role/terseLabel"
         self.verbose_label = "http://www.xbrl.org/2003/role/verboseLabel"
         self.negated_label = "http://www.xbrl.org/2009/role/negatedLabel"
@@ -116,3 +121,18 @@ class Labels(unittest.TestCase):
         arc = pre_elem.find(to_attr_xpath % label_ref)
 
         self.assertEqual(arc.get("preferredLabel"), self.negated_label)
+
+    def test_insert_labels(self):
+        calcs = xbrl.get_calcs(self.cal_root)
+        log = xbrl.calc_values(self.root, calcs)
+        label_log = xbrl.insert_labels(self.lab_root, log)
+        debt = [
+            "http://www.example.com/role/DebtLongTermDebtDetails",
+            "Long-term Debt, Excluding Current Maturities",
+            "us-gaap_LongTermDebtNoncurrent",
+            "I2013Q1",
+            2989.0,
+            11.0
+        ]
+        self.assertIn(debt, label_log)
+        self.assertEqual(len(label_log), 22)
