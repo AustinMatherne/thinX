@@ -3,6 +3,7 @@
 import configparser
 import collections
 import re
+from decimal import Decimal
 from datetime import datetime
 from thinX import namespace
 
@@ -719,7 +720,7 @@ def calc_values(elem, calcs):
             thing = (namespaces[ns_total_elem[0]], ns_total_elem[1])
             totals = elem.findall(".//{%s}%s" % thing)
             for total in totals:
-                value = float(total.text)
+                value = Decimal(total.text)
                 context = total.get("contextRef")
                 calculated_total = 0
                 changed = False
@@ -731,9 +732,9 @@ def calc_values(elem, calcs):
                     if new is not None and new.text is not None:
                         changed = True
                         if weight == "1":
-                            calculated_total += float(new.text)
+                            calculated_total += Decimal(new.text)
                         else:
-                            calculated_total -= float(new.text)
+                            calculated_total -= Decimal(new.text)
                 if calculated_total != value and changed:
                     warnings.append([link_role,
                                     total_elem,
