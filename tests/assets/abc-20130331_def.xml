@@ -521,6 +521,8 @@
     <definitionArc xlink:type="arc" xlink:arcrole="http://xbrl.org/int/dim/arcrole/domain-member" xlink:from="LineOfCreditFacilityLineItems" xlink:to="DebtInstrumentInterestRateEffectivePercentage" xlink:title="definition: LineOfCreditFacilityLineItems to DebtInstrumentInterestRateEffectivePercentage" order="8.0"/>
     <loc xlink:type="locator" xlink:href="http://xbrl.fasb.org/us-gaap/2012/elts/us-gaap-2012-01-31.xsd#us-gaap_LongTermDebtFairValue" xlink:label="LongTermDebtFairValue" xlink:title="LongTermDebtFairValue"/>
     <definitionArc xlink:type="arc" xlink:arcrole="http://xbrl.org/int/dim/arcrole/domain-member" xlink:from="LineOfCreditFacilityLineItems" xlink:to="LongTermDebtFairValue" xlink:title="definition: LineOfCreditFacilityLineItems to LongTermDebtFairValue" order="9.0"/>
+    <loc xlink:type="locator" xlink:href="http://xbrl.fasb.org/us-gaap/2012/elts/us-gaap-2012-01-31.xsd#us-gaap_DebtWeightedAverageInterestRate" xlink:label="DebtWeightedAverageInterestRate" xlink:title="DebtWeightedAverageInterestRate"/>
+    <definitionArc xlink:type="arc" xlink:arcrole="http://xbrl.org/int/dim/arcrole/domain-member" xlink:from="LineOfCreditFacilityLineItems" xlink:to="DebtWeightedAverageInterestRate" xlink:title="definition: LineOfCreditFacilityLineItems to DebtWeightedAverageInterestRate" order="10.0"/>
   </definitionLink>
   <definitionLink xlink:type="extended" xlink:role="http://www.example.com/role/DebtLongTermDebtDetails">
     <loc xlink:type="locator" xlink:href="http://xbrl.fasb.org/us-gaap/2012/elts/us-gaap-2012-01-31.xsd#us-gaap_DebtInstrumentAxis" xlink:label="DebtInstrumentAxis" xlink:title="DebtInstrumentAxis"/>

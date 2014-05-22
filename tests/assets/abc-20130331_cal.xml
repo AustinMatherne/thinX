@@ -306,4 +306,11 @@
     <loc xlink:type="locator" xlink:href="http://xbrl.fasb.org/us-gaap/2012/elts/us-gaap-2012-01-31.xsd#us-gaap_IncreaseDecreaseInCollateralHeldUnderSecuritiesLending" xlink:label="IncreaseDecreaseInCollateralHeldUnderSecuritiesLending" xlink:title="IncreaseDecreaseInCollateralHeldUnderSecuritiesLending"/>
     <calculationArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/summation-item" xlink:from="NetCashProvidedByUsedInInvestingActivities" xlink:to="IncreaseDecreaseInCollateralHeldUnderSecuritiesLending" xlink:title="calculation: NetCashProvidedByUsedInInvestingActivities to IncreaseDecreaseInCollateralHeldUnderSecuritiesLending" order="7.0" weight="-1"/>
   </calculationLink>
+  <calculationLink xlink:type="extended" xlink:role="http://www.example.com/role/DebtAdditionalInformationDetails">
+    <loc xlink:type="locator" xlink:href="http://xbrl.fasb.org/us-gaap/2012/elts/us-gaap-2012-01-31.xsd#us-gaap_DebtWeightedAverageInterestRate" xlink:label="DebtWeightedAverageInterestRate" xlink:title="DebtWeightedAverageInterestRate"/>
+    <loc xlink:type="locator" xlink:href="http://xbrl.fasb.org/us-gaap/2012/elts/us-gaap-2012-01-31.xsd#us-gaap_DebtInstrumentInterestRateEffectivePercentage" xlink:label="DebtInstrumentInterestRateEffectivePercentage" xlink:title="DebtInstrumentInterestRateEffectivePercentage"/>
+    <calculationArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/summation-item" xlink:from="DebtWeightedAverageInterestRate" xlink:to="DebtInstrumentInterestRateEffectivePercentage" xlink:title="calculation: DebtWeightedAverageInterestRate to DebtInstrumentInterestRateEffectivePercentage" order="1.0" weight="1.0"/>
+    <loc xlink:type="locator" xlink:href="http://xbrl.fasb.org/us-gaap/2012/elts/us-gaap-2012-01-31.xsd#us-gaap_ShortTermDebtWeightedAverageInterestRate" xlink:label="ShortTermDebtWeightedAverageInterestRate" xlink:title="ShortTermDebtWeightedAverageInterestRate"/>
+    <calculationArc xlink:type="arc" xlink:arcrole="http://www.xbrl.org/2003/arcrole/summation-item" xlink:from="DebtWeightedAverageInterestRate" xlink:to="ShortTermDebtWeightedAverageInterestRate" xlink:title="calculation: DebtWeightedAverageInterestRate to ShortTermDebtWeightedAverageInterestRate" order="2.0" weight="1.0"/>
+  </calculationLink>
 </linkbase>
