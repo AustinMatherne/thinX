@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
+from decimal import Decimal
 from thinX import namespace
 from thinX import xbrl
 
@@ -131,8 +132,8 @@ class Labels(unittest.TestCase):
             "Long-term Debt, Excluding Current Maturities",
             "us-gaap_LongTermDebtNoncurrent",
             "I2013Q1",
-            2989.0,
-            11.0
+            Decimal("2989"),
+            Decimal("11")
         ]
         self.assertIn(debt, label_log)
-        self.assertEqual(len(label_log), 22)
+        self.assertEqual(len(label_log), 23)
