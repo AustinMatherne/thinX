@@ -1026,7 +1026,8 @@
   <us-gaap:NetIncomeLoss contextRef="D2013Q1_ReclassificationOutOfAccumulatedOtherComprehensiveIncomeMember_AccumulatedNetGainLossFromDesignatedOrQualifyingCashFlowHedgesMember" decimals="0" unitRef="USD">22</us-gaap:NetIncomeLoss>
   <us-gaap:IncomeTaxExpenseBenefit contextRef="D2013Q1_ReclassificationOutOfAccumulatedOtherComprehensiveIncomeMember_AccumulatedNetGainLossFromDesignatedOrQualifyingCashFlowHedgesMember" decimals="0" unitRef="USD">13</us-gaap:IncomeTaxExpenseBenefit>
   <us-gaap:NonoperatingIncomeExpense contextRef="D2013Q1_ReclassificationOutOfAccumulatedOtherComprehensiveIncomeMember_AccumulatedNetGainLossFromDesignatedOrQualifyingCashFlowHedgesMember" decimals="0" unitRef="USD">35</us-gaap:NonoperatingIncomeExpense>
-  <us-gaap:DebtWeightedAverageInterestRate contextRef="I2013Q1" decimals="4" unitRef="USD">0.9843</us-gaap:DebtWeightedAverageInterestRate>
+  <us-gaap:DebtInstrumentInterestRateEffectivePercentage contextRef="I2013Q1" decimals="5" unitRef="USDPerShare">0.03734</us-gaap:DebtInstrumentInterestRateEffectivePercentage>
+  <us-gaap:DebtWeightedAverageInterestRate contextRef="I2013Q1" decimals="4" unitRef="USDPerShare">0.9843</us-gaap:DebtWeightedAverageInterestRate>
   <abc:NumberOfTranches contextRef="I2013Q1" decimals="INF" unitRef="Year">5</abc:NumberOfTranches>
   <abc:NumberOfTranches contextRef="I2013Q1" decimals="INF" unitRef="Acre">7</abc:NumberOfTranches>
   <abc:NumberOfTranches contextRef="I2013Q1" decimals="INF" unitRef="Week">9</abc:NumberOfTranches>
