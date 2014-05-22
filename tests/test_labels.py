@@ -36,7 +36,7 @@ class Labels(unittest.TestCase):
 
         exp_terse_label = "Class of Stock [Axis]"
 
-        self.assertEqual(235, concepts_with_labels)
+        self.assertEqual(236, concepts_with_labels)
         self.assertIn(expected_concept, found_labels)
         self.assertEqual(2, expected_labels)
         self.assertIn(self.terse_label, found_labels[expected_concept])
@@ -51,7 +51,7 @@ class Labels(unittest.TestCase):
         expected_concept = "abc-20130331.xsd#abc_XYZHoldingsIncMember"
         expected_labels = len(found_labels[expected_concept])
 
-        self.assertEqual(233, concepts_using_labels)
+        self.assertEqual(234, concepts_using_labels)
         self.assertIn(expected_concept, found_labels)
         self.assertEqual(2, expected_labels)
         self.assertEqual(True, found_labels[expected_concept][self.terse_label])
