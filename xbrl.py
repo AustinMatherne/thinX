@@ -731,7 +731,7 @@ def calc_values(elem, calcs):
                     new = elem.find(".//{%s}%s[@contextRef='%s']" % ns)
                     if new is not None and new.text is not None:
                         changed = True
-                        if weight == "1":
+                        if float(weight) == 1:
                             calculated_total += Decimal(new.text)
                         else:
                             calculated_total -= Decimal(new.text)
