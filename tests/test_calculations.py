@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
+from decimal import Decimal
 from thinX import namespace
 from thinX import xbrl
 
@@ -43,9 +44,9 @@ class Calculations(unittest.TestCase):
             for calc_total in calc_linkroles[calc_linkrole]:
                 total_elements.append(calc_total)
 
-        self.assertEqual(10, len(calc_linkroles))
+        self.assertEqual(11, len(calc_linkroles))
         self.assertIn(total, calc_linkroles[linkrole])
-        self.assertEqual(31, len(total_elements))
+        self.assertEqual(32, len(total_elements))
         self.assertEqual(elems_to_add, calc_linkroles[linkrole][total])
 
     def test_dup_calcs(self):
@@ -64,11 +65,11 @@ class Calculations(unittest.TestCase):
             "http://www.example.com/role/DebtLongTermDebtDetails",
             "us-gaap_LongTermDebtNoncurrent",
             "I2013Q1",
-            2989.0,
-            11.0
+            Decimal("2989"),
+            Decimal("11")
         ]
 
         calcs = xbrl.get_calcs(self.cal_root)
         log = xbrl.calc_values(self.root, calcs)
         self.assertIn(debt, log)
-        self.assertEqual(len(log), 22)
+        self.assertEqual(len(log), 23)
