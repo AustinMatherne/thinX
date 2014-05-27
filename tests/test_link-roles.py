@@ -57,7 +57,8 @@ class Link_Roles(unittest.TestCase):
         self.assertEqual(len(result), 2)
 
     def test_delete_link_roles(self):
-        result = xbrl.delete_link_roles(self.xsd_root, self.inactive_link_roles)
+        result = xbrl.delete_link_roles(self.xsd_root,
+                                        self.inactive_link_roles)
 
         for role in self.inactive_link_roles:
             self.assertIn(role, result)

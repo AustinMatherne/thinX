@@ -30,95 +30,93 @@ class Labels(unittest.TestCase):
     def test_get_labels(self):
         found_labels = xbrl.get_labels(self.lab_root)
         concepts_with_labels = len(found_labels)
-        expected_concept = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
-                           "us-gaap-2012-01-31.xsd#us-gaap_StatementClassOf" \
-                           "StockAxis"
-        expected_labels = len(found_labels[expected_concept])
+        expected = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
+                   "us-gaap-2012-01-31.xsd#us-gaap_StatementClassOfStockAxis"
+        expected_labels = len(found_labels[expected])
 
         exp_terse_label = "Class of Stock [Axis]"
 
         self.assertEqual(236, concepts_with_labels)
-        self.assertIn(expected_concept, found_labels)
+        self.assertIn(expected, found_labels)
         self.assertEqual(2, expected_labels)
-        self.assertIn(self.terse_label, found_labels[expected_concept])
+        self.assertIn(self.terse_label, found_labels[expected])
         self.assertEqual(
             exp_terse_label,
-            found_labels[expected_concept][self.terse_label]
+            found_labels[expected][self.terse_label]
         )
 
     def test_get_used_labels(self):
         found_labels = xbrl.get_used_labels(self.pre_root)
         concepts_using_labels = len(found_labels)
-        expected_concept = "abc-20130331.xsd#abc_XYZHoldingsIncMember"
-        expected_labels = len(found_labels[expected_concept])
+        expected = "abc-20130331.xsd#abc_XYZHoldingsIncMember"
+        expected_labels = len(found_labels[expected])
 
         self.assertEqual(234, concepts_using_labels)
-        self.assertIn(expected_concept, found_labels)
+        self.assertIn(expected, found_labels)
         self.assertEqual(2, expected_labels)
-        self.assertEqual(True, found_labels[expected_concept][self.terse_label])
+        self.assertEqual(True, found_labels[expected][self.terse_label])
 
     def test_clean_labels(self):
         log = xbrl.clean_labels(self.lab_root, self.pre_root)
         concepts_with_deleted_labels = len(log)
-        expected_concept = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
-                           "us-gaap-2012-01-31.xsd#us-gaap_Goodwill"
-        expected_labels = len(log[expected_concept])
+        expected = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
+                   "us-gaap-2012-01-31.xsd#us-gaap_Goodwill"
+        expected_labels = len(log[expected])
         period_start_label = "http://www.xbrl.org/2003/role/periodStartLabel"
         label = "Beginning Balance"
 
         self.assertEqual(19, concepts_with_deleted_labels)
-        self.assertIn(expected_concept, log)
+        self.assertIn(expected, log)
         self.assertEqual(2, expected_labels)
-        self.assertEqual(label, log[expected_concept][period_start_label])
+        self.assertEqual(label, log[expected][period_start_label])
 
     def test_redundant_labels(self):
         log = xbrl.redundant_labels(self.lab_root, self.pre_root)
         concepts_with_redundant_labels = len(log)
-        expected_concept = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
-                           "us-gaap-2012-01-31.xsd#us-gaap_OtherComprehensive" \
-                           "IncomeLossForeignCurrencyTransactionAnd" \
-                           "TranslationAdjustmentNetOfTax"
+        expected = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
+                   "us-gaap-2012-01-31.xsd#us-gaap_OtherComprehensive" \
+                   "IncomeLossForeignCurrencyTransactionAnd" \
+                   "TranslationAdjustmentNetOfTax"
         expected_pos_concept = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
-                           "us-gaap-2012-01-31.xsd#us-gaap_AccumulatedOther" \
-                           "ComprehensiveIncomeLossNetOfTax"
+                               "us-gaap-2012-01-31.xsd#us-gaap_Accumulated" \
+                               "OtherComprehensiveIncomeLossNetOfTax"
         expected_neg_concept = "abc-20130331.xsd#abc_OutstandingBalanceUnder" \
                                "CommercialPaperProgram"
-        expected_labels = len(log[expected_concept])
+        expected_labels = len(log[expected])
         expected_pos_labels = len(log[expected_pos_concept])
         expected_neg_labels = len(log[expected_neg_concept])
 
         self.assertEqual(4, concepts_with_redundant_labels)
-        self.assertIn(expected_concept, log)
+        self.assertIn(expected, log)
         self.assertIn(expected_pos_concept, log)
         self.assertIn(expected_neg_concept, log)
         self.assertEqual(1, expected_labels)
         self.assertEqual(8, expected_pos_labels)
         self.assertEqual(1, expected_neg_labels)
-        self.assertNotIn(self.terse_label, log[expected_concept])
+        self.assertNotIn(self.terse_label, log[expected])
         self.assertNotIn(self.terse_label, log[expected_pos_concept])
         self.assertNotIn(self.negated_label, log[expected_neg_concept])
-        self.assertIn(self.verbose_label, log[expected_concept])
+        self.assertIn(self.verbose_label, log[expected])
         self.assertIn(self.verbose_label, log[expected_pos_concept])
         self.assertIn(self.negated_terse_label, log[expected_neg_concept])
 
     def test_change_preferred_label(self):
-        expected_concept = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
-                           "us-gaap-2012-01-31.xsd#us-gaap_Marketable" \
-                           "SecuritiesRealizedGainLossExcludingOtherThan" \
-                           "TemporaryImpairments"
+        expected = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
+                   "us-gaap-2012-01-31.xsd#us-gaap_MarketableSecurities" \
+                   "RealizedGainLossExcludingOtherThanTemporaryImpairments"
         href_xpath = ".//*[@{http://www.w3.org/1999/xlink}href='%s']"
         to_attr_xpath = ".//*[@{http://www.w3.org/1999/xlink}to='%s']"
         label_attr = "{http://www.w3.org/1999/xlink}label"
 
         pre_elem = xbrl.change_preferred_label(
-            expected_concept,
+            expected,
             self.pre_root,
             self.negated_terse_label,
             self.negated_label
         )
 
-        expected_concept_locs = pre_elem.find(href_xpath % expected_concept)
-        label_ref = expected_concept_locs.get(label_attr)
+        expected_locs = pre_elem.find(href_xpath % expected)
+        label_ref = expected_locs.get(label_attr)
         arc = pre_elem.find(to_attr_xpath % label_ref)
 
         self.assertEqual(arc.get("preferredLabel"), self.negated_label)

@@ -31,7 +31,7 @@ class Calculations(unittest.TestCase):
 
     def test_get_calcs(self):
         linkrole = "http://www.example.com/role/BalanceSheetComponents" \
-                        "InventoriesDetails"
+                   "InventoriesDetails"
         total = "us-gaap_InventoryNet"
         elems_to_add = [
             ("us-gaap_InventoryFinishedGoodsNetOfReserves", "1"),
@@ -51,7 +51,7 @@ class Calculations(unittest.TestCase):
 
     def test_dup_calcs(self):
         expected_dup_calcs = {
-            "us-gaap_OtherComprehensiveIncomeLossAvailableForSaleSecurities" \
+            "us-gaap_OtherComprehensiveIncomeLossAvailableForSaleSecurities"
             "AdjustmentNetOfTax": 0,
             "us-gaap_NetCashProvidedByUsedInInvestingActivities": 1,
             "us-gaap_NetIncomeLoss": 0

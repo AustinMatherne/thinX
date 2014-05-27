@@ -31,7 +31,7 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionAbout.triggered.connect(self.about)
         self.ui.actionLinkRoles.triggered.connect(self.link_role)
         self.ui.actionLabels.triggered.connect(self.labels)
-        self.ui.actionConsolidateLabels.triggered.connect(self.redundant_labels)
+        self.ui.actionConsolidateLabels.triggered.connect(self.redundant)
         self.ui.actionConcepts.triggered.connect(self.concepts)
         self.ui.actionCalculations.triggered.connect(self.calculations)
         self.ui.actionContexts.triggered.connect(self.contexts)
@@ -107,12 +107,13 @@ class ThinX(QtWidgets.QMainWindow):
         """Displays project information."""
         self.ui.textLog.clear()
         self.ui.textLog.append(
-            "<html><head/><body><br><p align=\"center\" style=\"font-size:24pt;"
-            " font-weight:600;\">thinX</p><p align=\"center\"><span style=\" "
-            "font-size:10pt;\">thinX is an open source XBRL toolkit developed "
-            "and maintained<br>by Austin M. Matherne and released under the "
-            "WTFPL.</span></p><p align=\"center\">https://github.com/Austin"
-            "Matherne/thinX</p><p align=\"center\" style=\"font-size:8pt;\">"
+            "<html><head/><body><br><p align=\"center\" "
+            "style=\"font-size:24pt; font-weight:600;\">thinX</p><p "
+            "align=\"center\"><span style=\"font-size:10pt;\">thinX is an open"
+            " source XBRL toolkit developed and maintained<br>by Austin M. "
+            "Matherne and released under the WTFPL.</span></p><p "
+            "align=\"center\">https://github.com/AustinMatherne/thinX</p><p "
+            "align=\"center\" style=\"font-size:8pt;\">"
             + str(self.get_version()) + "</p></body></html>"
         )
 
@@ -234,7 +235,7 @@ class ThinX(QtWidgets.QMainWindow):
                             + label
                         )
 
-    def redundant_labels(self):
+    def redundant(self):
         """Removes and logs labels which are redundant."""
         if self.filename == "":
             self.status.setText(
@@ -394,9 +395,9 @@ class ThinX(QtWidgets.QMainWindow):
                 self.ui.textLog.append(
                     "<strong>Duplicate Calculations:</strong>"
                 )
-                for calc, mutliples in log.items():
-                    if mutliples > 0:
-                        self.ui.textLog.append(calc + " *" + str(mutliples + 1))
+                for calc, multiple in log.items():
+                    if multiple > 0:
+                        self.ui.textLog.append(calc + " *" + str(multiple + 1))
                     else:
                         self.ui.textLog.append(calc)
 
@@ -570,14 +571,15 @@ class ThinX(QtWidgets.QMainWindow):
                         link_roles[sort] = {row[2]: 1}
                 for link_role, totals in link_roles.items():
                     for total, value in totals.items():
-                        output.append(link_role + " - " + total + " *" + str(value))
+                        line = link_role + " - " + total + " *" + str(value)
+                        output.append(line)
                 output.sort()
                 log.insert(0, ["RoleDefinition",
-                         "ElementLabel",
-                         "Element",
-                         "ContextId",
-                         "Value",
-                         "CalculatedValue"])
+                               "ElementLabel",
+                               "Element",
+                               "ContextId",
+                               "Value",
+                               "CalculatedValue"])
                 out_file = self.filename.rsplit(".", 1)[0] + "-calc.csv"
                 with open(out_file, 'w', newline='') as f:
                     writer = csv.writer(f, dialect='excel', delimiter=',')
@@ -593,8 +595,8 @@ class ThinX(QtWidgets.QMainWindow):
     def bridge_prep(self):
         """Prep taxonomy for import into Merrill Bridge."""
         comment = ('<?xml version="1.0" encoding="utf-8"?>\n<!--XBRL document '
-                   'created with Merrill Bridge Powered by Crossfire 5.9.112.0 '
-                   '-->\n<!--Based on XBRL 2.1-->\n<!--Created on: 5/14/2014 '
+                   'created with Merrill Bridge Powered by Crossfire 5.9.112.0'
+                   ' -->\n<!--Based on XBRL 2.1-->\n<!--Created on: 5/14/2014 '
                    '3:24:21 PM-->\n<!--Modified on: 5/14/2014 3:24:21 PM-->\n')
 
         if self.filename == "":
@@ -627,9 +629,9 @@ class ThinX(QtWidgets.QMainWindow):
                     refs = xbrl.rename_refs(root, "xsd")
                     base = xbrl.retrieve_base(root)
                 elif linkbase == labs:
-                    lab_log = xbrl.rename_refs(root, "labs")
+                    xbrl.rename_refs(root, "labs")
                 else:
-                    ref_log = xbrl.rename_refs(root, "linkbase")
+                    xbrl.rename_refs(root, "linkbase")
                 namespace.fixup_xmlns(root)
                 content = ET.tostring(root, encoding="unicode")
                 match = path.search(linkbase)
@@ -675,6 +677,7 @@ class ThinX(QtWidgets.QMainWindow):
             for link in log:
                 self.ui.textLog.append(link[0] + " > " + link[1])
             self.status.setText("Ready for Compare ")
+
 
 def main():
     """Launches Qt and creates an instance of ThinX."""

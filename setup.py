@@ -2,6 +2,7 @@ import re
 import sys
 from cx_Freeze import setup, Executable
 
+
 def get_version(filename):
     try:
         f = open(filename)
@@ -29,11 +30,11 @@ project_files = [
 
 options = {
     "build_exe": {
-        "include_files" : project_files,
-        "includes"      : "sip",
-        "icon"          : "logo.ico",
-        "optimize"      : 2,
-        "base"          : base
+        "include_files":    project_files,
+        "includes":         "sip",
+        "icon":             "logo.ico",
+        "optimize":         2,
+        "base":             base
     }
 }
 
@@ -42,14 +43,14 @@ exe = Executable(
 )
 
 setup(
-    name = "thinX",
-    version = get_version("_version.py"),
-    description = "GUI with various utilities for manipulating XBRL files.",
-    author = "Austin M. Matherne",
-    author_email = "AustinMatherne@Gmail.com",
-    url = "https://github.com/AustinMatherne/thinX",
-    download_url = "https://github.com/AustinMatherne/thinX/archive/master.zip",
-    classifiers = [
+    name="thinX",
+    version=get_version("_version.py"),
+    description="GUI with various utilities for manipulating XBRL files.",
+    author="Austin M. Matherne",
+    author_email="AustinMatherne@Gmail.com",
+    url="https://github.com/AustinMatherne/thinX",
+    download_url="https://github.com/AustinMatherne/thinX/archive/master.zip",
+    classifiers=[
         "Topic :: Desktop Environment",
         "Topic :: Office/Business",
         "Topic :: Text Processing",
@@ -65,8 +66,8 @@ setup(
         "Operating System :: Unix",
         "Programming Language :: Python :: 3.3",
         ],
-    license = "WTFPL",
-    keywords = "XBRL",
-    options = options,
-    executables = [exe]
+    license="WTFPL",
+    keywords="XBRL",
+    options=options,
+    executables=[exe]
 )
