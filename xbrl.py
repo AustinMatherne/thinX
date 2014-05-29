@@ -3,6 +3,7 @@
 import configparser
 import collections
 import re
+from lxml import etree
 from decimal import Decimal
 from datetime import datetime
 from thinX import namespace
@@ -10,12 +11,12 @@ from thinX import namespace
 
 def get_file_namespace(filename):
     xsd = get_linkbase(filename, "xsd")
-    tree = namespace.parse_xmlns(xsd)
+    tree = etree.parse(xsd)
     root = tree.getroot()
     name = root.get("targetNamespace")
-    for item in root.items():
-        if name in item and "targetNamespace" not in item:
-            prefix = item[0].split(":")[1]
+    for key, value in root.nsmap.items():
+        if value == name:
+            prefix = key
             break
 
     file_namespace = {"namespace": name, "prefix": prefix}
