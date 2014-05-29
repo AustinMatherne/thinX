@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from thinX import namespace
+from lxml import etree
 from thinX import xbrl
 
 
@@ -11,8 +11,8 @@ class Units(unittest.TestCase):
         self.instance_file = "assets/abc-20130331.xml"
         self.unit_config_file = "assets/units.ini"
         self.units_dictionary = xbrl.get_units(self.unit_config_file)
-        tree = namespace.parse_xmlns(self.instance_file)
-        self.root = tree.getroot()
+        self.tree = etree.parse(self.instance_file)
+        self.root = self.tree.getroot()
 
     def test_get_units(self):
         self.assertIn("TestMeasures", self.units_dictionary)
@@ -22,30 +22,30 @@ class Units(unittest.TestCase):
 
         self.assertEqual(testMeasures["Prefix"], "test")
         self.assertEqual(testMeasures["Namespace"],
-                                      "http://www.example.org/1989/instance")
+                         "http://www.example.org/1989/instance")
         self.assertEqual(testMeasures["Measures"], ["M1", "M2", "M3"])
 
     def test_add_namespace(self):
-        prefix = "xmlns:test"
-        base_prefix = "xmlns:abc"
-        ns = "http://www.example.org/1989/instance"
-        base_ns = "http://www.example.com/2013/base"
-        measures = ["Y", "t", "T", "fake", "acre", "pure"]
-        base_measures = ["item"]
+        dic = {"TEST": {"Namespace": "http://www.example.org/1989/instance",
+                        "Measures": ["Y", "t", "T", "fake", "acre", "pure"],
+                        "Prefix": "test"},
+               "ABC": {"Namespace": "http://www.example.com/2013/base",
+                       "Measures": ["item"],
+                       "Prefix": "abc"}
+               }
+        test = dic["TEST"]
+        unit_elem = "{http://www.xbrl.org/2003/instance}unit[@id='%s']/*"
 
-        xbrl.add_namespace(self.root, prefix, ns, measures)
-        xbrl.add_namespace(self.root, base_prefix, base_ns, base_measures)
+        root, log = xbrl.add_namespace(self.root, dic)
 
-        self.assertEqual(self.root.get(prefix), ns)
+        self.assertEqual(root.nsmap[test["Prefix"]], test["Namespace"])
 
-        unit_elem = "{http://www.xbrl.org/2003/instance}unit[@id='%(unit)s']/*"
-
-        year = self.root.findtext(unit_elem % {"unit": "Year"})
-        tonne = self.root.findtext(unit_elem % {"unit": "Tonne"})
-        ton = self.root.findtext(unit_elem % {"unit": "Ton"})
-        acre = self.root.findtext(unit_elem % {"unit": "Acre"})
-        item = self.root.findtext(unit_elem % {"unit": "Item"})
-        pure = self.root.findtext(unit_elem % {"unit": "Pure"})
+        year = root.findtext(unit_elem % "Year")
+        tonne = root.findtext(unit_elem % "Tonne")
+        ton = root.findtext(unit_elem % "Ton")
+        acre = root.findtext(unit_elem % "Acre")
+        item = root.findtext(unit_elem % "Item")
+        pure = root.findtext(unit_elem % "Pure")
 
         self.assertEqual(year, "test:Y")
         self.assertEqual(tonne, "test:t")
@@ -67,4 +67,5 @@ class Units(unittest.TestCase):
             self.unit_config_file,
             self.instance_file
         )
+
         self.assertEqual(unknown, expected_unknown)

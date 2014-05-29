@@ -2,7 +2,7 @@
 
 import unittest
 from decimal import Decimal
-from thinX import namespace
+from lxml import etree
 from thinX import xbrl
 
 
@@ -11,8 +11,8 @@ class Calculations(unittest.TestCase):
     def setUp(self):
         self.instance_file = "assets/abc-20130331.xml"
         cal_linkbase = xbrl.get_linkbase(self.instance_file, "cal")
-        tree = namespace.parse_xmlns(self.instance_file)
-        cal_tree = namespace.parse_xmlns(cal_linkbase)
+        tree = etree.parse(self.instance_file)
+        cal_tree = etree.parse(cal_linkbase)
         self.root = tree.getroot()
         self.cal_root = cal_tree.getroot()
 

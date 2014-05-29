@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from thinX import namespace
+from lxml import etree
 from thinX import xbrl
 
 
@@ -12,10 +12,10 @@ class Link_Roles(unittest.TestCase):
         pre_linkbase = "assets/abc-20130331_pre.xml"
         def_linkbase = "assets/abc-20130331_def.xml"
         cal_linkbase = "assets/abc-20130331_cal.xml"
-        xsd_tree = namespace.parse_xmlns(schema)
-        pre_tree = namespace.parse_xmlns(pre_linkbase)
-        def_tree = namespace.parse_xmlns(def_linkbase)
-        cal_tree = namespace.parse_xmlns(cal_linkbase)
+        xsd_tree = etree.parse(schema)
+        pre_tree = etree.parse(pre_linkbase)
+        def_tree = etree.parse(def_linkbase)
+        cal_tree = etree.parse(cal_linkbase)
         self.xsd_root = xsd_tree.getroot()
         self.linkbases = {"pre": pre_tree.getroot(),
                           "def": def_tree.getroot(),

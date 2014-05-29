@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from thinX import namespace
+from lxml import etree
 from thinX import xbrl
 
 
@@ -14,11 +14,11 @@ class Concepts(unittest.TestCase):
         def_linkbase = xbrl.get_linkbase(instance_file, "def")
         cal_linkbase = xbrl.get_linkbase(instance_file, "cal")
         lab_linkbase = xbrl.get_linkbase(instance_file, "lab")
-        xsd_tree = namespace.parse_xmlns(xsd)
-        pre_tree = namespace.parse_xmlns(pre_linkbase)
-        def_tree = namespace.parse_xmlns(def_linkbase)
-        cal_tree = namespace.parse_xmlns(cal_linkbase)
-        lab_tree = namespace.parse_xmlns(lab_linkbase)
+        xsd_tree = etree.parse(xsd)
+        pre_tree = etree.parse(pre_linkbase)
+        def_tree = etree.parse(def_linkbase)
+        cal_tree = etree.parse(cal_linkbase)
+        lab_tree = etree.parse(lab_linkbase)
         self.xsd_root = xsd_tree.getroot()
         self.pre_root = pre_tree.getroot()
         self.def_root = def_tree.getroot()

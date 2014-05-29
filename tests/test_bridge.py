@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from thinX import namespace
+from lxml import etree
 from thinX import xbrl
 
 
@@ -14,11 +14,11 @@ class Calculations(unittest.TestCase):
         calc = "assets/abc-20130331_cal.xml"
         labs = "assets/abc-20130331_lab.xml"
 
-        xsd_tree = namespace.parse_xmlns(schema)
-        pre_tree = namespace.parse_xmlns(pres)
-        def_tree = namespace.parse_xmlns(defs)
-        cal_tree = namespace.parse_xmlns(calc)
-        lab_tree = namespace.parse_xmlns(labs)
+        xsd_tree = etree.parse(schema)
+        pre_tree = etree.parse(pres)
+        def_tree = etree.parse(defs)
+        cal_tree = etree.parse(calc)
+        lab_tree = etree.parse(labs)
 
         self.xsd_root = xsd_tree.getroot()
         self.pre_root = pre_tree.getroot()

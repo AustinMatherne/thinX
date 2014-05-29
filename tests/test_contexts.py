@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from thinX import namespace
+from lxml import etree
 from thinX import xbrl
 
 
@@ -9,7 +9,7 @@ class Contexts(unittest.TestCase):
 
     def setUp(self):
         instance_file = "assets/abc-20130331.xml"
-        tree = namespace.parse_xmlns(instance_file)
+        tree = etree.parse(instance_file)
         self.root = tree.getroot()
 
     def test_clean_contexts(self):

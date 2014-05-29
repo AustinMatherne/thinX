@@ -2,7 +2,7 @@
 
 import unittest
 from decimal import Decimal
-from thinX import namespace
+from lxml import etree
 from thinX import xbrl
 
 
@@ -13,10 +13,10 @@ class Labels(unittest.TestCase):
         pre_linkbase = xbrl.get_linkbase(instance_file, "pre")
         lab_linkbase = xbrl.get_linkbase(instance_file, "lab")
         cal_linkbase = xbrl.get_linkbase(instance_file, "cal")
-        tree = namespace.parse_xmlns(instance_file)
-        pre_tree = namespace.parse_xmlns(pre_linkbase)
-        lab_tree = namespace.parse_xmlns(lab_linkbase)
-        cal_tree = namespace.parse_xmlns(cal_linkbase)
+        tree = etree.parse(instance_file)
+        pre_tree = etree.parse(pre_linkbase)
+        lab_tree = etree.parse(lab_linkbase)
+        cal_tree = etree.parse(cal_linkbase)
         self.root = tree.getroot()
         self.pre_root = pre_tree.getroot()
         self.lab_root = lab_tree.getroot()
