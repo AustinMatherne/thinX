@@ -728,16 +728,25 @@ def link_role_sort(elem):
 
 def remove_namespace_date(elem):
     """Remove the date from the targetNamespcae."""
+
+    def change_ns(elem, old_namespace, new_namespace):
+        for prefix, namespace in elem.nsmap.items():
+            if namespace == old_namespace:
+                nsmap = elem.nsmap
+                nsmap[prefix] = new_namespace
+                new_elem = etree.Element(elem.tag, nsmap=nsmap)
+                new_elem[:] = elem[:]
+                for key, value in elem.attrib.items():
+                    new_elem.set(key, value)
+                return new_elem
+
     old_namespace = elem.get("targetNamespace")
     new_namespace = re.search("(^.*)/\d{8}$", old_namespace).group(1)
     elem.set("targetNamespace", new_namespace)
-    attrs = elem.items()
-    for attr in attrs:
-        if attr[-1] == old_namespace:
-            elem.set(attr[0], new_namespace)
-            break
 
-    return (old_namespace, new_namespace)
+    elem = change_ns(elem, old_namespace, new_namespace)
+
+    return (elem, (old_namespace, new_namespace))
 
 
 def rename_refs(elem, linkbase):
