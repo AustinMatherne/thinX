@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'C:\Users\amather\thinIceLabs\thinX\ui_thinX.ui'
 #
-# Created: Thu May  1 14:17:26 2014
-#      by: PyQt5 UI code generator 5.2.1
+# Created: Thu May 29 14:18:47 2014
+#      by: PyQt5 UI code generator 5.3
 #
 # WARNING! All changes made in this file will be lost!
 
