@@ -56,51 +56,65 @@ def get_units(ini, filename=False):
     return registries
 
 
-def add_namespace(elem, prefix, ns, clean_measures):
-    """Accepts an element, a prefix, a namespace, and a list of measures.
-    Declares the namespace and prefix in the provided element, then searches
-    through the element's children for declared units of measure. For each
-    measure that is found, it executes a case insensitive search against the
-    supplied list of measures for a match, if a match is found, the measure
-    and its prefix are replaced with the provided prefix and clean measure.
+def add_namespace(elem, registry):
+    """Accepts an element, and a prefix, a namespace, and a list of measures.
+    Declares the namespace and prefix in the provided element, searches through
+    the element's children for declared units of measure. For each measure that
+    is found, it executes a case insensitive search against the supplied list
+    of measures for a match, if a match is found, the measure and its prefix
+    are replaced with the provided prefix and clean measure.
 
     """
     log = {}
-    prefix_end = prefix.split(":")[1]
-    elem.set(prefix, ns)
-
-    low_clean = [x.lower() for x in clean_measures]
-    low_clean = [
-        key
-        for key, value in collections.Counter(low_clean).items()
-        if value > 1
-    ]
     measure_xpath = ".//{http://www.xbrl.org/2003/instance}measure"
-    current_measures = elem.findall(measure_xpath)
-    for element in current_measures:
-        current = element.text.split(":")
-        if len(current) > 1:
-            noprefix = False
-            current = current[1]
-        else:
-            noprefix = True
-            current = current[0]
-        for clean in clean_measures:
-            clean_lower = clean.lower()
-            if current.lower() == clean_lower:
-                old = element.text
-                if noprefix:
-                    new = clean
-                else:
-                    new = prefix_end + ":" + clean
-                if new != old:
-                    if (current != clean and clean_lower in low_clean):
-                        pass
-                    else:
-                        element.text = new
-                        log[old] = new
 
-    return log
+    def add_prefix(elem, prefix, ns):
+        if prefix not in elem.nsmap:
+            nsmap = elem.nsmap
+            nsmap[prefix] = ns
+            new_elem = etree.Element(elem.tag, nsmap=nsmap)
+            new_elem[:] = elem[:]
+            return new_elem
+        else:
+            return elem
+
+    for base in registry:
+        clean_measures = registry[base]["Measures"]
+        prefix = registry[base]["Prefix"]
+        ns = registry[base]["Namespace"]
+        low_clean = [x.lower() for x in clean_measures]
+        low_clean = [
+            key
+            for key, value in collections.Counter(low_clean).items()
+            if value > 1
+        ]
+        current_measures = elem.findall(measure_xpath)
+        for element in current_measures:
+            current = element.text.split(":")
+            if len(current) > 1:
+                noprefix = False
+                current = current[1]
+            else:
+                noprefix = True
+                current = current[0]
+            for clean in clean_measures:
+                clean_lower = clean.lower()
+                if current.lower() == clean_lower:
+                    old = element.text
+                    if noprefix:
+                        new = clean
+                    else:
+                        new = prefix + ":" + clean
+                    if new != old:
+                        if (current != clean and clean_lower in low_clean):
+                            pass
+                        else:
+                            element.text = new
+                            log[old] = new
+
+        elem = add_prefix(elem, prefix, ns)
+
+    return (elem, log)
 
 
 def unknown_measures(elem, ini, filename):
