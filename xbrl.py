@@ -6,7 +6,6 @@ import re
 from lxml import etree
 from decimal import Decimal
 from datetime import datetime
-from thinX import namespace
 
 
 def get_file_namespace(filename):
