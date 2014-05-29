@@ -31,7 +31,7 @@ project_files = [
 options = {
     "build_exe": {
         "include_files":    project_files,
-        "includes":         "sip",
+        "includes":         ["sip", "lxml._elementpath"],
         "icon":             "logo.ico",
         "optimize":         2,
         "base":             base
