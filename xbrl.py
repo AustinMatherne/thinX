@@ -73,6 +73,8 @@ def add_namespace(elem, registry):
             nsmap[prefix] = ns
             new_elem = etree.Element(elem.tag, nsmap=nsmap)
             new_elem[:] = elem[:]
+            for key, value in elem.attrib.items():
+                    new_elem.set(key, value)
             return new_elem
         else:
             return elem
