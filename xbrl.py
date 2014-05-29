@@ -493,14 +493,14 @@ def get_linkbase(filename, linkbase):
     """Find the requested linkbase in the provided element's DTS."""
     xlink = "{http://www.w3.org/1999/xlink}href"
     path = filename.rsplit("/", 1)[0] + "/"
-    tree = namespace.parse_xmlns(filename)
+    tree = etree.parse(filename)
     root = tree.getroot()
     schema_ref = root.find(".//{http://www.xbrl.org/2003/linkbase}schemaRef")
     schema = schema_ref.get(xlink)
     filename = path + schema
     if linkbase == "xsd":
         return filename
-    tree = namespace.parse_xmlns(filename)
+    tree = etree.parse(filename)
     root = tree.getroot()
     linkbase_refs_xpath = ".//{http://www.xbrl.org/2003/linkbase}linkbaseRef"
     linkbase_refs = root.findall(linkbase_refs_xpath)
