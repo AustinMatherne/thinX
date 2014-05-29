@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import namespace
 import sys
 import re
 import os
@@ -468,29 +467,23 @@ class ThinX(QtWidgets.QMainWindow):
             fixed = False
             logs = []
             try:
-                tree = namespace.parse_xmlns(self.filename)
+                tree = etree.parse(self.filename)
             except:
                 self.open_fail(self.filename)
                 return
 
             root = tree.getroot()
-            registries = xbrl.get_units(self.unit_config_file, self.filename)
-            prefixes = []
-            for key, registry in registries.items():
-                prefix = "xmlns:" + registry["Prefix"]
-                prefixes.append(prefix)
-                ns = registry["Namespace"]
-                measures = registry["Measures"]
-                log = xbrl.add_namespace(root, prefix, ns, measures)
-                if log:
-                    logs.append(log)
-                    fixed = True
+            registry = xbrl.get_units(self.unit_config_file, self.filename)
+            new_root, log = xbrl.add_namespace(root, registry)
+            if log:
+                logs.append(log)
+                fixed = True
             check = xbrl.unknown_measures(
-                root,
+                new_root,
                 self.unit_config_file,
                 self.filename
             )
-            namespace.fixup_xmlns(root)
+            tree._setroot(new_root)
             tree.write(self.filename, xml_declaration=True)
             if fixed:
                 self.status.setText("XBRL International Units Registry ")
