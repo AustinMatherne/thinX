@@ -612,9 +612,9 @@ class ThinX(QtWidgets.QMainWindow):
                 root = tree.getroot()
                 if linkbase == schema:
                     log = xbrl.link_role_sort(root)
-                    ns_change = xbrl.remove_namespace_date(root)
                     refs = xbrl.rename_refs(root, "xsd")
                     base = xbrl.retrieve_base(root)
+                    root, ns_change = xbrl.remove_namespace_date(root)
                 elif linkbase == labs:
                     xbrl.rename_refs(root, "labs")
                 else:
