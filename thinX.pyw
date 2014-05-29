@@ -6,7 +6,7 @@ import re
 import os
 from operator import itemgetter
 import csv
-import xml.etree.ElementTree as ET
+from lxml import etree
 from PyQt5 import QtWidgets
 from ui_thinX import Ui_MainWindow
 import xbrl
@@ -136,25 +136,25 @@ class ThinX(QtWidgets.QMainWindow):
                 return
 
             try:
-                xsd_tree = namespace.parse_xmlns(xsd)
+                xsd_tree = etree.parse(xsd)
             except:
                 self.open_fail(self.filename, "xsd")
                 return
 
             try:
-                pre_tree = namespace.parse_xmlns(pre_linkbase)
+                pre_tree = etree.parse(pre_linkbase)
             except:
                 self.open_fail(self.filename, "pre")
                 return
 
             try:
-                def_tree = namespace.parse_xmlns(def_linkbase)
+                def_tree = etree.parse(def_linkbase)
             except:
                 self.open_fail(self.filename, "def")
                 return
 
             try:
-                cal_tree = namespace.parse_xmlns(cal_linkbase)
+                cal_tree = etree.parse(cal_linkbase)
             except:
                 self.open_fail(self.filename, "cal")
                 return
@@ -172,7 +172,6 @@ class ThinX(QtWidgets.QMainWindow):
                 self.status.setText("No Unused Link Roles Found in File ")
             else:
                 xbrl.delete_link_roles(xsd_root, log)
-                namespace.fixup_xmlns(xsd_root)
                 xsd_tree.write(xsd, xml_declaration=True)
                 self.ui.textLog.append("<strong>Unused Link Roles:</strong>")
                 for role in log:
@@ -199,13 +198,13 @@ class ThinX(QtWidgets.QMainWindow):
                 return
 
             try:
-                pre_tree = namespace.parse_xmlns(pre_linkbase)
+                pre_tree = etree.parse(pre_linkbase)
             except:
                 self.open_fail(self.filename, "pre")
                 return
 
             try:
-                lab_tree = namespace.parse_xmlns(lab_linkbase)
+                lab_tree = etree.parse(lab_linkbase)
             except:
                 self.open_fail(self.filename, "lab")
                 return
@@ -217,7 +216,6 @@ class ThinX(QtWidgets.QMainWindow):
             if not log:
                 self.status.setText("No Unused Labels Found in File ")
             else:
-                namespace.fixup_xmlns(lab_root)
                 lab_tree.write(lab_linkbase, xml_declaration=True)
                 self.status.setText(
                     "The Above Unreferenced Labels Have Been Removed "
@@ -252,13 +250,13 @@ class ThinX(QtWidgets.QMainWindow):
                 return
 
             try:
-                pre_tree = namespace.parse_xmlns(pre_linkbase)
+                pre_tree = etree.parse(pre_linkbase)
             except:
                 self.open_fail(self.filename, "pre")
                 return
 
             try:
-                lab_tree = namespace.parse_xmlns(lab_linkbase)
+                lab_tree = etree.parse(lab_linkbase)
             except:
                 self.open_fail(self.filename, "lab")
                 return
@@ -270,8 +268,6 @@ class ThinX(QtWidgets.QMainWindow):
             if not log:
                 self.status.setText("No Redundant Labels Found in File ")
             else:
-                namespace.fixup_xmlns(pre_root)
-                namespace.fixup_xmlns(lab_root)
                 pre_tree.write(pre_linkbase, xml_declaration=True)
                 lab_tree.write(lab_linkbase, xml_declaration=True)
                 self.status.setText(
@@ -310,31 +306,31 @@ class ThinX(QtWidgets.QMainWindow):
                 return
 
             try:
-                xsd_tree = namespace.parse_xmlns(xsd)
+                xsd_tree = etree.parse(xsd)
             except:
                 self.open_fail(self.filename, "xsd")
                 return
 
             try:
-                pre_tree = namespace.parse_xmlns(pre_linkbase)
+                pre_tree = etree.parse(pre_linkbase)
             except:
                 self.open_fail(self.filename, "pre")
                 return
 
             try:
-                def_tree = namespace.parse_xmlns(def_linkbase)
+                def_tree = etree.parse(def_linkbase)
             except:
                 self.open_fail(self.filename, "def")
                 return
 
             try:
-                cal_tree = namespace.parse_xmlns(cal_linkbase)
+                cal_tree = etree.parse(cal_linkbase)
             except:
                 self.open_fail(self.filename, "cal")
                 return
 
             try:
-                lab_tree = namespace.parse_xmlns(lab_linkbase)
+                lab_tree = etree.parse(lab_linkbase)
             except:
                 self.open_fail(self.filename, "lab")
                 return
@@ -356,7 +352,6 @@ class ThinX(QtWidgets.QMainWindow):
             if not log:
                 self.status.setText("No Unused Concepts Found in File ")
             else:
-                namespace.fixup_xmlns(xsd_root)
                 xsd_tree.write(xsd, xml_declaration=True)
                 self.status.setText(
                     "The Above Unreferenced Concepts Have Been Removed "
@@ -382,7 +377,7 @@ class ThinX(QtWidgets.QMainWindow):
             except:
                 self.open_fail(self.filename, "cal")
                 return
-            tree = namespace.parse_xmlns(calc_linkbase)
+            tree = etree.parse(calc_linkbase)
             root = tree.getroot()
             log = xbrl.dup_calcs(root)
             if not log:
@@ -411,14 +406,13 @@ class ThinX(QtWidgets.QMainWindow):
         else:
             self.ui.textLog.clear()
             try:
-                tree = namespace.parse_xmlns(self.filename)
+                tree = etree.parse(self.filename)
             except:
                 self.open_fail(self.filename)
                 return
 
             root = tree.getroot()
             log = xbrl.clean_contexts(root)
-            namespace.fixup_xmlns(root)
             tree.write(self.filename, xml_declaration=True)
             if not log:
                 self.status.setText("No Unused Contexts Found in File ")
@@ -440,7 +434,7 @@ class ThinX(QtWidgets.QMainWindow):
         else:
             self.ui.textLog.clear()
             try:
-                tree = namespace.parse_xmlns(self.filename)
+                tree = etree.parse(self.filename)
             except:
                 self.open_fail(self.filename)
                 return
@@ -536,10 +530,10 @@ class ThinX(QtWidgets.QMainWindow):
                 self.open_fail(self.filename, "xsd")
                 return
 
-            tree = namespace.parse_xmlns(self.filename)
-            xsd_tree = namespace.parse_xmlns(xsd)
-            cal_tree = namespace.parse_xmlns(cal_linkbase)
-            lab_tree = namespace.parse_xmlns(lab_linkbase)
+            tree = etree.parse(self.filename)
+            xsd_tree = etree.parse(xsd)
+            cal_tree = etree.parse(cal_linkbase)
+            lab_tree = etree.parse(lab_linkbase)
             root = tree.getroot()
             xsd_root = xsd_tree.getroot()
             cal_root = cal_tree.getroot()
@@ -621,7 +615,7 @@ class ThinX(QtWidgets.QMainWindow):
             name = "current_taxonomy"
             os.remove(self.filename)
             for linkbase in linkbases:
-                tree = namespace.parse_xmlns(linkbase)
+                tree = etree.parse(linkbase)
                 root = tree.getroot()
                 if linkbase == schema:
                     log = xbrl.link_role_sort(root)
@@ -632,8 +626,7 @@ class ThinX(QtWidgets.QMainWindow):
                     xbrl.rename_refs(root, "labs")
                 else:
                     xbrl.rename_refs(root, "linkbase")
-                namespace.fixup_xmlns(root)
-                content = ET.tostring(root, encoding="unicode")
+                content = etree.tostring(root, encoding="unicode")
                 match = path.search(linkbase)
                 new_name = match.group(1) + name + match.group(2)
                 f = open(new_name, 'w', encoding="utf8")
@@ -668,10 +661,9 @@ class ThinX(QtWidgets.QMainWindow):
             except:
                 self.open_fail(self.filename, "xsd")
                 return
-            tree = namespace.parse_xmlns(schema)
+            tree = etree.parse(schema)
             root = tree.getroot()
             log = xbrl.link_role_sort(root)
-            namespace.fixup_xmlns(root)
             tree.write(schema, xml_declaration=True)
             self.ui.textLog.append("<strong>Sort Codes:</strong>")
             for link in log:
