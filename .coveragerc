@@ -1,0 +1,3 @@
+[run]
+omit = setup.py, _version.py, ui_thinX.py, icons_rc.py
+
