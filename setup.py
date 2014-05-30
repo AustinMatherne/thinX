@@ -24,7 +24,6 @@ project_files = [
     "AUTHORS.md",
     "LICENSE.md",
     "README.md",
-    "TODO.md",
     "units.ini"
 ]
 
