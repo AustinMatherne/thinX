@@ -8,11 +8,11 @@ from thinX import xbrl
 class Calculations(unittest.TestCase):
 
     def setUp(self):
-        schema = "assets/abc-20130331.xsd"
-        pres = "assets/abc-20130331_pre.xml"
-        defs = "assets/abc-20130331_def.xml"
-        calc = "assets/abc-20130331_cal.xml"
-        labs = "assets/abc-20130331_lab.xml"
+        schema = "tests/assets/abc-20130331.xsd"
+        pres = "tests/assets/abc-20130331_pre.xml"
+        defs = "tests/assets/abc-20130331_def.xml"
+        calc = "tests/assets/abc-20130331_cal.xml"
+        labs = "tests/assets/abc-20130331_lab.xml"
 
         xsd_tree = etree.parse(schema)
         pre_tree = etree.parse(pres)

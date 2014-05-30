@@ -8,7 +8,7 @@ from thinX import xbrl
 class Concepts(unittest.TestCase):
 
     def setUp(self):
-        instance_file = "assets/abc-20130331.xml"
+        instance_file = "tests/assets/abc-20130331.xml"
         xsd = xbrl.get_linkbase(instance_file, "xsd")
         pre_linkbase = xbrl.get_linkbase(instance_file, "pre")
         def_linkbase = xbrl.get_linkbase(instance_file, "def")

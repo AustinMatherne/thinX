@@ -8,8 +8,8 @@ from thinX import xbrl
 class Units(unittest.TestCase):
 
     def setUp(self):
-        self.instance_file = "assets/abc-20130331.xml"
-        self.unit_config_file = "assets/units.ini"
+        self.instance_file = "tests/assets/abc-20130331.xml"
+        self.unit_config_file = "tests/assets/units.ini"
         self.units_dictionary = xbrl.get_units(self.unit_config_file)
         self.tree = etree.parse(self.instance_file)
         self.root = self.tree.getroot()

@@ -8,7 +8,7 @@ from thinX import xbrl
 class Contexts(unittest.TestCase):
 
     def setUp(self):
-        instance_file = "assets/abc-20130331.xml"
+        instance_file = "tests/assets/abc-20130331.xml"
         tree = etree.parse(instance_file)
         self.root = tree.getroot()
 

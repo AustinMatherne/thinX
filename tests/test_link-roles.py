@@ -8,10 +8,10 @@ from thinX import xbrl
 class Link_Roles(unittest.TestCase):
 
     def setUp(self):
-        schema = "assets/abc-20130331.xsd"
-        pre_linkbase = "assets/abc-20130331_pre.xml"
-        def_linkbase = "assets/abc-20130331_def.xml"
-        cal_linkbase = "assets/abc-20130331_cal.xml"
+        schema = "tests/assets/abc-20130331.xsd"
+        pre_linkbase = "tests/assets/abc-20130331_pre.xml"
+        def_linkbase = "tests/assets/abc-20130331_def.xml"
+        cal_linkbase = "tests/assets/abc-20130331_cal.xml"
         xsd_tree = etree.parse(schema)
         pre_tree = etree.parse(pre_linkbase)
         def_tree = etree.parse(def_linkbase)

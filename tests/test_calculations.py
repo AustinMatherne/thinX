@@ -9,7 +9,7 @@ from thinX import xbrl
 class Calculations(unittest.TestCase):
 
     def setUp(self):
-        self.instance_file = "assets/abc-20130331.xml"
+        self.instance_file = "tests/assets/abc-20130331.xml"
         cal_linkbase = xbrl.get_linkbase(self.instance_file, "cal")
         tree = etree.parse(self.instance_file)
         cal_tree = etree.parse(cal_linkbase)
@@ -23,11 +23,11 @@ class Calculations(unittest.TestCase):
         cal_linkbase = xbrl.get_linkbase(self.instance_file, "cal")
         lab_linkbase = xbrl.get_linkbase(self.instance_file, "lab")
 
-        self.assertEqual("assets/abc-20130331.xsd", schema)
-        self.assertEqual("assets/abc-20130331_pre.xml", pre_linkbase)
-        self.assertEqual("assets/abc-20130331_def.xml", def_linkbase)
-        self.assertEqual("assets/abc-20130331_cal.xml", cal_linkbase)
-        self.assertEqual("assets/abc-20130331_lab.xml", lab_linkbase)
+        self.assertEqual("tests/assets/abc-20130331.xsd", schema)
+        self.assertEqual("tests/assets/abc-20130331_pre.xml", pre_linkbase)
+        self.assertEqual("tests/assets/abc-20130331_def.xml", def_linkbase)
+        self.assertEqual("tests/assets/abc-20130331_cal.xml", cal_linkbase)
+        self.assertEqual("tests/assets/abc-20130331_lab.xml", lab_linkbase)
 
     def test_get_calcs(self):
         linkrole = "http://www.example.com/role/BalanceSheetComponents" \

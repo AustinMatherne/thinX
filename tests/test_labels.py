@@ -9,7 +9,7 @@ from thinX import xbrl
 class Labels(unittest.TestCase):
 
     def setUp(self):
-        instance_file = "assets/abc-20130331.xml"
+        instance_file = "tests/assets/abc-20130331.xml"
         pre_linkbase = xbrl.get_linkbase(instance_file, "pre")
         lab_linkbase = xbrl.get_linkbase(instance_file, "lab")
         cal_linkbase = xbrl.get_linkbase(instance_file, "cal")
