@@ -1,6 +1,8 @@
 thinX
 =====
 
+[![Build Status](https://travis-ci.org/AustinMatherne/thinX.svg?branch=master)](https://travis-ci.org/AustinMatherne/thinX)
+
 thinX is a set of utilities for manipulating XBRL files.
 
 
