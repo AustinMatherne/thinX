@@ -1,7 +1,7 @@
 thinX
 =====
 
-[![Build Status](https://travis-ci.org/AustinMatherne/thinX.svg?branch=master)](https://travis-ci.org/AustinMatherne/thinX) [![Coverage Status](https://coveralls.io/repos/AustinMatherne/thinX/badge.png)](https://coveralls.io/r/AustinMatherne/thinX)
+[![Build Status](https://travis-ci.org/AustinMatherne/thinX.svg?branch=master)](https://travis-ci.org/AustinMatherne/thinX) [![Coverage Status](https://coveralls.io/repos/AustinMatherne/thinX/badge.png)](https://coveralls.io/r/AustinMatherne/thinX) [![Dependency Status](https://gemnasium.com/AustinMatherne/thinX.svg)](https://gemnasium.com/AustinMatherne/thinX)
 
 thinX is a set of utilities for manipulating XBRL files.
 
