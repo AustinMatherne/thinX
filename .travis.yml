@@ -2,7 +2,7 @@ language:
   - python
 python:
   - "3.4"
-before_script:
+install:
   - pip install -r requirements/travis-ci.txt
 script:
   - nosetests --with-coverage --cover-package=thinX
