@@ -116,6 +116,9 @@ class ThinX(QtWidgets.QMainWindow):
             + str(self.get_version()) + "</p></body></html>"
         )
 
+    def build_dts(self):
+        pass
+
     def link_role(self):
         """Find, report, and delete any inactive link roles."""
         if self.filename == "":
@@ -125,53 +128,29 @@ class ThinX(QtWidgets.QMainWindow):
             return
         else:
             self.ui.textLog.clear()
-            try:
-                xsd = xbrl.get_linkbase(self.filename, "xsd")
-                pre_linkbase = xbrl.get_linkbase(self.filename, "pre")
-                def_linkbase = xbrl.get_linkbase(self.filename, "def")
-                cal_linkbase = xbrl.get_linkbase(self.filename, "cal")
-            except:
-                self.open_fail(self.filename, "xsd")
-                return
+            linkbases = {"xsd": {}, "pre": {}, "def": {}, "cal": {}}
 
-            try:
-                xsd_tree = etree.parse(xsd)
-            except:
-                self.open_fail(self.filename, "xsd")
-                return
+            for key, name in linkbases.items():
+                try:
+                    name["filename"] = xbrl.get_linkbase(self.filename, key)
+                    name["tree"] = etree.parse(name["filename"])
+                    name["root"] = name["tree"].getroot()
+                except:
+                    self.open_fail(self.filename, key)
+                    return
 
-            try:
-                pre_tree = etree.parse(pre_linkbase)
-            except:
-                self.open_fail(self.filename, "pre")
-                return
-
-            try:
-                def_tree = etree.parse(def_linkbase)
-            except:
-                self.open_fail(self.filename, "def")
-                return
-
-            try:
-                cal_tree = etree.parse(cal_linkbase)
-            except:
-                self.open_fail(self.filename, "cal")
-                return
-
-            xsd_root = xsd_tree.getroot()
-            linkbases = {"pre": pre_tree.getroot(),
-                         "def": def_tree.getroot(),
-                         "cal": cal_tree.getroot()}
-
-            link_roles = xbrl.get_link_roles(xsd_root)
+            link_roles = xbrl.get_link_roles(linkbases["xsd"]["root"])
             active_link_roles = xbrl.get_active_link_roles(linkbases)
             log = xbrl.compare_link_roles(link_roles, active_link_roles)
 
             if not log:
                 self.status.setText("No Unused Link Roles Found in File ")
             else:
-                xbrl.delete_link_roles(xsd_root, log)
-                xsd_tree.write(xsd, xml_declaration=True)
+                xbrl.delete_link_roles(linkbases["xsd"]["root"], log)
+                linkbases["xsd"]["tree"].write(
+                    linkbases["xsd"]["filename"],
+                    xml_declaration=True
+                )
                 self.ui.textLog.append("<strong>Unused Link Roles:</strong>")
                 for role in log:
                     self.ui.textLog.append(role)
