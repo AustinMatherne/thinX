@@ -8,18 +8,18 @@ from thinX import xbrl
 class Link_Roles(unittest.TestCase):
 
     def setUp(self):
-        schema = "tests/assets/abc-20130331.xsd"
-        pre_linkbase = "tests/assets/abc-20130331_pre.xml"
-        def_linkbase = "tests/assets/abc-20130331_def.xml"
-        cal_linkbase = "tests/assets/abc-20130331_cal.xml"
-        xsd_tree = etree.parse(schema)
-        pre_tree = etree.parse(pre_linkbase)
-        def_tree = etree.parse(def_linkbase)
-        cal_tree = etree.parse(cal_linkbase)
-        self.xsd_root = xsd_tree.getroot()
-        self.linkbases = {"pre": pre_tree.getroot(),
-                          "def": def_tree.getroot(),
-                          "cal": cal_tree.getroot()}
+        exts = [
+            ("xsd", ".xsd"),
+            ("pre", "_pre.xml"),
+            ("def", "_def.xml"),
+            ("cal", "_cal.xml")
+        ]
+        self.linkbases = {}
+        for ext in exts:
+            linkbase = self.linkbases[ext[0]] = {}
+            linkbase["filename"] = "tests/assets/abc-20130331%s" % ext[1]
+            linkbase["tree"] = etree.parse(linkbase["filename"])
+            linkbase["root"] = linkbase["tree"].getroot()
 
         self.active_link_roles = [
             "http://www.example.com/role/BalanceSheetComponents",
@@ -33,7 +33,7 @@ class Link_Roles(unittest.TestCase):
         ]
 
     def test_get_link_roles(self):
-        result = xbrl.get_link_roles(self.xsd_root)
+        result = xbrl.get_link_roles(self.linkbases["xsd"]["root"])
 
         for role in self.active_link_roles:
             self.assertIn(role, result)
@@ -47,7 +47,7 @@ class Link_Roles(unittest.TestCase):
         self.assertEqual(len(result), 20)
 
     def test_compare_link_roles(self):
-        roles = xbrl.get_link_roles(self.xsd_root)
+        roles = xbrl.get_link_roles(self.linkbases["xsd"]["root"])
         active = xbrl.get_active_link_roles(self.linkbases)
 
         result = xbrl.compare_link_roles(roles, active)
@@ -57,7 +57,7 @@ class Link_Roles(unittest.TestCase):
         self.assertEqual(len(result), 2)
 
     def test_delete_link_roles(self):
-        result = xbrl.delete_link_roles(self.xsd_root,
+        result = xbrl.delete_link_roles(self.linkbases["xsd"]["root"],
                                         self.inactive_link_roles)
 
         for role in self.inactive_link_roles:
@@ -67,4 +67,5 @@ class Link_Roles(unittest.TestCase):
     def test_link_role_def(self):
         role_uri = "http://www.example.com/role/NotUsedDetails"
         result = "4040 - Disclosure - Not Used (Details)"
-        self.assertEqual(xbrl.link_role_def(self.xsd_root, role_uri), result)
+        self.assertEqual(xbrl.link_role_def(self.linkbases["xsd"]["root"],
+                                            role_uri), result)
