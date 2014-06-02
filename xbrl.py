@@ -823,9 +823,10 @@ def get_active_link_roles(linkbases):
     role_attr_xpath = "{http://www.w3.org/1999/xlink}role"
 
     for key, value in linkbases.items():
-        link_roles = value.findall(xpaths[key])
-        for link_role in link_roles:
-            log.append(link_role.get(role_attr_xpath))
+        if key in xpaths:
+            link_roles = value["root"].findall(xpaths[key])
+            for link_role in link_roles:
+                log.append(link_role.get(role_attr_xpath))
 
     return set(log)
 
