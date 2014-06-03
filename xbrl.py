@@ -8,6 +8,22 @@ from decimal import Decimal
 from datetime import datetime
 
 
+def open_linkbases(entry, files):
+    """Opens the list of files using the provided taxonomy entry point."""
+    linkbases = {}
+    for key in files:
+        linkbases[key] = {}
+        try:
+            linkbases[key]["filename"] = get_linkbase(entry, key)
+            linkbases[key]["tree"] = etree.parse(linkbases[key]["filename"])
+            linkbases[key]["root"] = linkbases[key]["tree"].getroot()
+        except Exception as e:
+            e.value = key
+            raise e
+
+    return linkbases
+
+
 def get_file_namespace(filename):
     xsd = get_linkbase(filename, "xsd")
     tree = etree.parse(xsd)
