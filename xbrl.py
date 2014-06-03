@@ -497,25 +497,28 @@ def clean_contexts(elem):
     return contexts_removed
 
 
-def clean_concepts(xsd_elem, pre_elem, def_elem, cal_elem, lab_elem, schema):
-    """Search through the provided xsd element's children for concepts. Find any
-    that aren't referenced by the presentation, definition, calculation, or
-    label linkbases and remove them.
+def clean_concepts(linkbases):
+    """Searches through the provided dictionary of linkbases using the xsd to
+    build a list of extension concepts. Then finds any that aren't referenced
+    by the presentation, definition, calculation, or label linkbases and
+    removes them.
 
     """
     concepts_removed = []
+    schema = linkbases["xsd"]["filename"].split("/")[-1]
     concepts_xpath = ".//{http://www.w3.org/2001/XMLSchema}element"
     href_xpath = ".//*[@{http://www.w3.org/1999/xlink}href='%s#%s']"
-    current_concepts = xsd_elem.findall(concepts_xpath)
+    current_concepts = linkbases["xsd"]["root"].findall(concepts_xpath)
     for element in current_concepts:
-        identifier = element.get("id")
-        in_pre = pre_elem.findall(href_xpath % (schema, identifier))
-        in_def = def_elem.findall(href_xpath % (schema, identifier))
-        in_cal = cal_elem.findall(href_xpath % (schema, identifier))
-        in_lab = lab_elem.findall(href_xpath % (schema, identifier))
-        if not in_pre and not in_def and not in_cal and not in_lab:
-            xsd_elem.remove(element)
-            concepts_removed.append(identifier)
+        d = element.get("id")
+        used = False
+        for key, val in linkbases.items():
+            if key != "xsd" and val["root"].findall(href_xpath % (schema, d)):
+                used = True
+                break
+        if not used:
+            linkbases["xsd"]["root"].remove(element)
+            concepts_removed.append(d)
 
     return concepts_removed
 
