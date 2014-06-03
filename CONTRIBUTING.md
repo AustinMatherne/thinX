@@ -1,3 +1,10 @@
+### Versioning
+
+* Major version bumps accompany backwards compatibility breaking changes.
+* Minor version bumps accompany new features.
+* Patch version bumps accompany bug fixes.
+
+
 Contributing
 ============
 
