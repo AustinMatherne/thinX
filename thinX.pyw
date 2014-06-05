@@ -74,15 +74,11 @@ class ThinX(QtWidgets.QMainWindow):
             "lab": "Label Linkbase"
         }
         if file_type in file_types:
-            self.status.setText(
-                "Failed to Open "
-                + file_types[file_type]
-                + " of: "
-                + instance
-                + " "
-            )
+            self.status.setText("Failed to Open {0} of: {1} ".format(
+                file_types[file_type], instance
+            ))
         else:
-            self.status.setText("Failed to Open: " + instance + " ")
+            self.status.setText("Failed to Open: {0} ".format(instance))
 
     def open(self):
         """Prompts the user to open an XBRL instance document and stores the
@@ -115,8 +111,8 @@ class ThinX(QtWidgets.QMainWindow):
             " source XBRL toolkit developed and maintained<br>by Austin M. "
             "Matherne and released under the WTFPL.</span></p><p "
             "align=\"center\">https://github.com/AustinMatherne/thinX</p><p "
-            "align=\"center\" style=\"font-size:8pt;\">"
-            + str(self.get_version()) + "</p></body></html>"
+            "align=\"center\" style=\"font-size:8pt;\">{0}</p></body></html>"
+            .format(str(self.get_version()))
         )
 
     def link_role(self):
@@ -187,15 +183,11 @@ class ThinX(QtWidgets.QMainWindow):
             )
             for element, labels in log.items():
                 self.ui.textLog.append(
-                    "<strong>"
-                    + element.rsplit("#")[-1]
-                    + ":</strong>"
+                    "<strong>{0}:</strong>".format(element.rsplit("#")[-1])
                 )
                 for label_type, label in labels.items():
                     self.ui.textLog.append(
-                        label_type.rsplit("/")[-1]
-                        + ": "
-                        + label
+                        "{0}: {1}".format(label_type.rsplit("/")[-1], label)
                     )
 
     def redundant(self):
@@ -234,15 +226,14 @@ class ThinX(QtWidgets.QMainWindow):
             )
             for element, labels in log.items():
                 self.ui.textLog.append(
-                    "<strong>"
-                    + element.rsplit("#")[-1]
-                    + ":</strong>"
+                    "<strong>{0}:</strong>".format(element.rsplit("#")[-1])
                 )
                 for label_type, label in labels.items():
                     self.ui.textLog.append(
-                        label_type.rsplit("/")[-1]
-                        + " > "
-                        + label.rsplit("/")[-1]
+                        "{0} > {1}".format(
+                            label_type.rsplit("/")[-1],
+                            label.rsplit("/")[-1]
+                        )
                     )
 
     def concepts(self):
@@ -306,7 +297,8 @@ class ThinX(QtWidgets.QMainWindow):
             self.ui.textLog.append("<strong>Duplicate Calculations:</strong>")
             for calc, multiple in log.items():
                 if multiple > 0:
-                    self.ui.textLog.append(calc + " *" + str(multiple + 1))
+                    self.ui.textLog.append(
+                        "{0} *{1}".format(calc, str(multiple + 1)))
                 else:
                     self.ui.textLog.append(calc)
 
@@ -405,7 +397,9 @@ class ThinX(QtWidgets.QMainWindow):
             )
             for dictionary in logs:
                 for item in dictionary:
-                    self.ui.textLog.append(item + " > " + dictionary[item])
+                    self.ui.textLog.append(
+                        "{0} > {1}".format(item, dictionary[item])
+                    )
             self.ui.textLog.append("<br>")
         else:
             self.status.setText("No Units Found to Fix ")
@@ -468,7 +462,11 @@ class ThinX(QtWidgets.QMainWindow):
                     link_roles[sort] = {row[2]: 1}
             for link_role, totals in link_roles.items():
                 for total, value in totals.items():
-                    line = link_role + " - " + total + " *" + str(value)
+                    line = "{0} - {1} *{3}".format(
+                        link_role,
+                        total,
+                        str(value)
+                    )
                     output.append(line)
             output.sort()
             log.insert(0, ["RoleDefinition",
@@ -477,17 +475,17 @@ class ThinX(QtWidgets.QMainWindow):
                            "ContextId",
                            "Value",
                            "CalculatedValue"])
-            out_file = self.filename.rsplit(".", 1)[0] + "-calc.csv"
+            out_file = "{0}-calc.csv".format(self.filename.rsplit(".", 1)[0])
             with open(out_file, 'w', newline='') as f:
                 writer = csv.writer(f, dialect='excel', delimiter=',')
                 writer.writerows(log)
             for row in output:
                 self.ui.textLog.append(row)
-            self.status.setText(" ".join([
-                "Calculation Inconsistency Report Saved to",
-                out_file,
-                ""
-            ]))
+            self.status.setText(
+                "Calculation Inconsistency Report Saved to {0} ".format(
+                    out_file
+                )
+            )
 
     def bridge_prep(self):
         """Prep taxonomy for import into Merrill Bridge."""
@@ -536,13 +534,13 @@ class ThinX(QtWidgets.QMainWindow):
         if log:
             self.ui.textLog.append("<strong>Sort Codes:</strong>")
             for link in log:
-                self.ui.textLog.append(link[0] + " > " + link[1])
+                self.ui.textLog.append("{0} > {1}".format(link[0], link[1]))
             self.ui.textLog.append("")
         self.ui.textLog.append("<strong>Files:</strong>")
         for ref in refs:
-            self.ui.textLog.append(ref[0] + " > " + ref[1])
+            self.ui.textLog.append("{0} > {1}".format(ref[0], ref[1]))
         self.ui.textLog.append("<br><strong>Namespace:</strong>")
-        self.ui.textLog.append(ns_change[0] + " > " + ns_change[1])
+        self.ui.textLog.append("{0} > {1}".format(ns_change[0], ns_change[1]))
         self.ui.textLog.append("<br><strong>Base Taxonomy:</strong>")
         self.ui.textLog.append(base)
         self.status.setText("Ready for Bridge ")
@@ -570,7 +568,7 @@ class ThinX(QtWidgets.QMainWindow):
         )
         self.ui.textLog.append("<strong>Sort Codes:</strong>")
         for link in log:
-            self.ui.textLog.append(link[0] + " > " + link[1])
+            self.ui.textLog.append("{0} > {1}".format(link[0], link[1]))
         self.status.setText("Ready for Compare ")
 
 

@@ -121,7 +121,7 @@ def add_namespace(elem, registry):
                     if noprefix:
                         new = clean
                     else:
-                        new = prefix + ":" + clean
+                        new = "{0}:{1}".format(prefix, clean)
                     if new != old:
                         if (current != clean and clean_lower in low_clean):
                             pass
@@ -149,7 +149,7 @@ def unknown_measures(elem, ini, filename):
             prefix = units[unit_set]["Prefix"]
             for measure in units[unit_set]["Measures"]:
                 if len(element.text.split(":")) > 1:
-                    if prefix + ":" + measure == element.text:
+                    if "{0}:{1}".format(prefix, measure) == element.text:
                         logit = False
                 else:
                     if measure == element.text:
@@ -526,7 +526,7 @@ def clean_concepts(linkbases):
 def get_linkbase(filename, linkbase):
     """Find the requested linkbase in the provided element's DTS."""
     xlink = "{http://www.w3.org/1999/xlink}href"
-    path = filename.rsplit("/", 1)[0] + "/"
+    path = "{0}/".format(filename.rsplit("/", 1)[0])
     tree = etree.parse(filename)
     root = tree.getroot()
     schema_ref = root.find(".//{http://www.xbrl.org/2003/linkbase}schemaRef")
@@ -727,15 +727,15 @@ def link_role_sort(elem):
         if sort == dei:
             new_sort = "00090"
         elif face_par.search(sort):
-            new_sort = sort[:3] + "0" + sort[-1:]
+            new_sort = "{0}0{1}".format(sort[:3], sort[-1:])
         elif text_block.search(sort):
-            new_sort = sort[:3] + "0" + sort[:1]
+            new_sort = "{0}0{1}".format(sort[:3], sort[:1])
         elif face_fin.search(sort) or eights.search(sort):
-            new_sort = sort + "0"
+            new_sort = "{0}0".format(sort)
         elif level_four.search(sort):
             code = int(sort[-1:]) + 1
             if code < 10:
-                new_sort = sort[:-1] + "0" + str(code)
+                new_sort = "{0}0{1}".format(sort[:-1], str(code))
             else:
                 new_sort = sort[:-1] + str(code)
 
@@ -782,12 +782,16 @@ def rename_refs(elem, linkbase):
         for link_ref in link_refs:
             old_path = link_ref.get(href_attr_xpath)
             match = filename.search(old_path)
-            new_path = match.group(1) + "current_taxonomy" + match.group(3)
+            new_path = "{0}current_taxonomy{1}".format(
+                match.group(1),
+                match.group(3)
+            )
             link_ref.set(href_attr_xpath, new_path)
             log.append((old_path, new_path))
         base = match.group(1) + match.group(2)
-        log.append((base + ".xsd", match.group(1) + "current_taxonomy.xsd"))
-        log.append((base + ".xml", "*Deleted*"))
+        log.append(("{0}.xsd".format(base),
+                    "{0}current_taxonomy.xsd".format(match.group(1))))
+        log.append(("{0}.xml".format(base), "*Deleted*"))
     else:
         links = ["loc"]
         if linkbase == "linkbase":
@@ -798,7 +802,10 @@ def rename_refs(elem, linkbase):
             for link_ref in link_refs:
                 match = path.search(link_ref.get(href_attr_xpath))
                 if match:
-                    xsd = match.group(1) + "current_taxonomy" + match.group(3)
+                    xsd = "{0}current_taxonomy{1}".format(
+                        match.group(1),
+                        match.group(3)
+                    )
                     link_ref.set(href_attr_xpath, xsd + match.group(4))
 
     return log
