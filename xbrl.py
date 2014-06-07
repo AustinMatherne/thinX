@@ -99,7 +99,7 @@ def add_namespace(elem, registry):
             for key, value in collections.Counter(low_clean).items()
             if value > 1
         ]
-        for element in elem.findall(measure_xpath):
+        for element in elem.iterfind(measure_xpath):
             current = element.text.split(":")
             if len(current) > 1:
                 noprefix = False
@@ -134,10 +134,8 @@ def unknown_measures(elem, ini, filename):
     """
     log = []
     units = get_units(ini, filename)
-    current_measures = elem.findall(
-        ".//{http://www.xbrl.org/2003/instance}measure"
-    )
-    for element in current_measures:
+    measure_xpath = ".//{http://www.xbrl.org/2003/instance}measure"
+    for element in elem.iterfind(measure_xpath):
         logit = True
         for unit_set in units:
             prefix = units[unit_set]["Prefix"]
@@ -159,26 +157,38 @@ def get_labels(lab_elem):
     """Return a dictionary of all labels in the element."""
     found_labels = {}
     xlink = "{http://www.w3.org/1999/xlink}"
-    linkbase = ".//{http://www.xbrl.org/2003/linkbase}"
+    linkbase = "{http://www.xbrl.org/2003/linkbase}"
     role_attr_xpath = "{0}role".format(xlink)
     to_attr_xpath = "{0}to".format(xlink)
+    from_attr_xpath = "{0}from".format(xlink)
     href_attr_xpath = "{0}href".format(xlink)
     label_attr_xpath = "{0}label".format(xlink)
-    label_xpath = "{0}label[@{1}label='%s']".format(linkbase, xlink)
-    arc_xpath = "{0}labelArc[@{1}from='%s']".format(linkbase, xlink)
-    locs = lab_elem.findall("{0}loc".format(linkbase))
+    lab_link = lab_elem.find(".//{0}labelLink".format(linkbase))
 
-    for loc in locs:
-        concept = loc.get(href_attr_xpath)
-        concept_label = loc.get(label_attr_xpath)
-        if concept not in found_labels:
-            found_labels[concept] = {}
-        for label_arc in lab_elem.findall(arc_xpath % concept_label):
-            element = label_arc.get(to_attr_xpath)
-            label_element = lab_elem.find(label_xpath % element)
-            label_type = label_element.get(role_attr_xpath)
-            found_labels[concept][label_type] = label_element.text
+    loc = "{0}loc".format(linkbase)
+    label_arc = "{0}labelArc".format(linkbase)
+    label = "{0}label".format(linkbase)
+    locs = {}
+    label_arcs = {}
+    labels = {}
 
+    for elem in lab_link.iter():
+        if elem.tag == loc:
+            locs[elem.get(label_attr_xpath)] = elem.get(href_attr_xpath)
+        elif elem.tag == label_arc:
+            label_arcs[elem.get(to_attr_xpath)] = elem.get(from_attr_xpath)
+        elif elem.tag == label:
+            labels[elem.get(label_attr_xpath)] = {
+                "type": elem.get(role_attr_xpath),
+                "label": elem.text
+            }
+
+    for lab, label_type in labels.items():
+        href = locs[label_arcs[lab]]
+        found_labels.setdefault(
+            href,
+            dict()
+        )[label_type["type"]] = label_type["label"]
     return found_labels
 
 
@@ -187,19 +197,18 @@ def get_used_labels(pre_elem):
     found_labels = {}
     xlink = "{http://www.w3.org/1999/xlink}"
     linkbase = ".//{http://www.xbrl.org/2003/linkbase}"
-    pre_arc_xpath = "{0}presentationArc[@{1}to='%s']".format(linkbase, xlink)
+    arc_xpath = "{0}presentationArc[@{1}to='%s']".format(linkbase, xlink)
     href_attr_xpath = "{0}href".format(xlink)
-    label_attr_xpath = "{0}label".format(xlink)
-    locs = pre_elem.findall("{0}loc".format(linkbase))
+    lab_attr_xpath = "{0}label".format(xlink)
+    loc_xpath = "{0}loc".format(linkbase)
 
-    for loc in locs:
-        concept = loc.get(href_attr_xpath)
-        if concept not in found_labels:
-            found_labels[concept] = {}
-        pre_arcs = pre_elem.findall(pre_arc_xpath % loc.get(label_attr_xpath))
-        for pre_arc in pre_arcs:
-            element = pre_arc.get("preferredLabel")
-            if element not in found_labels[concept]:
+    for link in pre_elem.iterfind("{0}presentationLink".format(linkbase)):
+        for loc in link.iterfind(loc_xpath):
+            concept = loc.get(href_attr_xpath)
+            if concept not in found_labels:
+                found_labels[concept] = {}
+            for pre_arc in link.iterfind(arc_xpath % loc.get(lab_attr_xpath)):
+                element = pre_arc.get("preferredLabel")
                 found_labels[concept][element] = True
 
     return found_labels
@@ -223,29 +232,19 @@ def clean_labels(lab_elem, pre_elem):
         "http://www.xbrl.org/2003/role/exampleGuidance"
     ]
     used_labels = get_used_labels(pre_elem)
-    lab_link = lab_elem.find(".//{http://www.xbrl.org/2003/linkbase}labelLink")
-    removed_labels = {}
-    for concept, lab_types in get_labels(lab_elem).items():
+    labels = get_labels(lab_elem)
+    to_delete = {}
+    for concept, lab_types in labels.items():
         if concept not in used_labels:
-            removed_labels, lab_link = delete_label(
-                removed_labels,
-                concept,
-                lab_link
-            )
+            to_delete[concept] = "All"
         else:
-            store = []
             for lab_type in lab_types:
                 not_used = lab_type not in used_labels[concept]
                 not_standard = lab_type not in standard_labels
                 if (not_used and not_standard):
-                    store.append(lab_type)
-            if store:
-                removed_labels, lab_link = delete_label(
-                    removed_labels,
-                    concept,
-                    lab_link,
-                    store
-                )
+                    to_delete.setdefault(concept, list()).append(lab_type)
+    removed_labels, lab_elem = delete_labels(to_delete, lab_elem)
+
     return removed_labels
 
 
@@ -264,8 +263,6 @@ def redundant_labels(lab_elem, pre_elem):
             result[concept][label_type] = store_label_type
         else:
             result[concept][store_label_type] = label_type
-
-    lab_link = lab_elem.find(".//{http://www.xbrl.org/2003/linkbase}labelLink")
 
     regular_label_types = {
         "http://www.xbrl.org/2003/role/terseLabel": 0,
@@ -296,17 +293,18 @@ def redundant_labels(lab_elem, pre_elem):
         "http://www.xbrl.org/2009/role/negatedLabel": 0,
         "http://www.xbrl.org/2009/role/negatedTerseLabel": 1
     }
-
     result = {}
 
-    removed_labels = {}
     for concept, label_types in get_labels(lab_elem).items():
         store = {}
         for label_type, label in label_types.items():
             for store_label_type, store_label in store.items():
                 if label == store_label:
-                    if (label_type in pos_label_types and
-                            store_label_type in pos_label_types):
+                    is_pos = label_type in pos_label_types
+                    store_is_pos = store_label_type in pos_label_types
+                    is_neg = label_type in neg_label_types
+                    store_is_neg = store_label_type in neg_label_types
+                    if (is_pos and store_is_pos):
                         if (label_type in regular_label_types or
                                 store_label_type in regular_label_types):
                             add_to_result(
@@ -339,8 +337,7 @@ def redundant_labels(lab_elem, pre_elem):
                                 label_type,
                                 store_label_type
                             )
-                    elif (label_type in neg_label_types and
-                          store_label_type in neg_label_types):
+                    elif (is_neg and store_is_neg):
                         add_to_result(
                             concept,
                             neg_label_types,
@@ -353,85 +350,75 @@ def redundant_labels(lab_elem, pre_elem):
     while not clean:
         clean = True
         for concept in result:
-            store = result[concept].keys()
+            keys = result[concept].keys()
             for key, value in result[concept].items():
-                if value in store:
+                if value in keys:
                     result[concept][key] = result[concept][value]
                     clean = False
 
-    for concept, label_types in result.items():
-        removed_labels, lab_link = delete_label(
-            removed_labels,
-            concept,
-            lab_link,
-            label_types
-        )
-        for label_type, label in label_types.items():
-            pre_elem = change_preferred_label(
-                concept,
-                pre_elem,
-                label_type,
-                label
-            )
+    removed_labels, lab_elem = delete_labels(result, lab_elem)
+    pre_elem = change_preferred_labels(result, pre_elem)
+
     return result
 
 
-def change_preferred_label(concept, pre_elem, old_label_type, new_label_type):
-    """Accepts a concept, a presentation link element, a label type to remove
+def change_preferred_labels(concepts, pre_elem):
+    """Accepts a dictionary of concepts, and a presentation link element. The
+    dictionary container  a label type to remove
     and the label type to use in it's place.
 
     """
     linkbase = ".//{http://www.xbrl.org/2003/linkbase}"
     xlink = "{http://www.w3.org/1999/xlink}"
     loc_href_xpath = "{0}loc[@{1}href='%s']".format(linkbase, xlink)
-    attr_xpath = "{0}label".format(xlink)
+    lab_attr_xpath = "{0}label".format(xlink)
     to_attr_xpath = "{0}presentationArc[@{1}to='%s']".format(linkbase, xlink)
 
-    for concept in pre_elem.findall(loc_href_xpath % concept):
-        for arc in pre_elem.findall(to_attr_xpath % concept.get(attr_xpath)):
-            if arc.get("preferredLabel") == old_label_type:
-                arc.set("preferredLabel", new_label_type)
+    for concept, label_types in concepts.items():
+        for loc in pre_elem.iterfind(loc_href_xpath % concept):
+            for old_label_type, new_label_type in label_types.items():
+                for arc in pre_elem.iterfind(
+                    to_attr_xpath % loc.get(lab_attr_xpath)
+                ):
+                    if arc.get("preferredLabel") == old_label_type:
+                        arc.set("preferredLabel", new_label_type)
 
     return pre_elem
 
 
-def delete_label(removed_labels, concept, label_link, label_types=False):
-    """Accepts a dictionary of removed labels, a concept, a label_link element
-    full of labels, and possibly a type of label to delete. If the label type
-    isn't provided, all of the concepts labels are deleted, otherwise, only the
-    label of the provided type is removed.
+def delete_labels(concepts, lab_elem):
+    """Accepts a dictionary of concepts, and a label linkbase element. The
+    dictionary of concepts contains concepts as keys, and a list of label types
+    to remove as their values. The label types of the concepts are removed from
+    the label linkbase element.
 
     """
-    linkbase = "{http://www.xbrl.org/2003/linkbase}"
     xlink = "{http://www.w3.org/1999/xlink}"
-    label_xpath = ".//{0}label[@{1}label='%s']".format(linkbase, xlink)
-    loc_href_xpath = ".//{0}loc[@{1}href='%s']".format(linkbase, xlink)
-    label_arc_xpath = ".//{0}labelArc[@{1}from='%s']".format(linkbase, xlink)
+    linkbase = "{http://www.xbrl.org/2003/linkbase}"
     role_attr_xpath = "{0}role".format(xlink)
     to_attr_xpath = "{0}to".format(xlink)
     label_attr_xpath = "{0}label".format(xlink)
-
-    if concept not in removed_labels:
+    lab_link = lab_elem.find(".//{0}labelLink".format(linkbase))
+    label_xpath = ".//{0}label[@{1}label='%s']".format(linkbase, xlink)
+    loc_href_xpath = ".//{0}loc[@{1}href='%s']".format(linkbase, xlink)
+    label_arc_xpath = ".//{0}labelArc[@{1}from='%s']".format(linkbase, xlink)
+    removed_labels = {}
+    for concept, label_types in concepts.items():
         removed_labels[concept] = {}
-    delete_arc = False
-    for loc_to_delete in label_link.findall(loc_href_xpath % concept):
-        label_ref = loc_to_delete.get(label_attr_xpath)
-        label_arcs_to_delete = label_link.findall(label_arc_xpath % label_ref)
-        for label_arc_to_delete in label_arcs_to_delete:
-            to_label = label_arc_to_delete.get(to_attr_xpath)
-            for label_to_delete in label_link.findall(label_xpath % to_label):
-                label_role = label_to_delete.get(role_attr_xpath)
-                if not label_types or label_role in label_types:
-                    removed_labels[concept][label_role] = label_to_delete.text
-                    label_link.remove(label_to_delete)
-                    delete_arc = True
-            if delete_arc:
-                label_link.remove(label_arc_to_delete)
-                delete_arc = False
-        label_arcs_to_delete = label_link.findall(label_arc_xpath % label_ref)
-        if not label_arcs_to_delete:
-            label_link.remove(loc_to_delete)
-    return (removed_labels, label_link)
+        for loc_to_delete in lab_link.iterfind(loc_href_xpath % concept):
+            label_ref = label_arc_xpath % loc_to_delete.get(label_attr_xpath)
+            for label_arc_to_delete in lab_link.iterfind(label_ref):
+                to_label = label_arc_to_delete.get(to_attr_xpath)
+                for label_to_delete in lab_link.iterfind(label_xpath % to_label):
+                    label_role = label_to_delete.get(role_attr_xpath)
+                    if label_types == "All" or label_role in label_types:
+                        removed_labels[concept][label_role] = label_to_delete.text
+                        lab_link.remove(label_to_delete)
+                        lab_link.remove(label_arc_to_delete)
+            if not etree.iselement(lab_link.find(label_ref)):
+                lab_link.remove(loc_to_delete)
+
+    return (removed_labels, lab_elem)
 
 
 def two_day_contexts(elem):
@@ -446,9 +433,8 @@ def two_day_contexts(elem):
     instance_xpath = ".//{http://www.xbrl.org/2003/instance}"
     start_xpath = "{0}startDate".format(instance_xpath)
     end_xpath = "{0}endDate".format(instance_xpath)
-    current_contexts = elem.findall("{0}context".format(instance_xpath))
 
-    for context in current_contexts:
+    for context in elem.iterfind("{0}context".format(instance_xpath)):
         start = context.find(start_xpath)
         if start is not None:
             if days_between(start.text, context.find(end_xpath).text) == 1:
@@ -466,7 +452,7 @@ def clean_contexts(elem):
     contexts_removed = []
     context_ref_xpath = ".//*[@contextRef='{0}']"
     context_xpath = ".//{http://www.xbrl.org/2003/instance}context"
-    for element in elem.findall(context_xpath):
+    for element in elem.iterfind(context_xpath):
         contexts[element] = element.get("id")
     for context, identifier in contexts.items():
         fact_value = elem.find(context_ref_xpath.format(str(identifier)))
@@ -485,20 +471,21 @@ def clean_concepts(linkbases):
 
     """
     concepts_removed = []
+    xlink = "{http://www.w3.org/1999/xlink}"
     schema = linkbases["xsd"]["filename"].split("/")[-1]
+    href_xpath = ".//*[@{0}href='{1}#%s']".format(xlink, schema)
     concepts_xpath = ".//{http://www.w3.org/2001/XMLSchema}element"
-    href_xpath = ".//*[@{http://www.w3.org/1999/xlink}href='%s#%s']"
-    current_concepts = linkbases["xsd"]["root"].findall(concepts_xpath)
-    for element in current_concepts:
-        d = element.get("id")
+    for concept in linkbases["xsd"]["root"].iterfind(concepts_xpath):
+        identifier = concept.get("id")
         used = False
         for key, val in linkbases.items():
-            if key != "xsd" and val["root"].findall(href_xpath % (schema, d)):
+            exists = val["root"].find(href_xpath % identifier)
+            if key != "xsd" and etree.iselement(exists):
                 used = True
                 break
         if not used:
-            linkbases["xsd"]["root"].remove(element)
-            concepts_removed.append(d)
+            linkbases["xsd"]["root"].remove(concept)
+            concepts_removed.append(identifier)
 
     return concepts_removed
 
@@ -523,7 +510,7 @@ def get_linkbase(filename, linkbase):
         "lab": "http://www.xbrl.org/2003/role/labelLinkbaseRef"
     }
     role_xpath = "{http://www.w3.org/1999/xlink}role"
-    for linkbase_ref in root.findall("{0}linkbaseRef".format(link_xpath)):
+    for linkbase_ref in root.iterfind("{0}linkbaseRef".format(link_xpath)):
         if linkbase_ref.get(role_xpath) == linkbases[linkbase]:
             return path + linkbase_ref.get(href_xpath)
 
@@ -541,11 +528,10 @@ def get_calcs(elem):
     role_xpath = "{0}role".format(xlink)
     href_xpath = "{0}href".format(xlink)
     lab_attr_xpath = "[@{0}label='%s']".format(xlink)
-    linkroles = elem.findall(calc_link_xpath)
-    for linkrole in linkroles:
+    for linkrole in elem.iterfind(calc_link_xpath):
         link_role_href = linkrole.get(role_xpath)
         store[link_role_href] = {}
-        for arc in linkrole.findall(calc_arc_xpath):
+        for arc in linkrole.iterfind(calc_arc_xpath):
             label_from = linkrole.find(
                 calc_loc_xpath + lab_attr_xpath % arc.get(from_xpath)
             )
@@ -620,8 +606,7 @@ def calc_values(elem, calcs):
         for total_elem, line_items in total_elems.items():
             total_split = total_elem.split("_", 1)
             namespace = ".//{{{0}}}".format(nsmap[total_split[0]])
-            totals = elem.findall(namespace + total_split[-1])
-            for total in totals:
+            for total in elem.iterfind(namespace + total_split[-1]):
                 value = Decimal(total.text)
                 cont = total.get("contextRef")
                 calculated_total = 0
@@ -658,30 +643,14 @@ def link_role_def(elem, link_role):
 def insert_labels(elem, calcs):
     """Take a list of calcs and insert standard labels before each concept."""
     role_label = "http://www.xbrl.org/2003/role/label"
-    xlink = "{http://www.w3.org/1999/xlink}"
-    href_attr_xpath = "{0}href".format(xlink)
-    lab_attr_xpath = "{0}label".format(xlink)
-    to_attr_xapth = "{0}to".format(xlink)
-    role_attr_xpath = "{0}role".format(xlink)
-    loc_xpath = ".//*[@{{http://www.w3.org/1999/xlink}}href='{0}']"
-    arc_xpath = ".//*[@{{http://www.w3.org/1999/xlink}}from='{0}']"
-    lab_xpath = ".//*[@{{http://www.w3.org/1999/xlink}}label='{0}']"
-    concepts = {}
-    for loc in elem.findall(".//{http://www.xbrl.org/2003/linkbase}loc"):
-        href = loc.get(href_attr_xpath)
-        concepts[href.split("#")[-1]] = href
+    labels = get_labels(elem)
+    short_labels = {}
+    for label, label_types in labels.items():
+        short_labels[label.split("#")[-1]] = label_types
     for calc in calcs:
         standard_lab = ""
-        if calc[1] in concepts:
-            href = concepts[calc[1]]
-            label = elem.find(loc_xpath.format(href)).get(lab_attr_xpath)
-            arcs = elem.findall(arc_xpath.format(label))
-            for arc in arcs:
-                lab = elem.find(lab_xpath.format(arc.get(to_attr_xapth)))
-                if lab.get(role_attr_xpath) == role_label:
-                    standard_lab = lab.text
-                    break
-
+        if calc[1] in short_labels:
+            standard_lab = short_labels[calc[1]][role_label]
         calc.insert(1, standard_lab)
 
     return calcs
@@ -698,11 +667,9 @@ def link_role_sort(elem):
     level_four = re.compile("^4\d{3}$")
     eights = re.compile("^8\d{3}$")
     sort_reg = re.compile("^(\d+)(.+)$")
-
     linkbase_refs_xpath = ".//{http://www.xbrl.org/2003/linkbase}definition"
-    linkbase_refs = elem.findall(linkbase_refs_xpath)
 
-    for linkbase_ref in linkbase_refs:
+    for linkbase_ref in elem.iterfind(linkbase_refs_xpath):
         match = sort_reg.search(linkbase_ref.text)
         sort = match.group(1)
         link_def = match.group(2)
@@ -762,8 +729,7 @@ def rename_refs(elem, linkbase):
     path = re.compile("^(?!http://)(.+-)(\d{8})(\.xsd)(#.+)$")
     if linkbase == "xsd":
         link_refs_xpath = ".//{http://www.xbrl.org/2003/linkbase}linkbaseRef"
-        link_refs = elem.findall(link_refs_xpath)
-        for link_ref in link_refs:
+        for link_ref in elem.iterfind(link_refs_xpath):
             old_path = link_ref.get(href_attr_xpath)
             match = filename.search(old_path)
             new_path = "{0}current_taxonomy{1}".format(
@@ -782,8 +748,7 @@ def rename_refs(elem, linkbase):
             links.append("roleRef")
         for link in links:
             xpath = ".//{http://www.xbrl.org/2003/linkbase}%s" % link
-            link_refs = elem.findall(xpath)
-            for link_ref in link_refs:
+            for link_ref in elem.iterfind(xpath):
                 match = path.search(link_ref.get(href_attr_xpath))
                 if match:
                     xsd = "{0}current_taxonomy{1}".format(
@@ -799,9 +764,8 @@ def retrieve_base(elem):
     """Return the base taxonomy from the provided schema element."""
     version = ""
     ugt = re.compile("(us-gaap-\d{4}-\d{2}-\d{2})\.xsd$")
-    imports = elem.findall("{http://www.w3.org/2001/XMLSchema}import")
 
-    for schema in imports:
+    for schema in elem.iterfind("{http://www.w3.org/2001/XMLSchema}import"):
         location = ugt.search(schema.get("schemaLocation"))
         if location:
             version = location.group(1)
@@ -813,9 +777,9 @@ def retrieve_base(elem):
 def get_link_roles(elem):
     """Return all extension link role URIs found in the given element."""
     log = []
-    link_roles = elem.findall(".//{http://www.xbrl.org/2003/linkbase}roleType")
+    role_type_xpath = ".//{http://www.xbrl.org/2003/linkbase}roleType"
 
-    for link_role in link_roles:
+    for link_role in elem.iterfind(role_type_xpath):
         log.append(link_role.get("roleURI"))
 
     return log
@@ -833,8 +797,7 @@ def get_active_link_roles(linkbases):
 
     for key, value in linkbases.items():
         if key in xpaths:
-            link_roles = value["root"].findall(xpaths[key])
-            for link_role in link_roles:
+            for link_role in value["root"].iterfind(xpaths[key]):
                 log.append(link_role.get(role_attr_xpath))
 
     return set(log)

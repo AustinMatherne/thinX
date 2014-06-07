@@ -100,7 +100,7 @@ class Labels(unittest.TestCase):
         self.assertIn(self.verbose_label, log[expected_pos_concept])
         self.assertIn(self.negated_terse_label, log[expected_neg_concept])
 
-    def test_change_preferred_label(self):
+    def test_change_preferred_labels(self):
         expected = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
                    "us-gaap-2012-01-31.xsd#us-gaap_MarketableSecurities" \
                    "RealizedGainLossExcludingOtherThanTemporaryImpairments"
@@ -108,11 +108,9 @@ class Labels(unittest.TestCase):
         to_attr_xpath = ".//*[@{http://www.w3.org/1999/xlink}to='%s']"
         label_attr = "{http://www.w3.org/1999/xlink}label"
 
-        pre_elem = xbrl.change_preferred_label(
-            expected,
-            self.pre_root,
-            self.negated_terse_label,
-            self.negated_label
+        pre_elem = xbrl.change_preferred_labels(
+            {expected: {self.negated_terse_label: self.negated_label}},
+            self.pre_root
         )
 
         expected_locs = pre_elem.find(href_xpath % expected)
