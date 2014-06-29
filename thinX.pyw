@@ -460,7 +460,6 @@ class ThinX(QtWidgets.QMainWindow):
                         link_roles[sort][row[2]] = 1
                 else:
                     link_roles[sort] = {row[2]: 1}
-                    print(link_roles)
             for link_role, totals in link_roles.items():
                 for total, value in totals.items():
                     line = "{0} - {1} *{2}".format(
