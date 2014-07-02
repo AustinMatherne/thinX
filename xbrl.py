@@ -178,13 +178,13 @@ def get_labels(lab_elem):
         elif elem.tag == label_arc:
             label_arcs[elem.get(to_attr_xpath)] = elem.get(from_attr_xpath)
         elif elem.tag == label:
-            labels[elem.get(label_attr_xpath)] = {
+            labels[(elem.get(label_attr_xpath), elem.get(role_attr_xpath))] = {
                 "type": elem.get(role_attr_xpath),
                 "label": elem.text
             }
 
     for lab, label_type in labels.items():
-        href = locs[label_arcs[lab]]
+        href = locs[label_arcs[lab[0]]]
         found_labels.setdefault(
             href,
             dict()
@@ -409,12 +409,13 @@ def delete_labels(concepts, lab_elem):
             label_ref = label_arc_xpath % loc_to_delete.get(label_attr_xpath)
             for label_arc_to_delete in lab_link.iterfind(label_ref):
                 to_label = label_arc_to_delete.get(to_attr_xpath)
-                for label_to_delete in lab_link.iterfind(label_xpath % to_label):
-                    label_role = label_to_delete.get(role_attr_xpath)
-                    if label_types == "All" or label_role in label_types:
-                        removed_labels[concept][label_role] = label_to_delete.text
-                        lab_link.remove(label_to_delete)
-                        lab_link.remove(label_arc_to_delete)
+                for lab_to_delete in lab_link.iterfind(label_xpath % to_label):
+                    lab_role = lab_to_delete.get(role_attr_xpath)
+                    if label_types == "All" or lab_role in label_types:
+                        removed_labels[concept][lab_role] = lab_to_delete.text
+                        lab_link.remove(lab_to_delete)
+                if not etree.iselement(lab_link.find(label_xpath % to_label)):
+                    lab_link.remove(label_arc_to_delete)
             if not etree.iselement(lab_link.find(label_ref)):
                 lab_link.remove(loc_to_delete)
 
