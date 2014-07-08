@@ -37,3 +37,7 @@ nosetests.xml
 
 # autoenv
 .env
+
+# Compiled PyQt thinX files
+icons_rc.py
+ui_thinX.py
