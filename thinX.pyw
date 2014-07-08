@@ -31,6 +31,7 @@ class ThinX(QtWidgets.QMainWindow):
         self.ui.actionLinkRoles.triggered.connect(self.link_role)
         self.ui.actionLabels.triggered.connect(self.labels)
         self.ui.actionConsolidateLabels.triggered.connect(self.redundant)
+        self.ui.actionStandardLabels.triggered.connect(self.standard_labels)
         self.ui.actionConcepts.triggered.connect(self.concepts)
         self.ui.actionCalculations.triggered.connect(self.calculations)
         self.ui.actionContexts.triggered.connect(self.contexts)
@@ -223,6 +224,44 @@ class ThinX(QtWidgets.QMainWindow):
             )
             self.status.setText(
                 "The Above Redundant Labels Have Been Removed "
+            )
+            for element, labels in log.items():
+                self.ui.textLog.append(
+                    "<strong>{0}:</strong>".format(element.rsplit("#")[-1])
+                )
+                for label_type, label in labels.items():
+                    self.ui.textLog.append(
+                        "{0} > {1}".format(
+                            label_type.rsplit("/")[-1],
+                            label.rsplit("/")[-1]
+                        )
+                    )
+
+    def standard_labels(self):
+        """Removes and logs standard labels which are from a base taxonomy."""
+        if not self.filename:
+            self.status.setText(
+                "You Must Open an Instance Document Before Processing "
+            )
+            return
+
+        self.ui.textLog.clear()
+        try:
+            linkbases = xbrl.open_linkbases(self.filename, ["lab"])
+        except Exception as e:
+            self.open_fail(self.filename, e.value)
+            return
+
+        log = xbrl.remove_standard_labels(linkbases["lab"]["root"])
+        if not log:
+            self.status.setText("No Standard Labels Found in File ")
+        else:
+            linkbases["lab"]["tree"].write(
+                linkbases["lab"]["filename"],
+                xml_declaration=True
+            )
+            self.status.setText(
+                "The Above Standard Labels Have Been Removed "
             )
             for element, labels in log.items():
                 self.ui.textLog.append(
