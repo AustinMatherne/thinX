@@ -24,6 +24,11 @@ The Unused Labels utility searches the corresponding label linkbase of the selec
 The Consolidate Labels utility searches the corresponding label linkbase of the selected instance document for concepts with labels which both have the same textual content and are semantically the same in usage. Any labels which are found to be redundant are removed and references to them in the related presentation linkbase are updated. An example of this would be a concept with a terse and verbose label which are identical, in this case the verbose label would be removed and any references to the verbose label in the presentation linkbase would be changed to refer to the terse label.
 
 
+### Remove Standard Labels From Remote Concepts
+
+The Remove Standard Labels From Remote Concepts utility removes all standard labels assigned to concepts which come from a remotely hosted taxonomy. This is useful if the standard labels of these elements have been overridden, and your taxonomy editor of choice supports pulling down missing standard labels.
+
+
 ### Remove Unused Extension Concepts
 
 The Unused Extension Concepts utility searches the extension schema of the selected instance document for declared concepts that are not in use by any of the related linkbases. All unused concepts are logged and removed from the file.
