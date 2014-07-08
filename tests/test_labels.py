@@ -21,6 +21,7 @@ class Labels(unittest.TestCase):
         self.pre_root = pre_tree.getroot()
         self.lab_root = lab_tree.getroot()
         self.cal_root = cal_tree.getroot()
+        self.standard_label = "http://www.xbrl.org/2003/role/label"
         self.terse_label = "http://www.xbrl.org/2003/role/terseLabel"
         self.verbose_label = "http://www.xbrl.org/2003/role/verboseLabel"
         self.negated_label = "http://www.xbrl.org/2009/role/negatedLabel"
@@ -99,6 +100,19 @@ class Labels(unittest.TestCase):
         self.assertIn(self.verbose_label, log[expected])
         self.assertIn(self.verbose_label, log[expected_pos_concept])
         self.assertIn(self.negated_terse_label, log[expected_neg_concept])
+
+    def test_remove_standard_labels(self):
+        log = xbrl.remove_standard_labels(self.lab_root)
+        base_concepts_with_standard_labels = len(log)
+        expected = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
+                   "us-gaap-2012-01-31.xsd#us-gaap_" \
+                   "InventoryWorkInProcessAndRawMaterialsNetOfReserves"
+        expected_labels = len(log[expected])
+
+        self.assertEqual(193, base_concepts_with_standard_labels)
+        self.assertIn(expected, log)
+        self.assertEqual(1, expected_labels)
+        self.assertIn(self.standard_label, log[expected])
 
     def test_change_preferred_labels(self):
         expected = "http://xbrl.fasb.org/us-gaap/2012/elts/" \
