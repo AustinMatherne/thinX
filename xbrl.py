@@ -362,6 +362,37 @@ def redundant_labels(lab_elem, pre_elem):
     return result
 
 
+def remove_standard_labels(label_elem):
+    """Accepts a label linkbase element and removes all standard labels which
+    belong to elements from a remote taxonomy.
+
+    """
+    linkbase = ".//{http://www.xbrl.org/2003/linkbase}"
+    xlink = "{http://www.w3.org/1999/xlink}"
+    standard_label = "http://www.xbrl.org/2003/role/label"
+    role_attr_xpath = "{0}label[@{1}role='{2}']".format(linkbase,
+                                                        xlink,
+                                                        standard_label)
+    label_arc_xpath = "{0}labelArc[@{1}to='%s']".format(linkbase, xlink)
+    loc_xpath = "{0}loc[@{1}label='%s']".format(linkbase, xlink)
+    label_attr_xpath = "{0}label".format(xlink)
+    from_attr_xpath = "{0}from".format(xlink)
+    href_attr_xpath = "{0}href".format(xlink)
+    url_reg = re.compile("^https?://")
+    to_delete = {}
+    for label in label_elem.iterfind(role_attr_xpath):
+        label_attr = label.get(label_attr_xpath)
+        label_arc = label_elem.find(label_arc_xpath % label_attr)
+        from_attr = label_arc.get(from_attr_xpath)
+        loc = label_elem.find(loc_xpath % from_attr)
+        href_attr = loc.get(href_attr_xpath)
+        if url_reg.match(href_attr):
+            to_delete[href_attr] = standard_label
+    removed_labels, lab_elem = delete_labels(to_delete, label_elem)
+
+    return removed_labels
+
+
 def change_preferred_labels(concepts, pre_elem):
     """Accepts a dictionary of concepts, and a presentation link element. The
     dictionary container  a label type to remove
