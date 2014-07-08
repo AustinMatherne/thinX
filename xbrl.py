@@ -404,7 +404,6 @@ def delete_labels(concepts, lab_elem):
     label_arc_xpath = ".//{0}labelArc[@{1}from='%s']".format(linkbase, xlink)
     removed_labels = {}
     for concept, label_types in concepts.items():
-        removed_labels[concept] = {}
         for loc_to_delete in lab_link.iterfind(loc_href_xpath % concept):
             label_ref = label_arc_xpath % loc_to_delete.get(label_attr_xpath)
             for label_arc_to_delete in lab_link.iterfind(label_ref):
@@ -412,7 +411,9 @@ def delete_labels(concepts, lab_elem):
                 for lab_to_delete in lab_link.iterfind(label_xpath % to_label):
                     lab_role = lab_to_delete.get(role_attr_xpath)
                     if label_types == "All" or lab_role in label_types:
-                        removed_labels[concept][lab_role] = lab_to_delete.text
+                        removed_labels.setdefault(
+                            concept, dict()
+                        )[lab_role] = lab_to_delete.text
                         lab_link.remove(lab_to_delete)
                 if not etree.iselement(lab_link.find(label_xpath % to_label)):
                     lab_link.remove(label_arc_to_delete)
