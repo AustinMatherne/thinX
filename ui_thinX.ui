@@ -87,6 +87,7 @@
     <addaction name="actionLinkRoles"/>
     <addaction name="actionLabels"/>
     <addaction name="actionConsolidateLabels"/>
+    <addaction name="actionStandardLabels"/>
     <addaction name="actionConcepts"/>
     <addaction name="actionCalculations"/>
    </widget>
@@ -114,6 +115,8 @@
    <addaction name="actionLabels"/>
    <addaction name="separator"/>
    <addaction name="actionConsolidateLabels"/>
+   <addaction name="separator"/>
+   <addaction name="actionStandardLabels"/>
    <addaction name="separator"/>
    <addaction name="actionConcepts"/>
    <addaction name="separator"/>
@@ -204,7 +207,7 @@
     <string>Report Duplicate Calculations</string>
    </property>
    <property name="shortcut">
-    <string>Alt+S, Alt+5</string>
+    <string>Alt+S, Alt+6</string>
    </property>
   </action>
   <action name="actionLabels">
@@ -234,7 +237,7 @@
     <string>Remove Unused Extension Concepts</string>
    </property>
    <property name="shortcut">
-    <string>Alt+S, Alt+4</string>
+    <string>Alt+S, Alt+5</string>
    </property>
   </action>
   <action name="actionConsolidateLabels">
@@ -334,6 +337,21 @@
    </property>
    <property name="shortcut">
     <string>Alt+I, Alt+4</string>
+   </property>
+  </action>
+  <action name="actionStandardLabels">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/Glyphicons/icons/glyphicons_105_text_height.png</normaloff>:/Glyphicons/icons/glyphicons_105_text_height.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Standard Labels From Remote Concepts</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Standard Labels From Remote Concepts</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S, Alt+4</string>
    </property>
   </action>
  </widget>
