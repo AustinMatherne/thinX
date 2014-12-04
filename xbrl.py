@@ -640,6 +640,8 @@ def calc_values(elem, calcs):
             total_split = total_elem.split("_", 1)
             namespace = ".//{{{0}}}".format(nsmap[total_split[0]])
             for total in elem.iterfind(namespace + total_split[-1]):
+                if total.text is None:
+                    break
                 value = Decimal(total.text)
                 cont = total.get("contextRef")
                 calculated_total = 0
