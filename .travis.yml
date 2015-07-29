@@ -8,3 +8,4 @@ script:
   - nosetests --with-coverage --cover-package=thinX
 after_success:
   - coveralls
+sudo: false
