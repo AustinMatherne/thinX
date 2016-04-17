@@ -46,7 +46,7 @@ setup(
     version=get_version("_version.py"),
     description="GUI with various utilities for manipulating XBRL files.",
     author="Austin M. Matherne",
-    author_email="AustinMatherne@Gmail.com",
+    author_email="AustinMatherne@ProtonMail.ch",
     url="https://github.com/AustinMatherne/thinX",
     download_url="https://github.com/AustinMatherne/thinX/archive/master.zip",
     classifiers=[
