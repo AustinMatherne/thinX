@@ -1,4 +1,4 @@
-coverage==4.2
+coverage==4.3.4
 coveralls==1.1
 cx_Freeze==5.0
 lxml==3.6.4
