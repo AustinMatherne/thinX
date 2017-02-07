@@ -31,14 +31,14 @@ options = {
     "build_exe": {
         "include_files":    project_files,
         "includes":         ["sip", "lxml._elementpath"],
-        "icon":             "logo.ico",
-        "optimize":         2,
-        "base":             base
+        "optimize":         2
     }
 }
 
 exe = Executable(
-    "thinX.pyw"
+    script="thinX.pyw",
+    icon="logo.ico",
+    base=base
 )
 
 setup(
