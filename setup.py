@@ -63,7 +63,7 @@ setup(
         "Operating System :: MacOS",
         "Operating System :: Microsoft",
         "Operating System :: Unix",
-        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
         ],
     license="WTFPL",
     keywords="XBRL",
